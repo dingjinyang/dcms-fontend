@@ -2,16 +2,21 @@
 
 import Vue from "vue";
 import axios from "axios";
+import { getToken, setToken } from "../util/cookie";
 
 // Full config:  https://github.com/axios/axios#request-config
 // axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || '';
 // axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
-// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+// axios.defaults.headers.post["Content-Type"] = "application/json";
 
 let config = {
-  // baseURL: process.env.baseURL || process.env.apiUrl || ""
-  // timeout: 60 * 1000, // Timeout
-  // withCredentials: true, // Check cross-site Access-Control
+  baseURL: process.env.VUE_APP_API_URL,
+  timeout: 60 * 1000, // Timeout
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: ""
+  },
+  withCredentials: true // Check cross-site Access-Control
 };
 
 const _axios = axios.create(config);
@@ -19,6 +24,10 @@ const _axios = axios.create(config);
 _axios.interceptors.request.use(
   function(config) {
     // Do something before request is sent
+    if (getToken()) config.headers.Authorization = getToken();
+    if (process.env.NODE_ENV === "development") {
+      console.log(config);
+    }
     return config;
   },
   function(error) {
@@ -31,7 +40,13 @@ _axios.interceptors.request.use(
 _axios.interceptors.response.use(
   function(response) {
     // Do something with response data
-    return response;
+    if (response.headers.authorization) {
+      setToken(response.headers.authorization);
+    }
+    if (process.env.NODE_ENV === "development") {
+      console.log(response);
+    }
+    return response.data;
   },
   function(error) {
     // Do something with response error
@@ -39,9 +54,11 @@ _axios.interceptors.response.use(
   }
 );
 
-Plugin.install = function(Vue) {
+// eslint-disable-next-line no-unused-vars
+Plugin.install = function(Vue, options) {
   Vue.axios = _axios;
   window.axios = _axios;
+  console.log(options);
   Object.defineProperties(Vue.prototype, {
     axios: {
       get() {
