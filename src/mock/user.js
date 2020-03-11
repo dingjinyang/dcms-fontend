@@ -29,7 +29,7 @@ const permissions = {
 
 export default {
   /** 用户登陆 */
-  login: Mock.mock("/user/login", options => {
+  login: Mock.mock(`${process.env.VUE_APP_API_URL}/user/login`, options => {
     return {
       code: 200,
       data: {
@@ -38,7 +38,7 @@ export default {
     };
   }),
   /** 获取用户信息 */
-  getUserInfo: Mock.mock("/user/info", () => {
+  getUserInfo: Mock.mock(`${process.env.VUE_APP_API_URL}/user/info`, () => {
     const role = getToken();
     return {
       code: 200,
@@ -53,7 +53,7 @@ export default {
     };
   }),
   /** 用户登出 */
-  logout: Mock.mock("/logout", {
+  logout: Mock.mock(`${process.env.VUE_APP_API_URL}/logout`, {
     code: 200,
     meg: "logout success"
   }),

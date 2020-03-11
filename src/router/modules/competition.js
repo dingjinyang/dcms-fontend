@@ -19,7 +19,7 @@ export default [
         },
         component: () =>
           import(
-            /* webpackChunkName: "CompetitionLaunch" */ "@/views/competition/CompetitionList"
+            /* webpackChunkName: "CompetitionList" */ "@/views/competition/CompetitionList"
           )
       },
       {

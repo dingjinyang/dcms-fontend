@@ -6,7 +6,6 @@ export default [
     meta: {
       title: "系统管理",
       icon: "television-guide",
-      roles: ["admin"],
       isGroup: true // 在根据角色筛选路由时，若原本有两个子路由，筛选后剩余一个，可保证父路由渲染为分组
     },
     component: () =>

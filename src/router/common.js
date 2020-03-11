@@ -45,7 +45,7 @@ export const UserProfile = {
       name: "UserProfile",
       meta: { title: "个人中心", icon: "view-dashboard" },
       component: () =>
-        import(/* webpackChunkName: "Dashboard" */ "@/views/UserProfile")
+        import(/* webpackChunkName: "UserProfile" */ "@/views/UserProfile")
     }
   ]
 };
