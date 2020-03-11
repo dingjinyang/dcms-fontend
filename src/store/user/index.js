@@ -16,6 +16,7 @@ export default {
   mutations,
   actions,
   getters: {
+    info: state => state.info,
     roles: state => state.info.roles,
     avatar: state => state.info.avatar,
     permissions: state => state.info.permissions

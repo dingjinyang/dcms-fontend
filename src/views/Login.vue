@@ -35,27 +35,15 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn
-                  :loading="loginLoading"
-                  text
-                  color="error"
-                  @click="loginWith('root')"
-                  >root
-                </v-btn>
-                <v-btn
-                  :loading="loginLoading"
-                  text
-                  color="success"
-                  @click="loginWith('admin')"
-                  >admin
-                </v-btn>
-                <v-btn
-                  :loading="loginLoading"
-                  text
-                  color="primary"
-                  @click="loginWith('user')"
-                  >user
-                </v-btn>
+                <div v-for="item in loginRoles" :key="item.account">
+                  <v-btn
+                    :loading="loginLoading"
+                    text
+                    :color="item.color"
+                    @click="loginWith(item.account)"
+                    >{{ item.username }}
+                  </v-btn>
+                </div>
 
                 <!--                <v-btn-->
                 <!--                  :loading="loginLoading"-->
@@ -86,6 +74,20 @@ export default {
       account: "admin",
       password: "admin"
     },
+    loginRoles: [
+      {
+        color: "error",
+        username: "竞赛负责人",
+        account: "competitionPrincipal"
+      },
+      { color: "warning", username: "学院领导", account: "collegeLeader" },
+      {
+        color: "success",
+        username: "实践管理科",
+        account: "practiceManagementDivision"
+      },
+      { color: "primary", username: "学生", account: "student" }
+    ],
     rules: {
       required: value => !!value || "Required."
     },
@@ -116,6 +118,11 @@ export default {
           _this.loginLoading = false;
         });
     },
+    /**
+     * 提示框
+     * @param text 提示内容
+     * @param color 提示框颜色
+     */
     snackbarShow(text, color) {
       this.snackbar = {
         show: true,

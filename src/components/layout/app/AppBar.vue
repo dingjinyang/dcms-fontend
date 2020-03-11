@@ -4,7 +4,7 @@
       <svg-icon name="menu" />
     </v-app-bar-nav-icon>
     <v-toolbar-title class="ml-0 pl-4">
-      <span class="hidden-xs-only">DCMS-FontEnd</span>
+      <span class="hidden-xs-only">学科竞赛管理系统</span>
     </v-toolbar-title>
     <v-spacer />
 

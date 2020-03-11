@@ -1,2 +1,3 @@
 import * as user from "./user";
-export default { ...user };
+import * as system from "../router/modules/system";
+export default { ...user, ...system };
