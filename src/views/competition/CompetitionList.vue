@@ -16,8 +16,6 @@
           <v-btn
             color="primary"
             dark
-            class="mb-2"
-            v-on="on"
             @click="$router.push(`/competitionManagement/launch`)"
           >
             发起竞赛
@@ -90,6 +88,7 @@ export default {
       },
       { text: "竞赛名称", sortable: false, value: "name" },
       { text: "所属学院", value: "college" },
+      { text: "负责人", value: "principal" },
       { text: "操作", value: "action", sortable: false }
     ],
     desserts: [],
