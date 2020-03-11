@@ -46,6 +46,7 @@ export default {
     logout() {
       this.$store.dispatch("user/FONT_LOGOUT").then(() => {
         // 刷新路由
+        console.log(this.$router);
         history.go("/login");
       });
     }
