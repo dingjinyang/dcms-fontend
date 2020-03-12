@@ -13,20 +13,31 @@ export default {
         list: [
           {
             id: 1,
-            name: "软件设计大赛",
+            status: 0,
+            name: "ACM程序设计大赛",
             college: "软件学院",
             principal: "@CNAME",
             description: "@TEXT"
           },
           {
             id: 2,
-            name: "软件知识大赛",
+            status: 1,
+            name: "软件设计大赛",
             college: "软件学院",
             principal: "@CNAME",
             description: "@TEXT"
           },
           {
             id: 3,
+            status: 2,
+            name: "软件知识大赛",
+            college: "软件学院",
+            principal: "@CNAME",
+            description: "@TEXT"
+          },
+          {
+            id: 4,
+            status: 3,
             name: "软件创意大赛",
             college: "软件学院",
             principal: "@CNAME",

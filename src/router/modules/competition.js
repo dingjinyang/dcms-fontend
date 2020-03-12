@@ -34,6 +34,19 @@ export default [
           import(
             /* webpackChunkName: "CompetitionLaunch" */ "@/views/competition/CompetitionLaunch"
           )
+      },
+      {
+        path: "detail/:competitionId",
+        name: "CompetitionDetail",
+        hideInMenu: true,
+        meta: {
+          title: "竞赛详情",
+          icon: "id-card"
+        },
+        component: () =>
+          import(
+            /* webpackChunkName: "CompetitionDetail" */ "@/views/competition/CompetitionDetail"
+          )
       }
     ]
   }

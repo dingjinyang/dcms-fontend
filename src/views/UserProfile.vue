@@ -1,10 +1,10 @@
 <template>
-  <v-app id="inspire">
+  <v-app id="user-profile">
     <h1>个人信息</h1>
     <v-container grid-list-xl>
       <v-layout wrap justify-space-between>
         <v-row>
-          <v-col cols="6" sm="6" md="4">
+          <v-col cols="12" sm="10" md="8" lg="6" xl="4">
             <v-form ref="form">
               <v-text-field
                 v-model="userForm.userRole"
@@ -24,8 +24,8 @@
                 label="部门"
                 readonly
               ></v-select>
-              <v-btn color="warning">修改</v-btn>
-              <v-btn color="success" class="ml-4">保存</v-btn>
+              <v-btn class="my-2" color="warning">修改</v-btn>
+              <v-btn class="my-2 mx-2" color="success">保存</v-btn>
             </v-form>
           </v-col>
         </v-row>

@@ -52,20 +52,28 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+                <v-btn color="orange darken-1" text @click="close">取消</v-btn>
+                <v-btn color="blue darken-1" text @click="save">保存</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
         </v-toolbar>
       </template>
+      <template v-slot:item.status="{ item }">
+        <v-chip :color="getColor(item.status)" small dark>
+          {{ item.status | statusText }}
+        </v-chip>
+      </template>
       <template v-slot:item.action="{ item }">
-        <v-icon @click="editItem(item)">
-          mdi-table-edit
-        </v-icon>
-        <v-icon @click="deleteItem(item)">
-          mdi-delete
-        </v-icon>
+        <v-btn small color="warning" text @click="checkItem(item)">
+          审核
+        </v-btn>
+        <v-btn small color="success" text @click="editItem(item)">
+          编辑
+        </v-btn>
+        <v-btn small color="error" text @click="deleteItem(item)">
+          删除
+        </v-btn>
       </template>
     </v-data-table>
   </v-card>
@@ -89,6 +97,7 @@ export default {
       { text: "竞赛名称", sortable: false, value: "name" },
       { text: "所属学院", value: "college" },
       { text: "负责人", value: "principal" },
+      { text: "状态", value: "status" },
       { text: "操作", value: "action", sortable: false }
     ],
     desserts: [],
@@ -109,7 +118,7 @@ export default {
   }),
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+      return this.editedIndex === -1 ? "New Item" : "编辑";
     }
   },
   methods: {
@@ -129,6 +138,13 @@ export default {
           this.loading = false;
         });
     },
+    checkItem(item) {
+      this.$router.push({
+        name: "CompetitionDetail",
+        params: { competitionId: item.id }
+      });
+    },
+
     editItem(item) {
       this.editedIndex = this.desserts.indexOf(item);
       this.editedItem = Object.assign({}, item);
@@ -156,6 +172,11 @@ export default {
         this.desserts.push(this.editedItem);
       }
       this.close();
+    },
+
+    getColor(status) {
+      const colors = ["error", "warning", "success", "text"];
+      return colors[status];
     }
   },
   watch: {
@@ -167,6 +188,12 @@ export default {
     },
     dialog(val) {
       val || this.close();
+    }
+  },
+  filters: {
+    statusText(val) {
+      const text = ["待审核", "报名中", "比赛中", "已结束"];
+      return text[val];
     }
   },
   activated() {
