@@ -34,10 +34,10 @@
                 <v-spacer />
                 <div>
                   <v-btn v-perm="'user:update'" text color="success">
-                    Edit
+                    编辑
                   </v-btn>
                   <v-btn v-perm="'user:delete'" text color="error">
-                    Delete
+                    删除
                   </v-btn>
                 </div>
               </v-card-actions>
@@ -48,10 +48,17 @@
 
       <template v-slot:footer>
         <v-row align="center">
-          <span class="grey--text">Items per page</span>
+          <span class="grey--text">每页</span>
           <v-menu offset-y>
             <template v-slot:activator="{ on }">
-              <v-btn dark text color="primary" class="ml-2" v-on="on">
+              <v-btn
+                dark
+                text
+                small
+                color="primary"
+                class="ml-2 pa-0"
+                v-on="on"
+              >
                 {{ itemsPerPage }}
                 <v-icon>mdi-chevron-down</v-icon>
               </v-btn>
@@ -66,21 +73,21 @@
               </v-list-item>
             </v-list>
           </v-menu>
-
+          <span class="grey--text">条</span>
           <v-spacer></v-spacer>
 
           <span
             class="mr-4
             grey--text"
           >
-            Total {{ total }}
+            共 {{ total }} 条
           </span>
 
           <span
             class="mr-4
             grey--text"
           >
-            Page {{ page }} of {{ pages }}
+            第 {{ page }} / {{ pages }} 页
           </span>
           <v-btn
             fab

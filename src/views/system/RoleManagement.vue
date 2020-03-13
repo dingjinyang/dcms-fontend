@@ -6,7 +6,7 @@
       :page="page"
       hide-default-footer
     >
-      <template v-slot:default="props">
+      <template #default="props">
         <v-row>
           <v-col
             v-for="item in props.items"
@@ -23,7 +23,7 @@
               <v-divider />
 
               <v-list dense>
-                <v-list-item v-for="(key, index) in keys" :key="index">
+                <v-list-item v-for="key in keys" :key="key.value">
                   <v-list-item-content>{{ key.text }} :</v-list-item-content>
                   <v-list-item-content class="align-end">{{
                     item[key.value]
@@ -34,10 +34,10 @@
                 <v-spacer />
                 <div>
                   <v-btn v-perm="'role:update'" text color="success">
-                    Edit
+                    编辑
                   </v-btn>
                   <v-btn v-perm="'role:delete'" text color="error">
-                    Delete
+                    删除
                   </v-btn>
                 </div>
               </v-card-actions>
@@ -46,12 +46,12 @@
         </v-row>
       </template>
 
-      <template v-slot:footer>
+      <template #footer>
         <v-row align="center">
-          <span class="grey--text">Items per page</span>
+          <span class="grey--text">每页</span>
           <v-menu offset-y>
             <template v-slot:activator="{ on }">
-              <v-btn dark text color="primary" class="ml-2" v-on="on">
+              <v-btn dark text small color="primary" class="pa-0" v-on="on">
                 {{ itemsPerPage }}
                 <v-icon>mdi-chevron-down</v-icon>
               </v-btn>
@@ -66,21 +66,21 @@
               </v-list-item>
             </v-list>
           </v-menu>
-
+          <span class="grey--text">条</span>
           <v-spacer></v-spacer>
 
           <span
             class="mr-4
             grey--text"
           >
-            Total {{ total }}
+            共 {{ total }} 条
           </span>
 
           <span
             class="mr-4
             grey--text"
           >
-            Page {{ page }} of {{ pages }}
+            第 {{ page }} / {{ pages }} 页
           </span>
           <v-btn
             fab
@@ -116,11 +116,14 @@ export default {
   data() {
     return {
       search: "",
-      itemsPerPageArray: [3, 6, 9],
+      itemsPerPageArray: [5, 10, 20],
       page: 1,
       pages: 1,
       itemsPerPage: 3,
-      keys: [{ text: "Name", value: "name" }],
+      keys: [
+        { text: "角色名称", value: "name" },
+        { text: "拥有权限", value: "permission" }
+      ],
       items: [],
       total: 0
     };

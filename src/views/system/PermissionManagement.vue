@@ -8,16 +8,26 @@
       :options.sync="options"
       :server-items-length="total"
     >
-      <template v-slot:top>
+      <template #top>
         <v-toolbar flat color="white">
-          <v-toolbar-title>Permission</v-toolbar-title>
-          <v-divider class="mx-4" inset vertical></v-divider>
-          <v-spacer></v-spacer>
+          <v-toolbar-title>权限列表</v-toolbar-title>
+          <v-divider class="mx-4" inset vertical />
+          <v-text-field
+            clearable
+            placeholder="搜索权限名称或代码"
+            :loading="searchLoading"
+            v-model="searchText"
+            class="mt-5"
+            append-outer-icon="mdi-table-search"
+            @click:append-outer="searchPermission"
+          >
+          </v-text-field>
+          <v-spacer />
           <v-dialog v-model="dialog" max-width="500px">
-            <template v-slot:activator="{ on }">
-              <v-btn color="primary" dark class="mb-2" v-on="on"
-                >New Item</v-btn
-              >
+            <template #activator="{ on }">
+              <v-btn color="primary" dark class="mb-2" v-on="on">
+                新增权限
+              </v-btn>
             </template>
             <v-card>
               <v-card-title>
@@ -25,63 +35,86 @@
               </v-card-title>
 
               <v-card-text>
-                <v-container>
+                <v-form ref="permission_form">
                   <v-row>
-                    <v-col cols="12" sm="6" md="4">
+                    <v-col cols="12" sm="6" md="6">
                       <v-text-field
                         v-model="editedItem.name"
-                        label="Name"
+                        label="权限名称"
+                        required
+                        :rules="[v => !!v || '权限名称不能为空']"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6" md="4">
+                    <v-col cols="12" sm="6" md="6">
                       <v-text-field
                         v-model="editedItem.perCode"
-                        label="Code"
+                        label="权限代码"
+                        required
+                        :rules="[v => !!v || '权限代码不能为空']"
                       ></v-text-field>
                     </v-col>
                   </v-row>
-                </v-container>
+                </v-form>
               </v-card-text>
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+                <v-btn color="error" text @click="close">取消</v-btn>
+                <v-btn color="primary" text @click="save">保存</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
         </v-toolbar>
       </template>
-      <template v-slot:item.action="{ item }">
-        <v-icon @click="editItem(item)" v-perm="`permission:update`">
-          mdi-table-edit
-        </v-icon>
-        <v-icon @click="deleteItem(item)" v-perm="`permission:delete`">
-          mdi-delete
-        </v-icon>
+
+      <template #item.action="{ item }">
+        <v-btn
+          small
+          color="success"
+          text
+          @click="editItem(item)"
+          v-perm="`permission:update`"
+        >
+          编辑
+        </v-btn>
+        <v-btn
+          small
+          color="error"
+          text
+          @click="deleteItem(item)"
+          v-perm="`permission:delete`"
+        >
+          删除
+        </v-btn>
       </template>
     </v-data-table>
   </v-card>
 </template>
 
 <script>
-import { getAllPermission } from "../../api/system";
+import {
+  getAllPermission,
+  insertPermission,
+  updatePermission
+} from "../../api/system";
 
 export default {
   name: "PermissionManagement",
   data: () => ({
     search: "",
     loading: false,
+    searchLoading: false,
+    searchText: "",
     dialog: false,
     headers: [
       {
-        text: "Id",
+        text: "序号",
         align: "left",
         value: "id"
       },
-      { text: "Name", sortable: false, value: "name" },
-      { text: "Code", value: "perCode" },
-      { text: "Actions", value: "action", sortable: false }
+      { text: "权限名称", sortable: false, value: "name" },
+      { text: "权限代码", value: "perCode" },
+      { text: "操作", value: "action", sortable: false }
     ],
     desserts: [],
     options: {
@@ -101,7 +134,7 @@ export default {
   }),
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+      return this.editedIndex === -1 ? "新增" : "编辑";
     }
   },
   methods: {
@@ -110,7 +143,7 @@ export default {
       this.loading = true;
       getAllPermission(page, itemsPerPage)
         .then(({ code, data: { list, total } }) => {
-          if (code !== 200) return;
+          if (!code || code !== 200) return;
           this.desserts = list;
           this.total = total;
         })
@@ -136,18 +169,43 @@ export default {
     close() {
       this.dialog = false;
       setTimeout(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
+        // this.editedItem = Object.assign({}, this.defaultItem);
+        this.$refs.permission_form.reset();
         this.editedIndex = -1;
       }, 300);
     },
 
     save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem);
+        const id = this.desserts[this.editedIndex].id;
+        this.$refs.permission_form.validate() &&
+          updatePermission(id, this.editedItem)
+            .then(({ code }) => {
+              if (code === 200) this.close();
+              // TODO 后端添加后再次调用请求
+              Object.assign(this.desserts[this.editedIndex], this.editedItem);
+            })
+            .catch(() => {});
       } else {
-        this.desserts.push(this.editedItem);
+        this.$refs.permission_form.validate() &&
+          insertPermission(this.editedItem)
+            .then(({ code }) => {
+              if (code === 200) this.close();
+              // TODO 后端添加后再次调用请求
+              this.desserts.push(this.editedItem);
+            })
+            .catch(() => {});
       }
-      this.close();
+    },
+    searchPermission() {
+      if (this.searchText.trim()) {
+        this.searchLoading = true;
+        //TODO 后端查询
+        setTimeout(() => {
+          this.searchLoading = false;
+          this.getDate();
+        }, 1000);
+      }
     }
   },
   watch: {

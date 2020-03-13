@@ -5,14 +5,16 @@ export default {
     code: 200,
     msg: "success",
     data: {
-      total: 3,
+      total: 5,
       list: [
-        { id: 2, name: "admin" },
-        { id: 1, name: "root" },
-        { id: 3, name: "user" }
+        { id: 1, name: "系统管理员" },
+        { id: 2, name: "竞赛负责人" },
+        { id: 3, name: "学院领导" },
+        { id: 4, name: "实践管理科" },
+        { id: 5, name: "学生" }
       ],
       pageNum: 1,
-      pageSize: 3,
+      pageSize: 5,
       pages: 1
     }
   })
