@@ -15,29 +15,34 @@ const permissionList = [
   { id: 12, name: "删除权限", perCode: "permission:delete" }
 ];
 
+import { pageHelper } from "../util/pageHelper";
+import { getURLSearchParams } from "../util/url";
+
 export default {
   /** 权限列表 */
   select: Mock.mock(
     /\/permission\/all\?pageNum=[1-9]\d*&pageSize=[-1-9]\d*/,
     options => {
-      const [pageNum, pageSize] = options.url.match(/[-1-9]\d*/g).map(item => {
-        return parseInt(item);
-      });
-      const pages = Math.ceil(permissionList.length / 5);
-      let list =
-        pageSize > 0
-          ? permissionList.slice((pageNum - 1) * pageSize, pageNum * pageSize)
-          : permissionList;
+      const { pageNum, pageSize } = getURLSearchParams(options.url);
       return {
         code: 200,
         msg: "success",
-        data: {
-          total: permissionList.length,
-          list,
-          pageNum,
-          pageSize,
-          pages
-        }
+        data: pageHelper(permissionList, pageNum, pageSize)
+      };
+    }
+  ),
+  selectByName: Mock.mock(
+    /\/permission\/search\?pageNum=[1-9]\d*&pageSize=[-1-9]\d*&name=\w*/,
+    "get",
+    options => {
+      const { pageNum, pageSize, name } = getURLSearchParams(options.url);
+      const data = permissionList.filter(item => {
+        return name && item.name.includes(name);
+      });
+      return {
+        code: 200,
+        msg: "success",
+        data: pageHelper(data, pageNum, pageSize)
       };
     }
   ),

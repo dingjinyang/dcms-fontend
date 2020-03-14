@@ -14,7 +14,7 @@
           <v-divider class="mx-4" inset vertical />
           <v-text-field
             clearable
-            placeholder="搜索权限名称或代码"
+            placeholder="搜索权限名称"
             :loading="searchLoading"
             v-model="searchText"
             class="mt-5"
@@ -95,7 +95,8 @@
 import {
   getAllPermission,
   insertPermission,
-  updatePermission
+  updatePermission,
+  getPermissionByName
 } from "../../api/system";
 
 export default {
@@ -190,21 +191,32 @@ export default {
         this.$refs.permission_form.validate() &&
           insertPermission(this.editedItem)
             .then(({ code }) => {
-              if (code === 200) this.close();
-              // TODO 后端添加后再次调用请求
-              this.desserts.push(this.editedItem);
+              if (code === 200) {
+                // TODO 后端添加后再次调用请求
+                this.desserts.push(this.editedItem);
+                this.close();
+              }
             })
             .catch(() => {});
       }
     },
     searchPermission() {
-      if (this.searchText.trim()) {
+      if (this.searchText && this.searchText.trim()) {
         this.searchLoading = true;
         //TODO 后端查询
-        setTimeout(() => {
-          this.searchLoading = false;
-          this.getDate();
-        }, 1000);
+        const { page, itemsPerPage } = this.options;
+        getPermissionByName(page, itemsPerPage, this.searchText)
+          .then(({ code, data: { list, total } }) => {
+            if (!code || code !== 200) return;
+            this.desserts = list;
+            this.total = total;
+          })
+          .catch(err => {
+            console.error(err);
+          })
+          .finally(() => {
+            this.searchLoading = false;
+          });
       }
     }
   },
