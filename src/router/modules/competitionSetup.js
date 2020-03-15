@@ -1,9 +1,9 @@
 export default [
   {
-    path: "/competitionManagement",
-    name: "CompetitionManagement",
+    path: "/competitionSetup",
+    name: "competitionSetup",
     meta: {
-      title: "竞赛管理",
+      title: "竞赛立项",
       icon: "television-guide",
       isGroup: true // 在根据角色筛选路由时，若原本有两个子路由，筛选后剩余一个，可保证父路由渲染为分组
     },
@@ -19,7 +19,7 @@ export default [
         },
         component: () =>
           import(
-            /* webpackChunkName: "CompetitionList" */ "@/views/competition/CompetitionList"
+            /* webpackChunkName: "CompetitionList" */ "@/views/competitionSetup/CompetitionList"
           )
       },
       {
@@ -32,7 +32,7 @@ export default [
         },
         component: () =>
           import(
-            /* webpackChunkName: "CompetitionLaunch" */ "@/views/competition/CompetitionLaunch"
+            /* webpackChunkName: "CompetitionLaunch" */ "@/views/competitionSetup/CompetitionLaunch"
           )
       },
       {
@@ -45,7 +45,7 @@ export default [
         },
         component: () =>
           import(
-            /* webpackChunkName: "CompetitionDetail" */ "@/views/competition/CompetitionDetail"
+            /* webpackChunkName: "CompetitionDetail" */ "@/views/competitionSetup/CompetitionDetail"
           )
       }
     ]

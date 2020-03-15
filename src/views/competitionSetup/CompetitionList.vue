@@ -3,68 +3,70 @@
     <v-data-table
       :headers="headers"
       :items="desserts"
-      :search="search"
       :loading="loading"
       :options.sync="options"
       :server-items-length="total"
+      show-expand
     >
-      <template v-slot:top>
-        <v-toolbar flat color="white">
-          <v-toolbar-title>全部竞赛</v-toolbar-title>
-          <v-divider class="mx-4" inset vertical></v-divider>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="primary"
-            dark
-            @click="$router.push(`/competitionManagement/launch`)"
-          >
-            发起竞赛
-          </v-btn>
-          <v-dialog v-model="dialog" max-width="500px">
-            <!--            <template v-slot:activator="{ on }">-->
-            <!--              <v-btn color="primary" dark class="mb-2" v-on="on">-->
-            <!--                新增竞赛-->
-            <!--              </v-btn>-->
-            <!--            </template>-->
-            <v-card>
-              <v-card-title>
-                <span class="headline">{{ formTitle }}</span>
-              </v-card-title>
+      <template #top>
+        <v-row no-gutters>
+          <v-col cols="10"
+            ><table-search-toolbar v-on:search="tableSearch"
+          /></v-col>
+          <v-col cols="2">
+            <v-toolbar dense flat color="white">
+              <v-spacer />
+              <v-btn
+                color="primary"
+                dark
+                @click="$router.push({ name: 'CompetitionLaunch' })"
+              >
+                发起竞赛
+              </v-btn>
+              <v-dialog v-model="dialog" max-width="500px">
+                <v-card>
+                  <v-card-title>
+                    <span class="headline">{{ formTitle }}</span>
+                  </v-card-title>
 
-              <v-card-text>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="editedItem.name"
-                        label="Name"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="editedItem.college"
-                        label="Code"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card-text>
+                  <v-card-text>
+                    <v-container>
+                      <v-row>
+                        <v-col cols="12" sm="6" md="4">
+                          <v-text-field
+                            v-model="editedItem.name"
+                            label="Name"
+                          ></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="4">
+                          <v-text-field
+                            v-model="editedItem.department"
+                            label="Code"
+                          ></v-text-field>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-card-text>
 
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="orange darken-1" text @click="close">取消</v-btn>
-                <v-btn color="blue darken-1" text @click="save">保存</v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-        </v-toolbar>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="orange darken-1" text @click="close"
+                      >取消</v-btn
+                    >
+                    <v-btn color="blue darken-1" text @click="save">保存</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </v-toolbar>
+          </v-col>
+        </v-row>
       </template>
-      <template v-slot:item.status="{ item }">
+      <template #item.status="{ item }">
         <v-chip :color="getColor(item.status)" small dark>
           {{ item.status | statusText }}
         </v-chip>
       </template>
-      <template v-slot:item.action="{ item }">
+      <template #item.action="{ item }">
         <v-btn small color="warning" text @click="checkItem(item)">
           审核
         </v-btn>
@@ -75,30 +77,35 @@
           删除
         </v-btn>
       </template>
+      <template #expanded-item="{ headers, item }">
+        <td :colspan="headers.length">
+          参赛对象：{{ item.scope }} <br />竞赛描述：{{ item.description }}
+        </td>
+      </template>
     </v-data-table>
   </v-card>
 </template>
 
 <script>
 import { getAllCompetition } from "../../api/competition";
+import TableSearchToolbar from "./components/TableSearchToolbar";
 
 export default {
   name: "CompetitionList",
   data: () => ({
-    search: "",
     loading: false,
     dialog: false,
     headers: [
-      {
-        text: "#",
-        align: "left",
-        value: "id"
-      },
-      { text: "竞赛名称", sortable: false, value: "name" },
-      { text: "所属学院", value: "college" },
+      { text: "#", value: "id" },
+      { text: "名称", value: "name" },
+      { text: "年份", value: "year" },
+      { text: "部门", value: "department" },
+      { text: "时间", value: "time" },
       { text: "负责人", value: "principal" },
       { text: "状态", value: "status" },
-      { text: "操作", value: "action", sortable: false }
+      { text: "最后处理人", value: "lastHandler" },
+      { text: "操作", value: "action" },
+      { text: "", value: "data-table-expand" }
     ],
     desserts: [],
     options: {
@@ -109,11 +116,11 @@ export default {
     editedIndex: -1,
     editedItem: {
       name: "",
-      college: ""
+      department: ""
     },
     defaultItem: {
       name: "",
-      college: ""
+      department: ""
     }
   }),
   computed: {
@@ -122,6 +129,7 @@ export default {
     }
   },
   methods: {
+    // TODO 本院系本年度立项申请
     getDate() {
       const { page, itemsPerPage } = this.options;
       this.loading = true;
@@ -177,6 +185,14 @@ export default {
     getColor(status) {
       const colors = ["error", "warning", "success", "text"];
       return colors[status];
+    },
+    /**
+     * 表单检索
+     * @param search
+     */
+    tableSearch(search) {
+      // TODO 调用后端接口检索
+      alert(search.name);
     }
   },
   watch: {
@@ -198,7 +214,8 @@ export default {
   },
   activated() {
     this.getDate();
-  }
+  },
+  components: { TableSearchToolbar }
 };
 </script>
 
