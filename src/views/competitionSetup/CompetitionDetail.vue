@@ -1,18 +1,5 @@
 <template>
   <v-row>
-    <v-col cols="12">
-      <v-stepper alt-labels :value="competitionForm.status">
-        <v-stepper-header>
-          <v-stepper-step step="0">待审核</v-stepper-step>
-          <v-divider />
-          <v-stepper-step step="1">报名中</v-stepper-step>
-          <v-divider />
-          <v-stepper-step step="2">比赛中</v-stepper-step>
-          <v-divider />
-          <v-stepper-step step="3">已结束</v-stepper-step>
-        </v-stepper-header>
-      </v-stepper>
-    </v-col>
     <v-col cols="12" sm="10" md="8" lg="6" xl="4">
       <v-form>
         <v-text-field
@@ -33,6 +20,13 @@
           v-model="competitionForm.college"
           label="所属学院"
         />
+        <v-select
+          readonly
+          persistent-hint
+          :items="statusItems"
+          v-model="competitionForm.status"
+          label="当前状态"
+        />
         <v-textarea
           auto-grow
           clearable
@@ -51,12 +45,14 @@
 </template>
 
 <script>
+import { competitionStatus } from "../../common/constant";
+
 export default {
   name: "CompetitionDetail",
   data: () => ({
     competitionForm: {
       id: 1,
-      status: 0,
+      status: 1,
       name: "软件设计大赛",
       college: "软件学院",
       startTime: "第5周",
@@ -67,6 +63,11 @@ export default {
     },
     collegeItems: ["软件学院", "计算机学院"]
   }),
+  computed: {
+    statusItems() {
+      return competitionStatus;
+    }
+  },
   methods: {
     checkCompetition() {
       if (confirm("是否审核？")) this.competitionForm.status = 1;

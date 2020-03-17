@@ -16,65 +16,38 @@
           <v-col cols="12" xl="1" lg="2" md="12" sm="12">
             <v-toolbar dense flat color="white">
               <v-spacer />
-              <v-btn
-                color="primary"
-                dark
-                @click="$router.push({ name: 'CompetitionLaunch' })"
-              >
-                发起竞赛
+              <v-btn color="primary" dark :to="{ name: 'CompetitionApply' }">
+                新的申请
               </v-btn>
-              <v-dialog v-model="dialog" max-width="500px">
-                <v-card>
-                  <v-card-title>
-                    <span class="headline">{{ formTitle }}</span>
-                  </v-card-title>
-
-                  <v-card-text>
-                    <v-container>
-                      <v-row>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.name"
-                            label="Name"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.department"
-                            label="Code"
-                          ></v-text-field>
-                        </v-col>
-                      </v-row>
-                    </v-container>
-                  </v-card-text>
-
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="orange darken-1" text @click="close"
-                      >取消</v-btn
-                    >
-                    <v-btn color="blue darken-1" text @click="save">保存</v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
             </v-toolbar>
           </v-col>
         </v-row>
       </template>
+      <template #item.name="{ item }">
+        <router-link
+          :to="{
+            name: 'CompetitionDetail',
+            params: { competitionId: item.id }
+          }"
+          class="competition-name-link"
+        >
+          {{ item.name }}
+        </router-link>
+      </template>
       <template #item.status="{ item }">
-        <v-chip :color="getColor(item.status)" small dark>
-          {{ item.status | statusText }}
+        <v-chip :color="item.status | competitionStatusColorFilter" small dark>
+          {{ item.status | competitionStatusTextFilter }}
         </v-chip>
       </template>
       <template #item.action="{ item }">
-        <v-btn small color="warning" text @click="checkItem(item)">
-          审核
-        </v-btn>
-        <v-btn small color="success" text @click="editItem(item)">
+        <v-btn small color="warning" text :to="itemTo(item.id)">
           编辑
         </v-btn>
-        <v-btn small color="error" text @click="deleteItem(item)">
-          删除
+        <v-btn small color="primary" text :to="itemTo(item.id)">
+          修改
+        </v-btn>
+        <v-btn small color="error" text @click="deleteItem(item.id)">
+          撤销
         </v-btn>
       </template>
       <template #expanded-item="{ headers, item }">
@@ -94,7 +67,6 @@ export default {
   name: "CompetitionList",
   data: () => ({
     loading: false,
-    dialog: false,
     headers: [
       { text: "#", value: "id" },
       { text: "名称", value: "name" },
@@ -123,11 +95,6 @@ export default {
       department: ""
     }
   }),
-  computed: {
-    formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "编辑";
-    }
-  },
   methods: {
     // TODO 本院系本年度立项申请
     getDate() {
@@ -146,11 +113,11 @@ export default {
           this.loading = false;
         });
     },
-    checkItem(item) {
-      this.$router.push({
+    itemTo(id) {
+      return {
         name: "CompetitionDetail",
-        params: { competitionId: item.id }
-      });
+        params: { competitionId: id }
+      };
     },
 
     editItem(item) {
@@ -161,7 +128,7 @@ export default {
 
     deleteItem(item) {
       const index = this.desserts.indexOf(item);
-      confirm("Are you sure you want to delete this item?") &&
+      confirm("撤销的申请将不再保留记录，是否确定撤销？") &&
         this.desserts.splice(index, 1);
     },
 
@@ -181,11 +148,6 @@ export default {
       }
       this.close();
     },
-
-    getColor(status) {
-      const colors = ["error", "warning", "success", "text"];
-      return colors[status];
-    },
     /**
      * 表单检索
      * @param search
@@ -201,15 +163,6 @@ export default {
         this.getDate();
       },
       deep: true
-    },
-    dialog(val) {
-      val || this.close();
-    }
-  },
-  filters: {
-    statusText(val) {
-      const text = ["待审核", "报名中", "比赛中", "已结束"];
-      return text[val];
     }
   },
   activated() {
@@ -219,4 +172,13 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.competition-name-link {
+  text-decoration: none;
+  color: #000000;
+}
+.competition-name-link:hover {
+  text-decoration: underline;
+  color: #0000ee;
+}
+</style>

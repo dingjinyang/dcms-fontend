@@ -14,7 +14,7 @@ export default [
         path: "list",
         name: "CompetitionList",
         meta: {
-          title: "竞赛列表",
+          title: "立项申请",
           icon: "id-card"
         },
         component: () =>
@@ -24,7 +24,7 @@ export default [
       },
       {
         path: "launch",
-        name: "CompetitionLaunch",
+        name: "CompetitionApply",
         hideInMenu: true,
         meta: {
           title: "竞赛发起",
@@ -32,7 +32,7 @@ export default [
         },
         component: () =>
           import(
-            /* webpackChunkName: "CompetitionLaunch" */ "@/views/competitionSetup/CompetitionLaunch"
+            /* webpackChunkName: "CompetitionLaunch" */ "../../views/competitionSetup/CompetitionApply"
           )
       },
       {
@@ -40,7 +40,7 @@ export default [
         name: "CompetitionDetail",
         hideInMenu: true,
         meta: {
-          title: "竞赛详情",
+          title: "立项详情",
           icon: "id-card"
         },
         component: () =>
