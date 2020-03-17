@@ -10,10 +10,10 @@
     >
       <template #top>
         <v-row no-gutters>
-          <v-col cols="10"
-            ><table-search-toolbar v-on:search="tableSearch"
-          /></v-col>
-          <v-col cols="2">
+          <v-col cols="12" xl="11" lg="10" md="12" sm="12">
+            <table-search-toolbar @search="tableSearch" />
+          </v-col>
+          <v-col cols="12" xl="1" lg="2" md="12" sm="12">
             <v-toolbar dense flat color="white">
               <v-spacer />
               <v-btn
@@ -190,9 +190,9 @@ export default {
      * 表单检索
      * @param search
      */
+    // eslint-disable-next-line no-unused-vars
     tableSearch(search) {
       // TODO 调用后端接口检索
-      alert(search.name);
     }
   },
   watch: {

@@ -3,18 +3,25 @@
     <v-expansion-panel>
       <v-expansion-panel-header v-slot="{ open }">
         <v-row no-gutters>
-          <v-col cols="2">数据检索</v-col>
-          <v-col cols="10" class="text--secondary">
+          <v-col cols="12" xl="2" lg="2" md="12" sm="12">数据检索</v-col>
+          <v-col
+            cols="12"
+            xl="10"
+            lg="10"
+            md="12"
+            sm="12"
+            class="text--secondary"
+          >
             <v-fade-transition hide-on-leave>
               <span v-if="open">选择检索条件，点击检索按钮</span>
               <v-row v-else no-gutters style="width: 100%">
-                <v-col cols="4">
+                <v-col cols="12" xl="4" lg="4" md="4" sm="12">
                   日期： {{ competition.date || "全部" }}
                 </v-col>
-                <v-col cols="4">
+                <v-col cols="12" xl="4" lg="4" md="4" sm="12">
                   申报部门： {{ competition.department || "全部" }}
                 </v-col>
-                <v-col cols="4">
+                <v-col cols="12" xl="4" lg="4" md="4" sm="12">
                   竞赛名称： {{ competition.name || "全部" }}
                 </v-col>
               </v-row>
@@ -26,7 +33,7 @@
         <v-row>
           <v-col cols="12" lg="3" md="3" sm="12">
             <v-menu
-              ref="menu"
+              ref="tableDateSearchMenu"
               v-model="menu"
               :close-on-content-click="false"
               :return-value.sync="competition.date"
@@ -46,10 +53,20 @@
                   v-on="on"
                 ></v-text-field>
               </template>
-              <v-date-picker v-model="competition.date" type="month" scrollable>
+              <v-date-picker
+                v-model="competition.date"
+                type="month"
+                scrollable
+                locale="cn"
+              >
                 <v-spacer></v-spacer>
                 <v-btn text color="warning" @click="menu = false">取消</v-btn>
-                <v-btn text color="primary" @click="save">确定</v-btn>
+                <v-btn
+                  text
+                  color="primary"
+                  @click="$refs.tableDateSearchMenu.save(competition.date)"
+                  >确定
+                </v-btn>
               </v-date-picker>
             </v-menu>
           </v-col>
@@ -60,7 +77,6 @@
               prepend-icon="mdi-event"
               clearable
               @click:clear="clear"
-              v-on="on"
           /></v-col>
           <v-col cols="12" lg="4" md="4" sm="12">
             <v-text-field
@@ -69,7 +85,6 @@
               prepend-icon="mdi-event"
               clearable
               @click:clear="clear"
-              v-on="on"
           /></v-col>
           <v-col cols="12" lg="1" md="1" sm="12">
             <v-btn class="mt-3" color="primary" @click="search">检索</v-btn>
@@ -86,7 +101,7 @@ export default {
   data: () => ({
     menu: false,
     competition: {
-      date: "",
+      date: new Date().toISOString().substr(0, 7),
       department: null,
       name: null
     },
