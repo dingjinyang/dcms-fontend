@@ -174,11 +174,11 @@ export default {
 
 <style scoped>
 .competition-name-link {
+  color: #08c;
   text-decoration: none;
-  color: #000000;
 }
 .competition-name-link:hover {
+  color: #337ab7;
   text-decoration: underline;
-  color: #0000ee;
 }
 </style>

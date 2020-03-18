@@ -10,9 +10,7 @@
       <v-container fluid>
         <div class="ml-5">
           <v-scroll-x-transition mode="out-in">
-            <keep-alive>
-              <router-view />
-            </keep-alive>
+            <router-view />
           </v-scroll-x-transition>
         </div>
       </v-container>
