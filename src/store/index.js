@@ -7,7 +7,10 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    navigationDrawer: null
+    /**
+     * 侧边栏默认状态 false-收起 true-展开
+     */
+    navigationDrawer: false
   },
   mutations: {
     REVERSE_DRAWER(state) {

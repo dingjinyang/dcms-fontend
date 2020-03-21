@@ -6,3 +6,12 @@ const _axios = axios;
 export function getAllCompetition(pageNum = 1, pageSize = 10) {
   return _axios.get(`/competition/all`, { params: { pageNum, pageSize } });
 }
+export function getCompetitionDetail(id) {
+  return _axios.get(`/competition/detail`, { params: { id } });
+}
+export function saveCompetitionApply(date) {
+  return _axios.post(`/competition/save`, date);
+}
+export function commitCompetitionApply(date) {
+  return _axios.post(`/competition/commit`, date);
+}

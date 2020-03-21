@@ -19,22 +19,50 @@ export default [
         },
         component: () =>
           import(
-            /* webpackChunkName: "CompetitionList" */ "@/views/competitionSetup/CompetitionList"
+            /* webpackChunkName: "CompetitionList" */ "../../views/competitionSetup/CompetitionList"
           )
       },
+
       {
-        path: "launch",
+        path: "apply",
         name: "CompetitionApply",
         hideInMenu: true,
         meta: {
-          title: "竞赛发起",
+          title: "新的申请",
           icon: "id-card"
         },
         component: () =>
           import(
-            /* webpackChunkName: "CompetitionLaunch" */ "../../views/competitionSetup/CompetitionApply"
+            /* webpackChunkName: "CompetitionApply" */ "../../views/competitionSetup/apply/CompetitionApply"
           )
       },
+      {
+        path: "edit/:competitionId",
+        name: "CompetitionEdit",
+        hideInMenu: true,
+        meta: {
+          title: "编辑申请",
+          icon: "id-card"
+        },
+        component: () =>
+          import(
+            /* webpackChunkName: "CompetitionApply" */ "../../views/competitionSetup/apply/CompetitionApply"
+          )
+      },
+      {
+        path: "revise/:competitionId",
+        name: "CompetitionRevise",
+        hideInMenu: true,
+        meta: {
+          title: "修改申请",
+          icon: "id-card"
+        },
+        component: () =>
+          import(
+            /* webpackChunkName: "CompetitionApply" */ "../../views/competitionSetup/apply/CompetitionApply"
+          )
+      },
+
       {
         path: "detail/:competitionId",
         name: "CompetitionDetail",
@@ -45,7 +73,7 @@ export default [
         },
         component: () =>
           import(
-            /* webpackChunkName: "CompetitionDetail" */ "@/views/competitionSetup/CompetitionDetail"
+            /* webpackChunkName: "CompetitionApply" */ "../../views/competitionSetup/apply/CompetitionApply"
           )
       }
     ]

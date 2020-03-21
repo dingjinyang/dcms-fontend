@@ -6,13 +6,13 @@
           <v-flex xs12 sm8 md6 lg5 xl3>
             <v-card class="elevation-12">
               <v-toolbar color="primary" dark flat>
-                <v-toolbar-title>Login form</v-toolbar-title>
+                <v-toolbar-title>学科竞赛管理系统</v-toolbar-title>
                 <v-spacer></v-spacer>
               </v-toolbar>
               <v-card-text>
                 <v-form ref="login_form">
                   <v-text-field
-                    label="account"
+                    label="账户"
                     name="account"
                     prepend-icon="mdi-account"
                     type="text"
@@ -21,8 +21,7 @@
                   ></v-text-field>
 
                   <v-text-field
-                    id="password"
-                    label="Password"
+                    label="密码"
                     name="password"
                     prepend-icon="mdi-lock"
                     :type="passwordDisplay ? 'text' : 'password'"
@@ -71,8 +70,8 @@ export default {
     passwordDisplay: false,
     loginLoading: false,
     loginForm: {
-      account: "admin",
-      password: "admin"
+      account: "",
+      password: ""
     },
     loginRoles: [
       {

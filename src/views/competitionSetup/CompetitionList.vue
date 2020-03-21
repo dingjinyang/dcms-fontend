@@ -40,19 +40,37 @@
         </v-chip>
       </template>
       <template #item.action="{ item }">
-        <v-btn small color="warning" text :to="itemTo(item.id)">
-          编辑
+        <v-btn
+          v-if="item.status === 0"
+          small
+          color="warning"
+          text
+          :to="itemTo('CompetitionEdit', item.id)"
+          >编辑
         </v-btn>
-        <v-btn small color="primary" text :to="itemTo(item.id)">
-          修改
+        <v-btn
+          v-if="item.status === 2"
+          small
+          color="primary"
+          text
+          :to="itemTo('CompetitionRevise', item.id)"
+          >修改
         </v-btn>
-        <v-btn small color="error" text @click="deleteItem(item.id)">
-          撤销
+        <v-btn
+          v-if="item.status === 0"
+          small
+          color="error"
+          text
+          @click="deleteItem(item.id)"
+          >撤销
+        </v-btn>
+        <v-btn v-if="item.status === 4" small color="success" text>
+          复制
         </v-btn>
       </template>
       <template #expanded-item="{ headers, item }">
         <td :colspan="headers.length">
-          参赛对象：{{ item.scope }} <br />竞赛描述：{{ item.description }}
+          参赛对象：{{ item.scope }} <br />竞赛简介：{{ item.description }}
         </td>
       </template>
     </v-data-table>
@@ -96,7 +114,7 @@ export default {
     }
   }),
   methods: {
-    // TODO 本院系本年度立项申请
+    // TODO 后端请求 本院系本年度立项申请
     getDate() {
       const { page, itemsPerPage } = this.options;
       this.loading = true;
@@ -113,47 +131,33 @@ export default {
           this.loading = false;
         });
     },
-    itemTo(id) {
+    /**
+     * 表格操作跳转至竞赛详情页 - 编辑/删除
+     * @param name 路由名称
+     * @param competitionId number
+     */
+    itemTo(name, competitionId) {
       return {
-        name: "CompetitionDetail",
-        params: { competitionId: id }
+        name,
+        params: { competitionId }
       };
     },
-
-    editItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialog = true;
-    },
-
+    /**
+     * 撤销当前竞赛
+     *  @param item object
+     */
     deleteItem(item) {
       const index = this.desserts.indexOf(item);
+      //TODO 请求后端，删除当前竞赛
       confirm("撤销的申请将不再保留记录，是否确定撤销？") &&
         this.desserts.splice(index, 1);
     },
-
-    close() {
-      this.dialog = false;
-      setTimeout(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      }, 300);
-    },
-
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem);
-      } else {
-        this.desserts.push(this.editedItem);
-      }
-      this.close();
-    },
     /**
      * 表单检索
-     * @param search
+     * @param searchFrom
      */
     // eslint-disable-next-line no-unused-vars
-    tableSearch(search) {
+    tableSearch(searchFrom) {
       // TODO 调用后端接口检索
     }
   },
@@ -178,7 +182,7 @@ export default {
   text-decoration: none;
 }
 .competition-name-link:hover {
-  color: #337ab7;
+  color: #0408b7;
   text-decoration: underline;
 }
 </style>

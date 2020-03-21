@@ -45,7 +45,7 @@ export default {
       data: {
         roles: [role],
         permissions: permissions[role],
-        name: Mock.mock("@NAME"),
+        username: Mock.mock("@CNAME"),
         avatar:
           // "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif"
           "https://d36jcksde1wxzq.cloudfront.net/saas-mega/whiteFingerprint.png"

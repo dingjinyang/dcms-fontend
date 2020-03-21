@@ -11,18 +11,40 @@
             md="12"
             sm="12"
             class="text--secondary"
+            :style="textMarginTop"
           >
             <v-fade-transition hide-on-leave>
               <span v-if="open">选择检索条件，点击检索按钮</span>
               <v-row v-else no-gutters style="width: 100%">
-                <v-col cols="12" xl="4" lg="4" md="4" sm="12">
-                  日期： {{ competition.date || "全部" }}
+                <v-col
+                  cols="12"
+                  xl="4"
+                  lg="4"
+                  md="4"
+                  sm="12"
+                  :style="textMarginTop"
+                >
+                  日期： {{ searchForm.date || "全部" }}
                 </v-col>
-                <v-col cols="12" xl="4" lg="4" md="4" sm="12">
-                  申报部门： {{ competition.department || "全部" }}
+                <v-col
+                  cols="12"
+                  xl="4"
+                  lg="4"
+                  md="4"
+                  sm="12"
+                  :style="textMarginTop"
+                >
+                  申报部门： {{ searchForm.department || "全部" }}
                 </v-col>
-                <v-col cols="12" xl="4" lg="4" md="4" sm="12">
-                  竞赛名称： {{ competition.name || "全部" }}
+                <v-col
+                  cols="12"
+                  xl="4"
+                  lg="4"
+                  md="4"
+                  sm="12"
+                  :style="textMarginTop"
+                >
+                  竞赛名称： {{ searchForm.name || "全部" }}
                 </v-col>
               </v-row>
             </v-fade-transition>
@@ -30,13 +52,13 @@
         </v-row>
       </v-expansion-panel-header>
       <v-expansion-panel-content>
-        <v-row>
+        <v-row style="width: 100%">
           <v-col cols="12" lg="3" md="3" sm="12">
             <v-menu
               ref="tableDateSearchMenu"
               v-model="menu"
               :close-on-content-click="false"
-              :return-value.sync="competition.date"
+              :return-value.sync="searchForm.date"
               transition="scale-transition"
               offset-y
               max-width="290px"
@@ -44,7 +66,7 @@
             >
               <template v-slot:activator="{ on }">
                 <v-text-field
-                  v-model="competition.date"
+                  v-model="searchForm.date"
                   label="选择日期"
                   prepend-icon="mdi-event"
                   readonly
@@ -54,7 +76,7 @@
                 ></v-text-field>
               </template>
               <v-date-picker
-                v-model="competition.date"
+                v-model="searchForm.date"
                 type="month"
                 scrollable
                 locale="cn"
@@ -64,7 +86,7 @@
                 <v-btn
                   text
                   color="primary"
-                  @click="$refs.tableDateSearchMenu.save(competition.date)"
+                  @click="$refs.tableDateSearchMenu.save(searchForm.date)"
                   >确定
                 </v-btn>
               </v-date-picker>
@@ -72,7 +94,7 @@
           </v-col>
           <v-col cols="12" lg="4" md="4" sm="12">
             <v-text-field
-              v-model="competition.department"
+              v-model="searchForm.department"
               label="申报部门"
               prepend-icon="mdi-event"
               clearable
@@ -80,7 +102,7 @@
           /></v-col>
           <v-col cols="12" lg="4" md="4" sm="12">
             <v-text-field
-              v-model="competition.name"
+              v-model="searchForm.name"
               label="竞赛名称"
               prepend-icon="mdi-event"
               clearable
@@ -100,13 +122,20 @@ export default {
   name: "TableSearchToolbar",
   data: () => ({
     menu: false,
-    competition: {
+    searchForm: {
       date: new Date().toISOString().substr(0, 7),
       department: null,
       name: null
     },
     panel: []
   }),
+  computed: {
+    textMarginTop() {
+      return {
+        "margin-top": this.$vuetify.breakpoint.mdAndDown ? "5px" : ""
+      };
+    }
+  },
   methods: {
     clear() {},
     save() {
@@ -114,7 +143,7 @@ export default {
     },
     search() {
       this.panel = [];
-      this.$emit("search", this.competition);
+      this.$emit("search", this.searchForm);
     }
   }
 };
