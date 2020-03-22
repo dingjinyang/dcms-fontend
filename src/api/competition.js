@@ -15,3 +15,8 @@ export function saveCompetitionApply(date) {
 export function commitCompetitionApply(date) {
   return _axios.post(`/competition/commit`, date);
 }
+export function getCompetitionApprovalList(pageNum = 1, pageSize = 10) {
+  return _axios.get(`/competition/approval/list`, {
+    params: { pageNum, pageSize }
+  });
+}
