@@ -42,7 +42,10 @@
           :readonly="isDetail"
       /></v-col>
       <v-col cols="12">
-        <competition-stage :stages.sync="competitionForm.stages" />
+        <competition-stage
+          :readonly="isDetail"
+          :stages.sync="competitionForm.stages"
+        />
       </v-col>
       <v-col cols="12" sm="12" md="12" lg="12" xl="12">
         <v-textarea
@@ -89,7 +92,15 @@
           <v-btn color="primary" class="ml-4" @click="commit">提交</v-btn>
         </div>
         <div v-else>
-          <v-btn color="primary" class="ml-4" @click="review">审核</v-btn>
+          <v-btn color="primary" class="ml-4" :to="{ name: 'CompetitionApply' }"
+            >再次申请</v-btn
+          >
+          <v-btn
+            color="warning"
+            class="ml-4"
+            :to="{ name: 'CompetitionApplyList' }"
+            >返回</v-btn
+          >
         </div>
       </v-col>
     </v-row>
@@ -195,13 +206,10 @@ export default {
               timeout: 3000
             };
         });
-    },
-    review() {
-      confirm(`审核提交后将不能修改，是否确定提交？`);
     }
   },
   created() {
-    this.$route.name === "CompetitionDetail" &&
+    this.$route.name !== "CompetitionApply" &&
       getCompetitionDetail(this.$route.params.competitionId).then(res => {
         if (res.code === 200) this.competitionForm = res.data;
       });

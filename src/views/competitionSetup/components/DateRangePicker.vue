@@ -10,13 +10,13 @@
   >
     <template v-slot:activator="{ on }">
       <v-text-field
-        :value="`${start} ~ ${end}`"
+        :value="`${start} ~ ${end || ''}`"
         label="时间段"
         readonly
         v-on="on"
       ></v-text-field>
     </template>
-    <v-date-picker v-model="dates" range scrollable>
+    <v-date-picker v-model="dates" :readonly="readonly" range scrollable>
       <v-spacer></v-spacer>
       <v-btn text color="error" @click="menu = false">取消</v-btn>
       <v-btn text color="primary" @click="save">确认</v-btn>
@@ -29,7 +29,11 @@ export default {
   name: "DateRangePicker",
   props: {
     start: String,
-    end: String
+    end: String,
+    readonly: {
+      type: Boolean,
+      default: false
+    }
   },
   data: () => ({
     dates: [],
@@ -51,6 +55,7 @@ export default {
   },
   methods: {
     save() {
+      if (this.dates[1] === undefined) return;
       this.dates.sort();
       this.$refs.menu.save(this.dates);
       this.$emit("update:start", this.dates[0]);

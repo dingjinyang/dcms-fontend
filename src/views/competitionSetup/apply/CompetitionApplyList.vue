@@ -64,7 +64,13 @@
           @click="deleteItem(item.id)"
           >撤销
         </v-btn>
-        <v-btn v-if="item.status === 4" small color="success" text>
+        <v-btn
+          v-if="item.status === 4"
+          small
+          color="success"
+          text
+          @click="copyItem(item)"
+        >
           复制
         </v-btn>
       </template>
@@ -78,13 +84,14 @@
 </template>
 
 <script>
-import { getAllCompetition } from "../../api/competition";
-import TableSearchToolbar from "./components/TableSearchToolbar";
+import { getAllCompetition } from "../../../api/competition";
+import TableSearchToolbar from "../components/TableSearchToolbar";
 
 export default {
   name: "CompetitionList",
   data: () => ({
     loading: false,
+    dialog: false,
     headers: [
       { text: "#", value: "id" },
       { text: "名称", value: "name" },
@@ -151,6 +158,9 @@ export default {
       //TODO 请求后端，删除当前竞赛
       confirm("撤销的申请将不再保留记录，是否确定撤销？") &&
         this.desserts.splice(index, 1);
+    },
+    copyItem(item) {
+      prompt("重新命名：", item.name);
     },
     /**
      * 表单检索

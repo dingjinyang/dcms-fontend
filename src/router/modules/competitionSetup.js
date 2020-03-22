@@ -12,17 +12,16 @@ export default [
     children: [
       {
         path: "list",
-        name: "CompetitionList",
+        name: "CompetitionApplyList",
         meta: {
           title: "立项申请",
           icon: "id-card"
         },
         component: () =>
           import(
-            /* webpackChunkName: "CompetitionList" */ "../../views/competitionSetup/CompetitionList"
+            /* webpackChunkName: "CompetitionList" */ "../../views/competitionSetup/apply/CompetitionApplyList"
           )
       },
-
       {
         path: "apply",
         name: "CompetitionApply",
@@ -33,7 +32,7 @@ export default [
         },
         component: () =>
           import(
-            /* webpackChunkName: "CompetitionApply" */ "../../views/competitionSetup/apply/CompetitionApply"
+            /* webpackChunkName: "CompetitionForm" */ "../../views/competitionSetup/apply/CompetitionForm"
           )
       },
       {
@@ -46,7 +45,7 @@ export default [
         },
         component: () =>
           import(
-            /* webpackChunkName: "CompetitionApply" */ "../../views/competitionSetup/apply/CompetitionApply"
+            /* webpackChunkName: "CompetitionForm" */ "../../views/competitionSetup/apply/CompetitionForm"
           )
       },
       {
@@ -59,10 +58,9 @@ export default [
         },
         component: () =>
           import(
-            /* webpackChunkName: "CompetitionApply" */ "../../views/competitionSetup/apply/CompetitionApply"
+            /* webpackChunkName: "CompetitionForm" */ "../../views/competitionSetup/apply/CompetitionForm"
           )
       },
-
       {
         path: "detail/:competitionId",
         name: "CompetitionDetail",
@@ -73,7 +71,19 @@ export default [
         },
         component: () =>
           import(
-            /* webpackChunkName: "CompetitionApply" */ "../../views/competitionSetup/apply/CompetitionApply"
+            /* webpackChunkName: "CompetitionForm" */ "../../views/competitionSetup/apply/CompetitionForm"
+          )
+      },
+      {
+        path: "approval",
+        name: "CollegeApprovalList",
+        meta: {
+          title: "学院审批",
+          icon: "id-card"
+        },
+        component: () =>
+          import(
+            /* webpackChunkName: "CollegeApproval" */ "../../views/competitionSetup/approval/CollegeApprovalList"
           )
       }
     ]

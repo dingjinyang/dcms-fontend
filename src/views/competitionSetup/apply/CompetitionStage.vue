@@ -21,7 +21,10 @@
           阶段 {{ i }}
         </v-tab>
         <v-tab-item v-for="i in tabs" :key="i" :value="`stage-${i}`">
-          <competition-stage-tab-item :stage.sync="stageForms[i - 1]" />
+          <competition-stage-tab-item
+            v-bind="$attrs"
+            :stage.sync="stageForms[i - 1]"
+          />
         </v-tab-item>
       </v-tabs>
     </v-card>
@@ -32,6 +35,8 @@
 import CompetitionStageTabItem from "./CompetitionStageTabItem";
 export default {
   name: "CompetitionStage",
+  components: { CompetitionStageTabItem },
+  inheritAttrs: false,
   props: {
     stages: Array
   },
@@ -80,8 +85,7 @@ export default {
     isDetail() {
       return this.$route.name === "CompetitionDetail";
     }
-  },
-  components: { CompetitionStageTabItem }
+  }
 };
 </script>
 

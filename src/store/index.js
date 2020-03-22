@@ -10,7 +10,7 @@ export default new Vuex.Store({
     /**
      * 侧边栏默认状态 false-收起 true-展开
      */
-    navigationDrawer: false
+    navigationDrawer: process.env.NODE_ENV === "production"
   },
   mutations: {
     REVERSE_DRAWER(state) {
