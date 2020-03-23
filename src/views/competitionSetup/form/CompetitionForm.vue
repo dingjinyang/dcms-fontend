@@ -5,103 +5,135 @@
         <v-text-field
           v-model="competitionForm.name"
           label="名称"
-          :readonly="isDetail"
+          :readonly="readonly"
       /></v-col>
       <v-col cols="12" sm="6" md="4" lg="4" xl="4">
         <v-select
           v-model="competitionForm.level"
           label="最高级别"
           :items="competitionLevels"
-          :readonly="isDetail"
+          :readonly="readonly"
       /></v-col>
       <v-col cols="12" sm="6" md="4" lg="4" xl="4">
         <v-text-field
           v-model="competitionForm.principal"
           label="负责人"
-          :readonly="isDetail"
+          :readonly="readonly"
       /></v-col>
       <v-col cols="12" sm="6" md="4" lg="4" xl="4">
         <v-text-field
           v-model="competitionForm.phone"
           label="联系方式"
           type="phone"
-          :readonly="isDetail"
+          :readonly="readonly"
       /></v-col>
       <v-col cols="12" sm="6" md="4" lg="4" xl="4">
         <v-text-field
           v-model="competitionForm.teams"
           label="参赛队数"
           type="number"
-          :readonly="isDetail"
+          :readonly="readonly"
       /></v-col>
       <v-col cols="12" sm="6" md="4" lg="4" xl="4">
         <v-text-field
           v-model="competitionForm.people"
           label="参赛人数"
           type="number"
-          :readonly="isDetail"
+          :readonly="readonly"
       /></v-col>
       <v-col cols="12">
         <competition-stage
-          :readonly="isDetail"
+          :readonly="readonly"
           :stages.sync="competitionForm.stages"
         />
       </v-col>
       <v-col cols="12" sm="12" md="12" lg="12" xl="12">
         <v-textarea
           auto-grow
-          :clearable="!isDetail"
+          :clearable="!readonly"
           label="简介"
           v-model="competitionForm.description"
-          :readonly="isDetail"
+          :readonly="readonly"
       /></v-col>
       <v-col cols="12" sm="12" md="6" lg="6" xl="4">
         <v-textarea
           auto-grow
-          :clearable="!isDetail"
+          :clearable="!readonly"
           label="拟设奖项及数目"
           v-model="competitionForm.awards"
-          :readonly="isDetail"
+          :readonly="readonly"
       /></v-col>
       <v-col cols="12" sm="12" md="6" lg="6" xl="4">
         <v-textarea
           auto-grow
-          :clearable="!isDetail"
+          :clearable="!readonly"
           label="竞赛流程"
           v-model="competitionForm.flow"
-          :readonly="isDetail"
+          :readonly="readonly"
       /></v-col>
       <v-col cols="12" sm="12" md="6" lg="6" xl="4">
         <v-text-field
-          :clearable="!isDetail"
+          :clearable="!readonly"
           v-model="competitionForm.condition"
           label="竞赛条件"
-          :readonly="isDetail"
+          :readonly="readonly"
       /></v-col>
       <v-col cols="12" sm="12" md="6" lg="6" xl="4">
         <v-text-field
-          :clearable="!isDetail"
+          :clearable="!readonly"
           v-model="competitionForm.achievement"
           label="预期成果"
-          :readonly="isDetail"
+          :readonly="readonly"
       /></v-col>
+      <v-col cols="12" sm="12" md="12" lg="12" xl="12" v-if="isCollegeApproval">
+        <v-btn text color="primary">历年经费使用情况</v-btn>
+        <v-btn text color="primary">历年参赛情况</v-btn>
+      </v-col>
       <v-col cols="12" sm="12" md="12" lg="12" xl="12">
-        <div v-if="!isDetail">
-          <v-btn color="warning" @click="reset">重置</v-btn>
-          <v-btn color="success" class="ml-4" @click="save">保存</v-btn>
-          <v-btn color="primary" class="ml-4" @click="commit">提交</v-btn>
-        </div>
-        <div v-else>
-          <v-btn color="primary" class="ml-4" :to="{ name: 'CompetitionApply' }"
-            >再次申请</v-btn
-          >
+        <template v-if="isDetail">
+          <v-btn color="primary" :to="{ name: 'CompetitionApply' }">
+            再次申请
+          </v-btn>
           <v-btn
             color="warning"
             class="ml-4"
             :to="{ name: 'CompetitionApplyList' }"
-            >返回</v-btn
           >
-        </div>
+            返回
+          </v-btn>
+        </template>
+        <template v-else-if="isCollegeApproval">
+          <confirm-dialog
+            title="确认通过"
+            btn-color="success"
+            max-width="373px"
+            only-title
+            >通过
+          </confirm-dialog>
+          <confirm-dialog
+            title="修改意见"
+            btn-class="ml-3"
+            max-width="600px"
+            @confirm="returnForCorrection"
+            >返回修改
+            <template #container>
+              <v-textarea v-model="correctSuggest" required clearable />
+            </template>
+          </confirm-dialog>
+          <confirm-dialog
+            title="确认驳回"
+            btn-class="ml-3"
+            btn-color="error"
+            max-width="373px"
+            only-title
+            >驳回</confirm-dialog
+          >
+        </template>
+        <template v-else
+          ><v-btn color="warning" @click="reset">重置</v-btn>
+          <v-btn color="success" class="ml-4" @click="save">保存</v-btn>
+          <v-btn color="primary" class="ml-4" @click="commit">提交</v-btn>
+        </template>
       </v-col>
     </v-row>
     <snack-bar :set="snackbarSet" />
@@ -118,6 +150,7 @@ import {
   saveCompetitionApply,
   commitCompetitionApply
 } from "../../../api/competition.js";
+import ConfirmDialog from "../../../components/ConfirmDialog";
 export default {
   name: "CompetitionApply",
   data: () => ({
@@ -169,11 +202,23 @@ export default {
     /** 部门选项 */
     colleges,
     competitionLevels,
-    snackbarSet: {}
+    snackbarSet: {},
+    correctSuggest: ""
   }),
+  components: {
+    CompetitionStage,
+    SnackBar,
+    ConfirmDialog
+  },
   computed: {
+    readonly() {
+      return this.isDetail || this.isCollegeApproval;
+    },
     isDetail() {
       return this.$route.name === "CompetitionDetail";
+    },
+    isCollegeApproval() {
+      return this.$route.name === "CollegeApproval";
     }
   },
   methods: {
@@ -206,6 +251,9 @@ export default {
               timeout: 3000
             };
         });
+    },
+    returnForCorrection() {
+      console.log(this.correctSuggest);
     }
   },
   created() {
@@ -213,8 +261,7 @@ export default {
       getCompetitionDetail(this.$route.params.competitionId).then(res => {
         if (res.code === 200) this.competitionForm = res.data;
       });
-  },
-  components: { CompetitionStage, SnackBar }
+  }
 };
 </script>
 

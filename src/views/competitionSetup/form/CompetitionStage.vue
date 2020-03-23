@@ -68,12 +68,12 @@ export default {
   },
   methods: {
     tabsPlus() {
-      !this.isDetail &&
+      !this.$attrs.readonly &&
         this.stageForms.length < this.tabsMax &&
         this.stageForms.push({ ...this.stage });
     },
     tabsMinus() {
-      !this.isDetail &&
+      !this.$attrs.readonly &&
         this.stageForms.length > this.tabsMin &&
         this.stageForms.pop();
     }

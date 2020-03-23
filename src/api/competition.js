@@ -9,14 +9,17 @@ export function getAllCompetition(pageNum = 1, pageSize = 10) {
 export function getCompetitionDetail(id) {
   return _axios.get(`/competition/detail`, { params: { id } });
 }
-export function saveCompetitionApply(date) {
-  return _axios.post(`/competition/save`, date);
+export function saveCompetitionApply(data) {
+  return _axios.post(`/competition/save`, data);
 }
-export function commitCompetitionApply(date) {
-  return _axios.post(`/competition/commit`, date);
+export function commitCompetitionApply(data) {
+  return _axios.post(`/competition/commit`, data);
 }
 export function getCompetitionApprovalList(pageNum = 1, pageSize = 10) {
   return _axios.get(`/competition/approval/list`, {
     params: { pageNum, pageSize }
   });
+}
+export function batchApprovalCompetition(data) {
+  return _axios.post(`/competition/approval/batch`, data);
 }

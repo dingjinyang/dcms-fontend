@@ -46,5 +46,10 @@ export default {
         )
       );
     }
+  ),
+  competitionApprovalBatch: Mock.mock(
+    "/competition/approval/batch",
+    "post",
+    responseData(null)
   )
 };

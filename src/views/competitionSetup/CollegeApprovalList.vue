@@ -1,33 +1,54 @@
 <template>
   <v-card>
     <v-data-table
+      v-model="selected"
       :headers="headers"
       :items="desserts"
       :loading="loading"
       :options.sync="options"
       :server-items-length="total"
       show-select
+      item-key="id"
     >
       <template #top>
-        <v-row no-gutters align="baseline">
-          <v-col cols="6" xl="1" lg="2" md="2" sm="3" align-self="baseline">
-            <v-toolbar dense flat color="white">
-              <v-spacer />
-              <v-btn color="success" dark>
+        <v-toolbar dense flat color="white">
+          <v-row>
+            <v-col
+              cols="6"
+              xl="1"
+              lg="2"
+              md="2"
+              sm="3"
+              v-show="selectedApproval.length"
+            >
+              <confirm-dialog
+                btn-color="success"
+                title="确认批量审批"
+                max-width="373px"
+                @confirm="batchApproval"
+              >
                 批量审批
-              </v-btn>
-            </v-toolbar>
-          </v-col>
-          <v-col cols="6" xl="1" lg="1" md="2" sm="3">
-            <v-toolbar dense flat color="white">
-              <v-spacer />
+                <template #container>
+                  <v-list disabled>
+                    <v-list-item
+                      v-for="item in selectedApproval"
+                      :key="item.id"
+                    >
+                      <v-list-item-content>
+                        <v-list-item-title>{{ item.name }} </v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list>
+                </template>
+              </confirm-dialog>
+            </v-col>
+            <v-col cols="6" xl="1" lg="2" md="2" sm="3">
               <v-btn color="primary" dark>
                 生成汇总表
               </v-btn>
-            </v-toolbar>
-          </v-col>
-          <v-spacer></v-spacer>
-        </v-row>
+            </v-col>
+          </v-row>
+        </v-toolbar>
       </template>
       <template #item.name="{ item }">
         <router-link
@@ -46,25 +67,32 @@
         </v-chip>
       </template>
       <template #item.action="{ item }">
-        <v-btn v-if="item.status === 1" small color="warning" text>审批 </v-btn>
-      </template>
-      <template #expanded-item="{ headers, item }">
-        <td :colspan="headers.length">
-          参赛对象：{{ item.scope }} <br />竞赛简介：{{ item.description }}
-        </td>
+        <v-btn
+          v-if="item.status === 1"
+          small
+          color="warning"
+          text
+          :to="itemTo(`CollegeApproval`, item.id)"
+          >审批
+        </v-btn>
       </template>
     </v-data-table>
   </v-card>
 </template>
 
 <script>
-import { getCompetitionApprovalList } from "../../../api/competition";
+import {
+  getCompetitionApprovalList,
+  batchApprovalCompetition
+} from "../../api/competition";
+import ConfirmDialog from "../../components/ConfirmDialog";
 
 export default {
   name: "CollegeApprovalList",
   data: () => ({
     loading: false,
     dialog: false,
+    selected: [],
     headers: [
       { text: "#", value: "id" },
       { text: "名称", value: "name", sortable: false },
@@ -81,17 +109,9 @@ export default {
       page: 1,
       itemsPerPage: 5
     },
-    total: 0,
-    editedIndex: -1,
-    editedItem: {
-      name: "",
-      department: ""
-    },
-    defaultItem: {
-      name: "",
-      department: ""
-    }
+    total: 0
   }),
+  components: { ConfirmDialog },
   methods: {
     // TODO 后端请求 本院系本年度立项申请
     getDate() {
@@ -110,49 +130,35 @@ export default {
           this.loading = false;
         });
     },
-    /**
-     * 表格操作跳转至竞赛详情页 - 编辑/删除
-     * @param name 路由名称
-     * @param competitionId number
-     */
+    batchApproval() {
+      batchApprovalCompetition(this.selectedApproval.map(item => item.id)).then(
+        res => {
+          if (res.code === 200) this.dialog = false;
+        }
+      );
+    },
     itemTo(name, competitionId) {
       return {
         name,
         params: { competitionId }
       };
-    },
-    /**
-     * 撤销当前竞赛
-     *  @param item object
-     */
-    deleteItem(item) {
-      const index = this.desserts.indexOf(item);
-      //TODO 请求后端，删除当前竞赛
-      confirm("撤销的申请将不再保留记录，是否确定撤销？") &&
-        this.desserts.splice(index, 1);
-    },
-    copyItem(item) {
-      prompt("重新命名：", item.name);
-    },
-    /**
-     * 表单检索
-     * @param searchFrom
-     */
-    // eslint-disable-next-line no-unused-vars
-    tableSearch(searchFrom) {
-      // TODO 调用后端接口检索
+    }
+  },
+  computed: {
+    selectedApproval() {
+      return this.selected.filter(item => {
+        return item.status === 1;
+      });
     }
   },
   watch: {
     options: {
+      deep: true,
+      immediate: true,
       handler() {
         this.getDate();
-      },
-      deep: true
+      }
     }
-  },
-  activated() {
-    this.getDate();
   }
 };
 </script>

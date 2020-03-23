@@ -56,14 +56,18 @@
           :to="itemTo('CompetitionRevise', item.id)"
           >修改
         </v-btn>
-        <v-btn
+        <confirm-dialog
           v-if="item.status === 0"
-          small
-          color="error"
-          text
-          @click="deleteItem(item.id)"
-          >撤销
-        </v-btn>
+          title="确认撤销"
+          btn-small
+          btn-text
+          btn-color="error"
+          max-width="373px"
+          only-title
+          @confirm="deleteItem(item.id)"
+        >
+          撤销
+        </confirm-dialog>
         <v-btn
           v-if="item.status === 4"
           small
@@ -84,8 +88,9 @@
 </template>
 
 <script>
-import { getAllCompetition } from "../../../api/competition";
-import TableSearchToolbar from "../components/TableSearchToolbar";
+import { getAllCompetition } from "../../api/competition";
+import TableSearchToolbar from "./components/TableSearchToolbar";
+import ConfirmDialog from "../../components/ConfirmDialog";
 
 export default {
   name: "CompetitionList",
@@ -120,6 +125,7 @@ export default {
       department: ""
     }
   }),
+  components: { TableSearchToolbar, ConfirmDialog },
   methods: {
     // TODO 后端请求 本院系本年度立项申请
     getDate() {
@@ -151,13 +157,10 @@ export default {
     },
     /**
      * 撤销当前竞赛
-     *  @param item object
+     *  @param id int
      */
-    deleteItem(item) {
-      const index = this.desserts.indexOf(item);
-      //TODO 请求后端，删除当前竞赛
-      confirm("撤销的申请将不再保留记录，是否确定撤销？") &&
-        this.desserts.splice(index, 1);
+    deleteItem(id) {
+      console.log(id);
     },
     copyItem(item) {
       prompt("重新命名：", item.name);
@@ -181,8 +184,7 @@ export default {
   },
   activated() {
     this.getDate();
-  },
-  components: { TableSearchToolbar }
+  }
 };
 </script>
 
