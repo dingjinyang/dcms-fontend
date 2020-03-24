@@ -1,7 +1,7 @@
 export default [
   {
     path: "/competition-setup",
-    name: "competitionSetup",
+    name: "setup",
     meta: {
       title: "竞赛立项",
       icon: "television-guide",
@@ -19,7 +19,7 @@ export default [
         },
         component: () =>
           import(
-            /* webpackChunkName: "CompetitionApplyList" */ "../../views/competitionSetup/apply/CompetitionApplyList"
+            /* webpackChunkName: "CompetitionApplyList" */ "../../views/setup/apply/CompetitionApplyList"
           )
       },
       {
@@ -32,7 +32,7 @@ export default [
         },
         component: () =>
           import(
-            /* webpackChunkName: "CompetitionForm" */ "../../views/competitionSetup/form/CompetitionForm"
+            /* webpackChunkName: "CompetitionForm" */ "../../views/setup/form/CompetitionForm"
           )
       },
       {
@@ -45,7 +45,7 @@ export default [
         },
         component: () =>
           import(
-            /* webpackChunkName: "CompetitionForm" */ "../../views/competitionSetup/form/CompetitionForm"
+            /* webpackChunkName: "CompetitionForm" */ "../../views/setup/form/CompetitionForm"
           )
       },
       {
@@ -58,7 +58,7 @@ export default [
         },
         component: () =>
           import(
-            /* webpackChunkName: "CompetitionForm" */ "../../views/competitionSetup/form/CompetitionForm"
+            /* webpackChunkName: "CompetitionForm" */ "../../views/setup/form/CompetitionForm"
           )
       },
       {
@@ -71,7 +71,7 @@ export default [
         },
         component: () =>
           import(
-            /* webpackChunkName: "CompetitionForm" */ "../../views/competitionSetup/form/CompetitionForm"
+            /* webpackChunkName: "CompetitionForm" */ "../../views/setup/form/CompetitionForm"
           )
       },
       {
@@ -83,7 +83,7 @@ export default [
         },
         component: () =>
           import(
-            /* webpackChunkName: "CollegeApprovalList" */ "../../views/competitionSetup/CollegeApprovalList"
+            /* webpackChunkName: "CollegeApprovalList" */ "../../views/setup/CollegeApprovalList"
           )
       },
       {
@@ -96,7 +96,7 @@ export default [
         },
         component: () =>
           import(
-            /* webpackChunkName: "CompetitionForm" */ "../../views/competitionSetup/form/CompetitionForm"
+            /* webpackChunkName: "CompetitionForm" */ "../../views/setup/form/CompetitionForm"
           )
       },
       {
@@ -108,7 +108,7 @@ export default [
         },
         component: () =>
           import(
-            /* webpackChunkName: "CompetitionForm" */ "../../views/competitionSetup/practice/PracticeApprovalList"
+            /* webpackChunkName: "CompetitionForm" */ "../../views/setup/practice/PracticeApprovalList"
           )
       },
       {
@@ -121,7 +121,7 @@ export default [
         },
         component: () =>
           import(
-            /* webpackChunkName: "CompetitionForm" */ "../../views/competitionSetup/form/CompetitionForm"
+            /* webpackChunkName: "CompetitionForm" */ "../../views/setup/form/CompetitionForm"
           )
       }
     ]

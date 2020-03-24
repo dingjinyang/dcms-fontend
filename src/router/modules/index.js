@@ -6,6 +6,6 @@
  */
 
 import system from "./system";
-import competitionSetup from "./competitionSetup";
+import competitionSetup from "./setup";
 
 export default [...competitionSetup, ...system];
