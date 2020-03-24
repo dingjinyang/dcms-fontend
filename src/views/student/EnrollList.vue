@@ -1,12 +1,10 @@
 <template>
-  <div></div>
+  <h1>竞赛报名</h1>
 </template>
 
 <script>
 export default {
-  name: "Dashboard",
-  data: () => ({}),
-  methods: {}
+  name: "EnrollList"
 };
 </script>
 

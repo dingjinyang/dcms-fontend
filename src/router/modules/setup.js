@@ -1,10 +1,10 @@
 export default [
   {
-    path: "/competition-setup",
-    name: "setup",
+    path: "/setup",
+    name: "Setup",
     meta: {
       title: "竞赛立项",
-      icon: "television-guide",
+      icon: "card-bulleted-settings",
       isGroup: true // 在根据角色筛选路由时，若原本有两个子路由，筛选后剩余一个，可保证父路由渲染为分组
     },
     component: () =>
@@ -15,7 +15,7 @@ export default [
         name: "CompetitionApplyList",
         meta: {
           title: "立项申请",
-          icon: "id-card"
+          icon: "file-settings"
         },
         component: () =>
           import(
@@ -79,7 +79,7 @@ export default [
         name: "CollegeApprovalList",
         meta: {
           title: "学院审批",
-          icon: "id-card"
+          icon: "file-star"
         },
         component: () =>
           import(
@@ -104,7 +104,7 @@ export default [
         name: "PracticeApprovalList",
         meta: {
           title: "部门汇总",
-          icon: "id-card"
+          icon: "table"
         },
         component: () =>
           import(

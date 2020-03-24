@@ -6,6 +6,8 @@
  */
 
 import system from "./system";
-import competitionSetup from "./setup";
+import setup from "./setup";
+import process from "./process";
+import student from "./student";
 
-export default [...competitionSetup, ...system];
+export default [...student, ...setup, ...process, ...system];

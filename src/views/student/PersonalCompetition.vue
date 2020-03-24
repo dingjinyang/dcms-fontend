@@ -1,12 +1,10 @@
 <template>
-  <div></div>
+  <h1>我的竞赛</h1>
 </template>
 
 <script>
 export default {
-  name: "Dashboard",
-  data: () => ({}),
-  methods: {}
+  name: "PersonalCompetition"
 };
 </script>
 
