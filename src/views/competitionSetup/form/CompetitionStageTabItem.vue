@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import DateRangePicker from "../components/DateRangePicker";
+import DateRangePicker from "../../../components/DateRangePicker";
 export default {
   name: "CompetitionStageTabItem",
   props: {

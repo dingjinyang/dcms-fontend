@@ -1,6 +1,6 @@
 export default [
   {
-    path: "/competitionSetup",
+    path: "/competition-setup",
     name: "competitionSetup",
     meta: {
       title: "竞赛立项",
@@ -11,7 +11,7 @@ export default [
       import(/* webpackChunkName: "Layout" */ "@/components/layout/Layout"),
     children: [
       {
-        path: "list",
+        path: "college-apply/list",
         name: "CompetitionApplyList",
         meta: {
           title: "立项申请",
@@ -19,7 +19,7 @@ export default [
         },
         component: () =>
           import(
-            /* webpackChunkName: "CompetitionApplyList" */ "../../views/competitionSetup/CompetitionApplyList"
+            /* webpackChunkName: "CompetitionApplyList" */ "../../views/competitionSetup/apply/CompetitionApplyList"
           )
       },
       {
@@ -75,7 +75,7 @@ export default [
           )
       },
       {
-        path: "approval/list",
+        path: "college-approval/list",
         name: "CollegeApprovalList",
         meta: {
           title: "学院审批",
@@ -87,11 +87,36 @@ export default [
           )
       },
       {
-        path: "approval/:competitionId",
+        path: "college-approval/:competitionId",
         name: "CollegeApproval",
         hideInMenu: true,
         meta: {
           title: "学院审批",
+          icon: "id-card"
+        },
+        component: () =>
+          import(
+            /* webpackChunkName: "CompetitionForm" */ "../../views/competitionSetup/form/CompetitionForm"
+          )
+      },
+      {
+        path: "practice-approval/list",
+        name: "PracticeApprovalList",
+        meta: {
+          title: "部门汇总",
+          icon: "id-card"
+        },
+        component: () =>
+          import(
+            /* webpackChunkName: "CompetitionForm" */ "../../views/competitionSetup/practice/PracticeApprovalList"
+          )
+      },
+      {
+        path: "practice-approval/:competitionId",
+        name: "PracticeApproval",
+        hideInMenu: true,
+        meta: {
+          title: "实践管理科审批",
           icon: "id-card"
         },
         component: () =>

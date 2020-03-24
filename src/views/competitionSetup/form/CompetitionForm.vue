@@ -85,11 +85,17 @@
           label="预期成果"
           :readonly="readonly"
       /></v-col>
-      <v-col cols="12" sm="12" md="12" lg="12" xl="12" v-if="isCollegeApproval">
+      <v-col cols="12" v-if="isApproval">
         <v-btn text color="primary">历年经费使用情况</v-btn>
         <v-btn text color="primary">历年参赛情况</v-btn>
       </v-col>
-      <v-col cols="12" sm="12" md="12" lg="12" xl="12">
+      <v-col cols="12" sm="12" md="6" lg="6" xl="6" v-if="isPracticeApproval">
+        <v-text-field label="批复预算金额"
+      /></v-col>
+      <v-col cols="12" sm="12" md="6" lg="6" xl="6" v-if="isPracticeApproval">
+        <v-checkbox label="纳入评估"></v-checkbox>
+      </v-col>
+      <v-col cols="12">
         <template v-if="isDetail">
           <v-btn color="primary" :to="{ name: 'CompetitionApply' }">
             再次申请
@@ -102,7 +108,7 @@
             返回
           </v-btn>
         </template>
-        <template v-else-if="isCollegeApproval">
+        <template v-else-if="isApproval">
           <confirm-dialog
             title="确认通过"
             btn-color="success"
@@ -132,7 +138,19 @@
         <template v-else
           ><v-btn color="warning" @click="reset">重置</v-btn>
           <v-btn color="success" class="ml-4" @click="save">保存</v-btn>
-          <v-btn color="primary" class="ml-4" @click="commit">提交</v-btn>
+          <confirm-dialog
+            title="确认提交"
+            btn-class="ml-3"
+            btn-color="primary"
+            max-width="473px"
+            @confirm="commit"
+            >提交
+            <template #container>
+              <v-alert dense type="warning" elevation="2">
+                申请提交后将不能修改，是否确定提交？
+              </v-alert>
+            </template>
+          </confirm-dialog>
         </template>
       </v-col>
     </v-row>
@@ -212,13 +230,19 @@ export default {
   },
   computed: {
     readonly() {
-      return this.isDetail || this.isCollegeApproval;
+      return this.isDetail || this.isCollegeApproval || this.isPracticeApproval;
     },
     isDetail() {
       return this.$route.name === "CompetitionDetail";
     },
+    isApproval() {
+      return this.isCollegeApproval || this.isPracticeApproval;
+    },
     isCollegeApproval() {
       return this.$route.name === "CollegeApproval";
+    },
+    isPracticeApproval() {
+      return this.$route.name === "PracticeApproval";
     }
   },
   methods: {
@@ -240,17 +264,16 @@ export default {
     },
     //TODO 提交，不可再修改,表单验证
     commit() {
-      confirm("申请提交后将不能修改，是否确定提交？") &&
-        commitCompetitionApply(this.competitionForm).then(res => {
-          if (res.code === 200)
-            this.snackbarSet = {
-              show: true,
-              text: "提交成功",
-              color: "success",
-              y: "top",
-              timeout: 3000
-            };
-        });
+      commitCompetitionApply(this.competitionForm).then(res => {
+        if (res.code === 200)
+          this.snackbarSet = {
+            show: true,
+            text: "提交成功",
+            color: "success",
+            y: "top",
+            timeout: 3000
+          };
+      });
     },
     returnForCorrection() {
       console.log(this.correctSuggest);

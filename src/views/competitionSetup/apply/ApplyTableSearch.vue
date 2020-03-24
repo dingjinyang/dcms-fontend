@@ -15,7 +15,7 @@
           >
             <v-fade-transition hide-on-leave>
               <span v-if="open">选择检索条件，点击检索按钮</span>
-              <v-row v-else no-gutters style="width: 100%">
+              <v-row no-gutters style="width: 100%">
                 <v-col
                   cols="12"
                   xl="4"

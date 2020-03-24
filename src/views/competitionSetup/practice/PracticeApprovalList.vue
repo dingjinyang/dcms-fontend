@@ -1,27 +1,37 @@
 <template>
   <v-card>
     <v-data-table
+      v-model="selected"
       :headers="headers"
       :items="desserts"
       :loading="loading"
       :options.sync="options"
       :server-items-length="total"
+      show-select
       show-expand
+      disable-sort
     >
       <template #top>
-        <v-row no-gutters>
-          <v-col cols="12" xl="11" lg="10" md="12" sm="12">
-            <table-search-toolbar @search="tableSearch" />
-          </v-col>
-          <v-col cols="12" xl="1" lg="2" md="12" sm="12">
-            <v-toolbar dense flat color="white">
-              <v-spacer />
-              <v-btn color="primary" dark :to="{ name: 'CompetitionApply' }">
-                新的申请
-              </v-btn>
-            </v-toolbar>
-          </v-col>
-        </v-row>
+        <practice-table-search @search="tableSearch" />
+        <v-toolbar v-show="selectedApproval.length" dense flat>
+          <confirm-dialog
+            btn-color="success"
+            title="确认批量审批"
+            max-width="373px"
+            @confirm="batchApproval"
+          >
+            批量审批
+            <template #container>
+              <v-list disabled>
+                <v-list-item v-for="item in selectedApproval" :key="item.id">
+                  <v-list-item-content>
+                    <v-list-item-title>{{ item.name }} </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list>
+            </template>
+          </confirm-dialog>
+        </v-toolbar>
       </template>
       <template #item.name="{ item }">
         <router-link
@@ -34,48 +44,14 @@
           {{ item.name }}
         </router-link>
       </template>
-      <template #item.status="{ item }">
-        <v-chip :color="item.status | competitionStatusColorFilter" small dark>
-          {{ item.status | competitionStatusTextFilter }}
-        </v-chip>
-      </template>
       <template #item.action="{ item }">
         <v-btn
-          v-if="item.status === 0"
+          v-if="item.status === 1"
           small
           color="warning"
           text
-          :to="itemTo('CompetitionEdit', item.id)"
-          >编辑
-        </v-btn>
-        <v-btn
-          v-if="item.status === 2"
-          small
-          color="primary"
-          text
-          :to="itemTo('CompetitionRevise', item.id)"
-          >修改
-        </v-btn>
-        <confirm-dialog
-          v-if="item.status === 0"
-          title="确认撤销"
-          btn-small
-          btn-text
-          btn-color="error"
-          max-width="373px"
-          only-title
-          @confirm="deleteItem(item.id)"
-        >
-          撤销
-        </confirm-dialog>
-        <v-btn
-          v-if="item.status === 4"
-          small
-          color="success"
-          text
-          @click="copyItem(item)"
-        >
-          复制
+          :to="itemTo(`PracticeApproval`, item.id)"
+          >审批
         </v-btn>
       </template>
       <template #expanded-item="{ headers, item }">
@@ -88,28 +64,31 @@
 </template>
 
 <script>
-import { getAllCompetition } from "../../api/competition";
-import TableSearchToolbar from "./components/TableSearchToolbar";
-import ConfirmDialog from "../../components/ConfirmDialog";
+import {
+  batchApprovalCompetition,
+  getAllCompetition
+} from "../../../api/competition";
+import PracticeTableSearch from "./PracticeTableSearch";
+import ConfirmDialog from "../../../components/ConfirmDialog";
 
 export default {
-  name: "CompetitionList",
+  name: "PracticeApprovalList",
   data: () => ({
     loading: false,
     dialog: false,
     headers: [
-      { text: "#", value: "id" },
-      { text: "名称", value: "name" },
-      { text: "年份", value: "year" },
-      { text: "部门", value: "department" },
+      { text: "申报部门", value: "department" },
+      { text: "竞赛名称", value: "name" },
       { text: "时间", value: "time" },
-      { text: "负责人", value: "principal" },
-      { text: "状态", value: "status" },
-      { text: "最后处理人", value: "lastHandler" },
+      { text: "预算金额(元)", value: "budget" },
+      { text: "上年度经费使用", value: "lastYearUseOfFunds" },
+      { text: "上年度获奖", value: "lastYearAwards" },
+      { text: "是否纳入评估", value: "isAssessment" },
       { text: "操作", value: "action" },
       { text: "", value: "data-table-expand" }
     ],
     desserts: [],
+    selected: [],
     options: {
       page: 1,
       itemsPerPage: 5
@@ -123,9 +102,17 @@ export default {
     defaultItem: {
       name: "",
       department: ""
-    }
+    },
+    copyName: ""
   }),
-  components: { TableSearchToolbar, ConfirmDialog },
+  components: { PracticeTableSearch, ConfirmDialog },
+  computed: {
+    selectedApproval() {
+      return this.selected.filter(item => {
+        return item.status === 1;
+      });
+    }
+  },
   methods: {
     // TODO 后端请求 本院系本年度立项申请
     getDate() {
@@ -172,6 +159,14 @@ export default {
     // eslint-disable-next-line no-unused-vars
     tableSearch(searchFrom) {
       // TODO 调用后端接口检索
+      console.log(searchFrom);
+    },
+    batchApproval() {
+      batchApprovalCompetition(this.selectedApproval.map(item => item.id)).then(
+        res => {
+          if (res.code === 200) this.dialog = false;
+        }
+      );
     }
   },
   watch: {
