@@ -167,7 +167,7 @@ import {
   getCompetitionDetail,
   saveCompetitionApply,
   commitCompetitionApply
-} from "../../../api/competition.js";
+} from "../../../api/competition/competition.js";
 import ConfirmDialog from "../../../components/ConfirmDialog";
 export default {
   name: "CompetitionApply",

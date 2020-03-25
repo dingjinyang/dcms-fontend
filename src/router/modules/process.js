@@ -11,15 +11,15 @@ export default [
       import(/* webpackChunkName: "Layout" */ "@/components/layout/Layout"),
     children: [
       {
-        path: "launch",
-        name: "CompetitionLaunch",
+        path: "launch/list",
+        name: "CompetitionLaunchList",
         meta: {
           title: "竞赛发起",
           icon: "clock-start"
         },
         component: () =>
           import(
-            /* webpackChunkName: "CompetitionLaunch" */ "../../views/process/CompetitionLaunch"
+            /* webpackChunkName: "CompetitionLaunchList" */ "../../views/process/CompetitionLaunchList"
           )
       }
     ]

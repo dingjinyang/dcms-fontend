@@ -1,4 +1,5 @@
 import "./user";
 import "./role";
 import "./permission";
-import "./competition";
+import "./setup";
+import "./process";

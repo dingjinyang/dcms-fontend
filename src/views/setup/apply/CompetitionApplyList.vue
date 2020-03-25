@@ -93,7 +93,7 @@
 </template>
 
 <script>
-import { getAllCompetition } from "../../../api/competition";
+import { getAllCompetition } from "../../../api/competition/competition";
 import ApplyTableSearch from "./ApplyTableSearch";
 import ConfirmDialog from "../../../components/ConfirmDialog";
 

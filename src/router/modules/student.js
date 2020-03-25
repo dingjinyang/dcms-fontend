@@ -1,20 +1,41 @@
 export default [
   {
-    path: "/enroll",
+    path: "/enroll/list",
     name: "Student",
     component: () =>
       import(/* webpackChunkName: "Layout" */ "@/components/layout/Layout"),
     children: [
       {
-        path: "list",
+        path: "",
         name: "EnrollList",
+        meta: {
+          title: "竞赛列表",
+          icon: "plus-box-multiple"
+        },
+        component: () =>
+          import(
+            /* webpackChunkName: "EnrollList" */ "../../views/student/EnrollList"
+          )
+      }
+    ]
+  },
+  {
+    path: "/enroll/form",
+    name: "Student",
+    hideInMenu: true,
+    component: () =>
+      import(/* webpackChunkName: "Layout" */ "@/components/layout/Layout"),
+    children: [
+      {
+        path: "",
+        name: "EnrollForm",
         meta: {
           title: "竞赛报名",
           icon: "plus-box-multiple"
         },
         component: () =>
           import(
-            /* webpackChunkName: "EnrollList" */ "../../views/student/EnrollList"
+            /* webpackChunkName: "EnrollForm" */ "../../views/student/EnrollForm"
           )
       }
     ]

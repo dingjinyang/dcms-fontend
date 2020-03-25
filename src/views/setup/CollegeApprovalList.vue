@@ -82,9 +82,9 @@
 
 <script>
 import {
-  getCompetitionApprovalList,
-  batchApprovalCompetition
-} from "../../api/competition";
+  getCollegeApprovalList,
+  batchCollegeApproval
+} from "../../api/competition/competition";
 import ConfirmDialog from "../../components/ConfirmDialog";
 
 export default {
@@ -117,7 +117,7 @@ export default {
     getDate() {
       const { page, itemsPerPage } = this.options;
       this.loading = true;
-      getCompetitionApprovalList(page, itemsPerPage)
+      getCollegeApprovalList(page, itemsPerPage)
         .then(({ code, data: { list, total } }) => {
           if (code !== 200) return;
           this.desserts = list;
@@ -131,7 +131,7 @@ export default {
         });
     },
     batchApproval() {
-      batchApprovalCompetition(this.selectedApproval.map(item => item.id)).then(
+      batchCollegeApproval(this.selectedApproval.map(item => item.id)).then(
         res => {
           if (res.code === 200) this.dialog = false;
         }

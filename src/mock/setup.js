@@ -31,8 +31,8 @@ export default {
     "post",
     responseData(null)
   ),
-  competitionApproval: Mock.mock(
-    /\/competition\/approval\/list\?pageNum=[1-9]\d*&pageSize=[1-9]\d*/,
+  collegeApproval: Mock.mock(
+    /\/college\/approval\/list\?pageNum=[1-9]\d*&pageSize=[1-9]\d*/,
     "get",
     options => {
       const { pageNum, pageSize } = getURLSearchParams(options.url);
@@ -47,8 +47,29 @@ export default {
       );
     }
   ),
-  competitionApprovalBatch: Mock.mock(
-    "/competition/approval/batch",
+  collegeApprovalBatch: Mock.mock(
+    "/college/approval/batch",
+    "post",
+    responseData(null)
+  ),
+  practiceApprovalList: Mock.mock(
+    /\/practice\/approval\/list\?pageNum=[1-9]\d*&pageSize=[1-9]\d*/,
+    "get",
+    options => {
+      const { pageNum, pageSize } = getURLSearchParams(options.url);
+      return responseData(
+        pageHelper(
+          competitionList.filter(
+            item => item.status === 1 || item.status === 4
+          ),
+          pageNum,
+          pageSize
+        )
+      );
+    }
+  ),
+  practiceApprovalBatch: Mock.mock(
+    "/practice/approval/batch",
     "post",
     responseData(null)
   )

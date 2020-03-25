@@ -1,10 +1,10 @@
 <template>
-  <h1>竞赛发起</h1>
+  <h1>竞赛报名</h1>
 </template>
 
 <script>
 export default {
-  name: "CompetitionLaunch"
+  name: "EnrollForm"
 };
 </script>
 

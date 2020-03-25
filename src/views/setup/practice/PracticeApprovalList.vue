@@ -65,9 +65,9 @@
 
 <script>
 import {
-  batchApprovalCompetition,
-  getAllCompetition
-} from "../../../api/competition";
+  batchPracticeApproval,
+  getPracticeApprovalList
+} from "../../../api/competition/competition";
 import PracticeTableSearch from "./PracticeTableSearch";
 import ConfirmDialog from "../../../components/ConfirmDialog";
 
@@ -118,7 +118,7 @@ export default {
     getDate() {
       const { page, itemsPerPage } = this.options;
       this.loading = true;
-      getAllCompetition(page, itemsPerPage)
+      getPracticeApprovalList(page, itemsPerPage)
         .then(({ code, data: { list, total } }) => {
           if (code !== 200) return;
           this.desserts = list;
@@ -162,7 +162,7 @@ export default {
       console.log(searchFrom);
     },
     batchApproval() {
-      batchApprovalCompetition(this.selectedApproval.map(item => item.id)).then(
+      batchPracticeApproval(this.selectedApproval.map(item => item.id)).then(
         res => {
           if (res.code === 200) this.dialog = false;
         }
