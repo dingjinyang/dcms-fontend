@@ -1,4 +1,3 @@
-import competitionDetail from "./data/competitionDetail";
 import competitionList from "./data/competitionList";
 import { getURLSearchParams } from "../util/url";
 import { pageHelper } from "../util/pageHelper";
@@ -23,7 +22,11 @@ export default {
   competitionDetail: Mock.mock(
     /\/competition\/detail\?id=[1-9]\d*/,
     "get",
-    responseData(competitionDetail)
+    options => {
+      const { id } = getURLSearchParams(options.url);
+      const arr = competitionList.filter(item => item.id === id);
+      return responseData(arr[0]);
+    }
   ),
   competitionSave: Mock.mock(/\/competition\/save/, "post", responseData(null)),
   competitionCommit: Mock.mock(
@@ -72,5 +75,12 @@ export default {
     "/practice/approval/batch",
     "post",
     responseData(null)
+  ),
+  getStudentInfoById: Mock.mock(
+    /\/student\/info\?id=[1-9]\d*/,
+    "get",
+    responseData({
+      "list|10-20": {}
+    })
   )
 };

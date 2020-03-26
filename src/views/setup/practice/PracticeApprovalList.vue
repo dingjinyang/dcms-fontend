@@ -13,25 +13,27 @@
     >
       <template #top>
         <practice-table-search @search="tableSearch" />
-        <v-toolbar v-show="selectedApproval.length" dense flat>
-          <confirm-dialog
-            btn-color="success"
-            title="确认批量审批"
-            max-width="373px"
-            @confirm="batchApproval"
-          >
-            批量审批
-            <template #container>
-              <v-list disabled>
-                <v-list-item v-for="item in selectedApproval" :key="item.id">
-                  <v-list-item-content>
-                    <v-list-item-title>{{ item.name }} </v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list>
-            </template>
-          </confirm-dialog>
-        </v-toolbar>
+        <v-expand-transition>
+          <v-toolbar v-show="selectedApproval.length" dense flat>
+            <confirm-dialog
+              btn-color="success"
+              title="确认批量审批"
+              max-width="373px"
+              @confirm="batchApproval"
+            >
+              批量审批
+              <template #container>
+                <v-list disabled>
+                  <v-list-item v-for="item in selectedApproval" :key="item.id">
+                    <v-list-item-content>
+                      <v-list-item-title>{{ item.name }} </v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+              </template>
+            </confirm-dialog>
+          </v-toolbar>
+        </v-expand-transition>
       </template>
       <template #item.name="{ item }">
         <router-link

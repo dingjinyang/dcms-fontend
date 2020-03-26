@@ -1,7 +1,7 @@
 <template>
   <table-search-toolbar :panel="panel">
     <template #header>
-      <v-row style="width: 100%">
+      <v-row no-gutters style="width: 100%">
         <v-col cols="12" xl="4" lg="4" md="4" sm="12">
           申报部门： {{ searchForm.department || "全部" }}
         </v-col>

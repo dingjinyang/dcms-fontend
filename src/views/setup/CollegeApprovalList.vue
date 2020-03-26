@@ -13,36 +13,40 @@
       <template #top>
         <v-toolbar dense flat color="white">
           <v-row>
-            <v-col
-              cols="6"
-              xl="1"
-              lg="2"
-              md="2"
-              sm="3"
-              v-show="selectedApproval.length"
-            >
-              <confirm-dialog
-                btn-color="success"
-                title="确认批量审批"
-                max-width="373px"
-                @confirm="batchApproval"
+            <v-slide-x-transition>
+              <v-col
+                cols="6"
+                xl="1"
+                lg="2"
+                md="2"
+                sm="3"
+                v-show="selectedApproval.length"
               >
-                批量审批
-                <template #container>
-                  <v-list disabled>
-                    <v-list-item
-                      v-for="item in selectedApproval"
-                      :key="item.id"
-                    >
-                      <v-list-item-content>
-                        <v-list-item-title>{{ item.name }} </v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </v-list>
-                </template>
-              </confirm-dialog>
-            </v-col>
-            <v-col cols="6" xl="1" lg="2" md="2" sm="3">
+                <confirm-dialog
+                  btn-color="success"
+                  title="确认批量审批"
+                  max-width="373px"
+                  @confirm="batchApproval"
+                >
+                  批量审批
+                  <template #container>
+                    <v-list disabled>
+                      <v-list-item
+                        v-for="item in selectedApproval"
+                        :key="item.id"
+                      >
+                        <v-list-item-content>
+                          <v-list-item-title
+                            >{{ item.name }}
+                          </v-list-item-title>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-list>
+                  </template>
+                </confirm-dialog>
+              </v-col>
+            </v-slide-x-transition>
+            <v-col translate cols="6" xl="1" lg="2" md="2" sm="3">
               <v-btn color="primary" dark>
                 生成汇总表
               </v-btn>
