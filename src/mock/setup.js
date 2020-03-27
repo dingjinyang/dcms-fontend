@@ -75,12 +75,5 @@ export default {
     "/practice/approval/batch",
     "post",
     responseData(null)
-  ),
-  getStudentInfoById: Mock.mock(
-    /\/student\/info\?id=[1-9]\d*/,
-    "get",
-    responseData({
-      "list|10-20": {}
-    })
   )
 };

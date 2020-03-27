@@ -30,7 +30,7 @@
 <script>
 import EnrollListTableSearch from "./EnrollListTableSearch";
 import EnrollListItem from "./EnrollListItem";
-import { getAllCompetition } from "../../api/competition/competition";
+import { getAllCompetition } from "../../../api/competition/competition";
 export default {
   name: "EnrollList",
   components: { EnrollListTableSearch, EnrollListItem },

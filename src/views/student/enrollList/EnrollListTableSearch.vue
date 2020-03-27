@@ -31,9 +31,9 @@
 </template>
 
 <script>
-import { colleges } from "../../common/constant";
+import { colleges } from "../../../common/constant";
 
-import TableSearchToolbar from "../../components/TableSearchToolbar";
+import TableSearchToolbar from "../../../components/TableSearchToolbar";
 
 export default {
   name: "EnrollListTableSearch",

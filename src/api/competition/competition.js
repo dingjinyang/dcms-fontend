@@ -42,8 +42,3 @@ export function getPracticeApprovalList(pageNum = 1, pageSize = 10) {
 export function batchPracticeApproval(data) {
   return _axios.post(`/practice/approval/batch`, data);
 }
-export function getStudentInfoById(id) {
-  return _axios.post(`/student/info`, {
-    params: { id }
-  });
-}

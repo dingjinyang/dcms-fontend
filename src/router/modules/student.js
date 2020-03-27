@@ -14,7 +14,7 @@ export default [
         },
         component: () =>
           import(
-            /* webpackChunkName: "EnrollList" */ "../../views/student/EnrollList"
+            /* webpackChunkName: "EnrollList" */ "../../views/student/enrollList/EnrollList"
           )
       }
     ]
@@ -35,7 +35,7 @@ export default [
         },
         component: () =>
           import(
-            /* webpackChunkName: "EnrollForm" */ "../../views/student/EnrollForm"
+            /* webpackChunkName: "EnrollForm" */ "../../views/student/enrollForm/EnrollForm"
           )
       }
     ]
@@ -55,7 +55,7 @@ export default [
         },
         component: () =>
           import(
-            /* webpackChunkName: "PersonalCompetition" */ "../../views/student/PersonalCompetition"
+            /* webpackChunkName: "PersonalCompetition" */ "../../views/student/personal/CompetitionList"
           )
       }
     ]

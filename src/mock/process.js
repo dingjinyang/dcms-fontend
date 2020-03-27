@@ -1,5 +1,4 @@
 import { getURLSearchParams } from "../util/url";
-import { pageHelper } from "../util/pageHelper";
 import competitionList from "./data/competitionList";
 
 const Mock = require("mockjs");
@@ -10,18 +9,24 @@ const responseData = (data = null) => ({
 });
 
 export default {
-  launchList: Mock.mock(
-    /\/launch\/all\?pageNum=[1-9]\d*&pageSize=[1-9]\d*/,
+  getStudentCompetitionList: Mock.mock(
+    /\/student\/competition\/all?sno=[1-9]\d*&pageSize=[1-9]\d*/,
+    "get",
+    responseData(competitionList.filter(item => item.status === 4))
+  ),
+  getStudentInfoById: Mock.mock(
+    /\/student\/info\?sno=[1-9]\d*/,
     "get",
     options => {
-      const { pageNum, pageSize } = getURLSearchParams(options.url);
-      return responseData(
-        pageHelper(
-          competitionList.filter(item => item.status === 4),
-          pageNum,
-          pageSize
-        )
-      );
+      const { sno } = getURLSearchParams(options.url);
+      return responseData({
+        sno,
+        // name: Mock.mock("@cname"),
+        name: "idng",
+        class: "RB软工卓越171",
+        grade: "2017",
+        college: "软件学院"
+      });
     }
   )
 };
