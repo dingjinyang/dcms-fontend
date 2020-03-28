@@ -19,7 +19,32 @@ export default [
         },
         component: () =>
           import(
-            /* webpackChunkName: "CompetitionLaunchList" */ "../../views/process/CompetitionLaunchList"
+            /* webpackChunkName: "CompetitionLaunchList" */ "@/views/process/CompetitionLaunchList"
+          )
+      },
+      {
+        path: "list",
+        name: "CompetitionProcessList",
+        meta: {
+          title: "竞赛列表",
+          icon: "clock-start"
+        },
+        component: () =>
+          import(
+            /* webpackChunkName: "CompetitionProcessList" */ "@/views/process/CompetitionProcessList"
+          )
+      },
+      {
+        path: "participant/list/:id",
+        name: "ConfirmParticipantList",
+        hideInMenu: true,
+        meta: {
+          title: "参赛名单",
+          icon: "clock-start"
+        },
+        component: () =>
+          import(
+            /* webpackChunkName: "CompetitionProcessList" */ "@/views/process/ConfirmParticipantList"
           )
       }
     ]

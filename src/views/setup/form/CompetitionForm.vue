@@ -100,11 +100,7 @@
           <v-btn color="primary" :to="{ name: 'CompetitionApply' }">
             再次申请
           </v-btn>
-          <v-btn
-            color="warning"
-            class="ml-4"
-            :to="{ name: 'CompetitionApplyList' }"
-          >
+          <v-btn color="warning" class="ml-4" @click="$router.back()">
             返回
           </v-btn>
         </template>

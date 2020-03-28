@@ -36,6 +36,16 @@
           </template>
         </v-data-table>
       </v-col>
+      <v-col cols="12">
+        <confirm-dialog
+          btn-color="success"
+          only-title
+          max-width="373px"
+          title="确认提交"
+          @confirm="save"
+          >提交
+        </confirm-dialog>
+      </v-col>
     </v-row>
   </v-form>
 </template>
@@ -43,6 +53,7 @@
 <script>
 import { getCompetitionDetail } from "../../../api/competition/competition";
 import EnrollFormAddItem from "./EnrollFormAddItem";
+import ConfirmDialog from "../../../components/ConfirmDialog";
 
 export default {
   name: "EnrollForm",
@@ -73,23 +84,9 @@ export default {
         grade: "2016",
         college: "软件学院"
       }
-    ],
-    editedItem: {
-      sno: "",
-      name: "",
-      class: "",
-      grade: "",
-      college: ""
-    },
-    defaultItem: {
-      sno: "",
-      name: "",
-      class: "",
-      grade: "",
-      college: ""
-    }
+    ]
   }),
-  components: { EnrollFormAddItem },
+  components: { EnrollFormAddItem, ConfirmDialog },
   methods: {
     deleteItem(item) {
       const index = this.desserts.indexOf(item);
@@ -98,6 +95,12 @@ export default {
     },
     addItem(item) {
       !this.desserts.find(e => item.sno === e.sno) && this.desserts.push(item);
+    },
+    save() {
+      console.log({
+        ...this.enrollForm,
+        teamMembers: this.desserts
+      });
     }
   },
   activated() {

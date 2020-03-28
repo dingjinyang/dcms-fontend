@@ -1,5 +1,9 @@
 <template>
-  <v-dialog v-model="dialog" persistent :max-width="$attrs['max-width']">
+  <v-dialog
+    v-model="dialog"
+    :persistent="!noPersistent"
+    :max-width="$attrs['max-width']"
+  >
     <template v-slot:activator="{ on }">
       <v-btn
         :color="btnColor"
@@ -17,7 +21,7 @@
       <v-card-text v-if="!onlyTitle">
         <slot name="container"></slot>
       </v-card-text>
-      <v-card-actions>
+      <v-card-actions v-if="!hideActions">
         <v-spacer></v-spacer>
         <v-btn color="error" text @click="dialog = false">取消</v-btn>
         <v-btn color="primary" text @click="confirm">确定</v-btn>
@@ -34,11 +38,29 @@ export default {
       type: String,
       default: "warning"
     },
+    /**
+     * Dialog 标题
+     */
     title: {
       type: String,
       required: true
     },
     onlyTitle: {
+      type: Boolean,
+      default: false
+    },
+    noPersistent: {
+      type: Boolean,
+      default: false
+    },
+    hideActions: {
+      type: Boolean,
+      default: false
+    },
+    /**
+     * 隐藏Dialog 内容
+     */
+    hideText: {
       type: Boolean,
       default: false
     }
