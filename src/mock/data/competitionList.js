@@ -140,6 +140,7 @@ export default [
     achievement: "优秀竞赛",
     flow: Mock.mock("@cparagraph"),
     condition: "16级全体学生",
+    currentStage: 1,
     stages: [
       {
         name: "报名",
@@ -199,6 +200,7 @@ export default [
     achievement: "优秀竞赛",
     flow: Mock.mock("@cparagraph"),
     condition: "16级全体学生",
+    currentStage: 1,
     stages: [
       {
         name: "报名",
@@ -258,6 +260,7 @@ export default [
     achievement: "优秀竞赛",
     flow: Mock.mock("@cparagraph"),
     condition: "16级全体学生",
+    currentStage: 1,
     stages: [
       {
         name: "报名",
@@ -317,6 +320,7 @@ export default [
     achievement: "优秀竞赛",
     flow: Mock.mock("@cparagraph"),
     condition: "16级全体学生",
+    currentStage: 1,
     stages: [
       {
         name: "报名",
@@ -376,6 +380,7 @@ export default [
     achievement: "优秀竞赛",
     flow: Mock.mock("@cparagraph"),
     condition: "16级全体学生",
+    currentStage: 1,
     stages: [
       {
         name: "报名",

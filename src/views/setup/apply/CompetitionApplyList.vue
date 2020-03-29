@@ -6,6 +6,7 @@
     :options.sync="options"
     :server-items-length="total"
     show-expand
+    disable-pagination
   >
     <template #top>
       <v-row no-gutters>
@@ -62,7 +63,7 @@
         btn-text
         btn-color="error"
         max-width="373px"
-        only-title
+        hide-text
         @confirm="deleteItem(item.id)"
       >
         撤销
@@ -181,14 +182,11 @@ export default {
   },
   watch: {
     options: {
+      deep: true,
       handler() {
         this.getDate();
-      },
-      deep: true
+      }
     }
-  },
-  activated() {
-    this.getDate();
   }
 };
 </script>

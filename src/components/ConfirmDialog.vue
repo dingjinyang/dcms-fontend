@@ -18,7 +18,7 @@
       <v-card-title>
         <span class="headline">{{ title }}</span>
       </v-card-title>
-      <v-card-text v-if="!onlyTitle">
+      <v-card-text v-if="!hideText">
         <slot name="container"></slot>
       </v-card-text>
       <v-card-actions v-if="!hideActions">

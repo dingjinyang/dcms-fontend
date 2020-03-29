@@ -39,7 +39,7 @@
       <v-col cols="12">
         <confirm-dialog
           btn-color="success"
-          only-title
+          hide-text
           max-width="373px"
           title="确认提交"
           @confirm="save"

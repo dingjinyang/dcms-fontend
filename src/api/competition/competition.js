@@ -3,6 +3,7 @@ import "../../plugins/axios";
 // eslint-disable-next-line no-unused-vars,no-undef
 const _axios = axios;
 
+// eslint-disable-next-line no-unused-vars
 const Timeout = times => {
   return new Promise(resolve => {
     setTimeout(() => {
@@ -12,7 +13,6 @@ const Timeout = times => {
 };
 
 export async function getAllCompetition(pageNum = 1, pageSize = 10) {
-  await Timeout(1000);
   return await _axios.get(`/competition/all`, {
     params: { pageNum, pageSize }
   });

@@ -5,6 +5,7 @@
     :loading="loading"
     :options.sync="options"
     :server-items-length="total"
+    disable-sort
   >
     <template #top>
       <v-row no-gutters>

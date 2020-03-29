@@ -22,7 +22,8 @@
           btn-color="success"
           btn-text
           btn-small
-          max-width="373px"
+          max-width="300px"
+          hide-text
         >
           发起
         </confirm-dialog>

@@ -6,41 +6,47 @@
           v-model="competitionForm.name"
           label="名称"
           :readonly="readonly"
-      /></v-col>
+        />
+      </v-col>
       <v-col cols="12" sm="6" md="4" lg="4" xl="4">
         <v-select
           v-model="competitionForm.level"
           label="最高级别"
           :items="competitionLevels"
           :readonly="readonly"
-      /></v-col>
+        />
+      </v-col>
       <v-col cols="12" sm="6" md="4" lg="4" xl="4">
         <v-text-field
           v-model="competitionForm.principal"
           label="负责人"
           :readonly="readonly"
-      /></v-col>
+        />
+      </v-col>
       <v-col cols="12" sm="6" md="4" lg="4" xl="4">
         <v-text-field
           v-model="competitionForm.phone"
           label="联系方式"
           type="phone"
           :readonly="readonly"
-      /></v-col>
+        />
+      </v-col>
       <v-col cols="12" sm="6" md="4" lg="4" xl="4">
         <v-text-field
           v-model="competitionForm.teams"
           label="参赛队数"
           type="number"
           :readonly="readonly"
-      /></v-col>
+        />
+      </v-col>
       <v-col cols="12" sm="6" md="4" lg="4" xl="4">
         <v-text-field
           v-model="competitionForm.people"
           label="参赛人数"
           type="number"
           :readonly="readonly"
-      /></v-col>
+        />
+      </v-col>
       <v-col cols="12">
         <competition-stage
           :readonly="readonly"
@@ -54,7 +60,8 @@
           label="简介"
           v-model="competitionForm.description"
           :readonly="readonly"
-      /></v-col>
+        />
+      </v-col>
       <v-col cols="12" sm="12" md="6" lg="6" xl="4">
         <v-textarea
           auto-grow
@@ -62,7 +69,8 @@
           label="拟设奖项及数目"
           v-model="competitionForm.awards"
           :readonly="readonly"
-      /></v-col>
+        />
+      </v-col>
       <v-col cols="12" sm="12" md="6" lg="6" xl="4">
         <v-textarea
           auto-grow
@@ -70,54 +78,58 @@
           label="竞赛流程"
           v-model="competitionForm.flow"
           :readonly="readonly"
-      /></v-col>
+        />
+      </v-col>
       <v-col cols="12" sm="12" md="6" lg="6" xl="4">
         <v-text-field
           :clearable="!readonly"
           v-model="competitionForm.condition"
           label="竞赛条件"
           :readonly="readonly"
-      /></v-col>
+        />
+      </v-col>
       <v-col cols="12" sm="12" md="6" lg="6" xl="4">
         <v-text-field
           :clearable="!readonly"
           v-model="competitionForm.achievement"
           label="预期成果"
           :readonly="readonly"
-      /></v-col>
+        />
+      </v-col>
       <v-col cols="12" v-if="isApproval">
         <v-btn text color="primary">历年经费使用情况</v-btn>
         <v-btn text color="primary">历年参赛情况</v-btn>
       </v-col>
       <v-col cols="12" sm="12" md="6" lg="6" xl="6" v-if="isPracticeApproval">
-        <v-text-field label="批复预算金额"
-      /></v-col>
+        <v-text-field label="批复预算金额" />
+      </v-col>
       <v-col cols="12" sm="12" md="6" lg="6" xl="6" v-if="isPracticeApproval">
         <v-checkbox label="纳入评估"></v-checkbox>
       </v-col>
       <v-col cols="12">
         <template v-if="isDetail">
-          <v-btn color="primary" :to="{ name: 'CompetitionApply' }">
-            再次申请
-          </v-btn>
-          <v-btn color="warning" class="ml-4" @click="$router.back()">
-            返回
-          </v-btn>
+          <v-btn color="primary" :to="{ name: 'CompetitionApply' }"
+            >再次申请</v-btn
+          >
+          <v-btn color="warning" class="ml-4" @click="$router.back()"
+            >返回</v-btn
+          >
         </template>
         <template v-else-if="isApproval">
           <confirm-dialog
             title="确认通过"
             btn-color="success"
             max-width="373px"
-            only-title
-            >通过
-          </confirm-dialog>
+            hide-text
+            >通过</confirm-dialog
+          >
           <confirm-dialog
             title="修改意见"
             btn-class="ml-3"
             max-width="600px"
             @confirm="returnForCorrection"
-            >返回修改
+          >
+            返回修改
             <template #container>
               <v-textarea v-model="correctSuggest" required clearable />
             </template>
@@ -127,12 +139,12 @@
             btn-class="ml-3"
             btn-color="error"
             max-width="373px"
-            only-title
+            hide-text
             >驳回</confirm-dialog
           >
         </template>
-        <template v-else
-          ><v-btn color="warning" @click="reset">重置</v-btn>
+        <template v-else>
+          <v-btn color="warning" @click="reset">重置</v-btn>
           <v-btn color="success" class="ml-4" @click="save">保存</v-btn>
           <confirm-dialog
             title="确认提交"
@@ -140,11 +152,12 @@
             btn-color="primary"
             max-width="473px"
             @confirm="commit"
-            >提交
+          >
+            提交
             <template #container>
-              <v-alert dense type="warning" elevation="2">
-                申请提交后将不能修改，是否确定提交？
-              </v-alert>
+              <v-alert dense type="warning" elevation="2"
+                >申请提交后将不能修改，是否确定提交？</v-alert
+              >
             </template>
           </confirm-dialog>
         </template>
