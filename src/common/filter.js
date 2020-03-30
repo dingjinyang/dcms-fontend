@@ -10,3 +10,15 @@ Vue.filter("competitionStatusColorFilter", value => {
 Vue.filter("dateRangeTextFilter", value => {
   return value.join(" ~ ");
 });
+Vue.filter("competitionStageFilter", value => {
+  const cur = new Date().toISOString().substr(0, 10);
+  return value.filter(e => {
+    return e.startTime < cur && e.endTime > cur;
+  })[0].name;
+});
+/**
+ * 竞赛团队成员
+ */
+Vue.filter("teamMemberTextFilter", value => {
+  return value.map(e => e.name).join(",");
+});

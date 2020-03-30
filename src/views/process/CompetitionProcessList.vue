@@ -9,7 +9,7 @@
   >
     <template #top>
       <v-row no-gutters>
-        <v-col cols="12" xl="11" lg="10" md="12" sm="12">
+        <v-col cols="12">
           <process-table-search @search="tableSearch" />
         </v-col>
       </v-row>
@@ -17,13 +17,26 @@
     <template #item.name="{ item }">
       <competition-name-link :id="item.id" :name="item.name" />
     </template>
+    <template #item.time="{ item }">
+      {{ `${item.startTime} - ${item.endTime}` }}
+    </template>
+    <template #item.stage="{ item }">
+      {{ item.stages | competitionStageFilter }}
+    </template>
     <template #item.action="{ item }">
       <v-btn
         small
         color="primary"
         text
         :to="itemTo('ConfirmParticipantList', item.id)"
-        >确认名单
+        >参赛名单
+      </v-btn>
+      <v-btn
+        small
+        color="warning"
+        text
+        :to="itemTo('ProcessManagement', item.id)"
+        >过程管理
       </v-btn>
     </template>
   </v-data-table>
@@ -32,18 +45,17 @@
 <script>
 import { getAllCompetition } from "@/api/competition/competition";
 import ProcessTableSearch from "./ProcessTableSearch";
-import CompetitionNameLink from "@/components/CompetitionNameLink";
+import CompetitionNameLink from "@/views/components/CompetitionNameLink";
 
 export default {
   name: "CompetitionProcessList",
   data: () => ({
     loading: false,
-    dialog: false,
     headers: [
       { text: "#", value: "id" },
       { text: "名称", value: "name" },
       { text: "时间", value: "time" },
-      { text: "竞赛阶段", value: "" },
+      { text: "竞赛阶段", value: "stage" },
       { text: "操作", value: "action" }
     ],
     desserts: [],
@@ -100,9 +112,6 @@ export default {
       },
       deep: true
     }
-  },
-  activated() {
-    this.getDate();
   }
 };
 </script>

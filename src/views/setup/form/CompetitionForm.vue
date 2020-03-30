@@ -180,6 +180,11 @@ import {
 import ConfirmDialog from "../../../components/ConfirmDialog";
 export default {
   name: "CompetitionApply",
+  components: {
+    CompetitionStage,
+    SnackBar,
+    ConfirmDialog
+  },
   data: () => ({
     competitionForm: {
       name: "",
@@ -232,45 +237,30 @@ export default {
     snackbarSet: {},
     correctSuggest: ""
   }),
-  components: {
-    CompetitionStage,
-    SnackBar,
-    ConfirmDialog
-  },
   computed: {
-    readonly() {
-      return this.isDetail || this.isCollegeApproval || this.isPracticeApproval;
-    },
-    isDetail() {
-      return this.$route.name === "CompetitionDetail";
-    },
     isApproval() {
       return this.isCollegeApproval || this.isPracticeApproval;
     },
     isCollegeApproval() {
       return this.$route.name === "CollegeApproval";
     },
+    isDetail() {
+      return this.$route.name === "CompetitionDetail";
+    },
     isPracticeApproval() {
       return this.$route.name === "PracticeApproval";
+    },
+    readonly() {
+      return this.isDetail || this.isCollegeApproval || this.isPracticeApproval;
     }
   },
-  methods: {
-    reset() {
-      this.competitionForm = this.defaultCompetitionForm;
-    },
-    //TODO 保存数据，可修改
-    save() {
-      saveCompetitionApply(this.competitionForm).then(res => {
-        if (res.code === 200)
-          this.snackbarSet = {
-            show: true,
-            text: "保存成功",
-            color: "success",
-            y: "top",
-            timeout: 3000
-          };
+  created() {
+    this.$route.name !== "CompetitionApply" &&
+      getCompetitionDetail(this.$route.params.competitionId).then(res => {
+        if (res.code === 200) this.competitionForm = res.data;
       });
-    },
+  },
+  methods: {
     //TODO 提交，不可再修改,表单验证
     commit() {
       commitCompetitionApply(this.competitionForm).then(res => {
@@ -284,15 +274,25 @@ export default {
           };
       });
     },
+    reset() {
+      this.competitionForm = this.defaultCompetitionForm;
+    },
     returnForCorrection() {
       console.log(this.correctSuggest);
-    }
-  },
-  created() {
-    this.$route.name !== "CompetitionApply" &&
-      getCompetitionDetail(this.$route.params.competitionId).then(res => {
-        if (res.code === 200) this.competitionForm = res.data;
+    },
+    //TODO 保存数据，可修改
+    save() {
+      saveCompetitionApply(this.competitionForm).then(res => {
+        if (res.code === 200)
+          this.snackbarSet = {
+            show: true,
+            text: "保存成功",
+            color: "success",
+            y: "top",
+            timeout: 3000
+          };
       });
+    }
   }
 };
 </script>

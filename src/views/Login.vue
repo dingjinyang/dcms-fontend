@@ -97,6 +97,25 @@ export default {
     }
   }),
   methods: {
+    loginWith(user) {
+      this.loginForm = {
+        account: user,
+        password: user
+      };
+      this.userLogin();
+    },
+    /**
+     * 提示框
+     * @param text 提示内容
+     * @param color 提示框颜色
+     */
+    snackbarShow(text, color) {
+      this.snackbar = {
+        show: true,
+        text,
+        color
+      };
+    },
     userLogin() {
       const _this = this;
       if (!_this.$refs.login_form.validate()) return;
@@ -116,25 +135,6 @@ export default {
         .finally(() => {
           _this.loginLoading = false;
         });
-    },
-    /**
-     * 提示框
-     * @param text 提示内容
-     * @param color 提示框颜色
-     */
-    snackbarShow(text, color) {
-      this.snackbar = {
-        show: true,
-        text,
-        color
-      };
-    },
-    loginWith(user) {
-      this.loginForm = {
-        account: user,
-        password: user
-      };
-      this.userLogin();
     }
   }
 };

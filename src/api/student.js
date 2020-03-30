@@ -3,14 +3,7 @@ import "../plugins/axios";
 // eslint-disable-next-line no-unused-vars,no-undef
 const _axios = axios;
 
-// eslint-disable-next-line no-unused-vars
-const Timeout = times => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve();
-    }, times);
-  });
-};
+//TODO 注意学生接口限制，避免查询不必要信息
 export const getStudentInfoBySno = async sno => {
   return await _axios.get(`/student/info`, {
     params: { sno }

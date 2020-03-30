@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import CompetitionNameLink from "../../components/CompetitionNameLink";
+import CompetitionNameLink from "../components/CompetitionNameLink";
 import { getLaunchList } from "../../api/competition/process";
 import ConfirmDialog from "../../components/ConfirmDialog";
 

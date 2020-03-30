@@ -46,6 +46,19 @@ export default [
           import(
             /* webpackChunkName: "CompetitionProcessList" */ "@/views/process/ConfirmParticipantList"
           )
+      },
+      {
+        path: "management",
+        name: "ProcessManagement",
+        hideInMenu: true,
+        meta: {
+          title: "竞赛过程",
+          icon: "clock-start"
+        },
+        component: () =>
+          import(
+            /* webpackChunkName: "ProcessManagement" */ "@/views/process/ProcessManagement"
+          )
       }
     ]
   }

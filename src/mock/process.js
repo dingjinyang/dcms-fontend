@@ -1,6 +1,6 @@
 import { getURLSearchParams } from "../util/url";
 import competitionList from "./data/competitionList";
-import competitionStudentList from "@/mock/data/competitionStudentList";
+import stageParticipants from "@/mock/data/stageParticipants";
 import { pageHelper } from "@/util/pageHelper";
 
 const Mock = require("mockjs");
@@ -30,13 +30,13 @@ export default {
       });
     }
   ),
-  getParticipateEntry: Mock.mock(
-    /\/participate\/entry\?sno=[1-9]\d*&pageNum=[1-9]\d*&pageSize=[1-9]\d*/,
+  getStageParticipants: Mock.mock(
+    /\/competition\/stage\/participants\?competitionId=[1-9]\d*&stage=[1-9]\d*&pageNum=[1-9]\d*&pageSize=[1-9]\d*/,
     "get",
     options => {
-      const { pageNum, pageSize } = getURLSearchParams(options.url);
+      const { stage, pageNum, pageSize } = getURLSearchParams(options.url);
       return responseData(
-        pageHelper(competitionStudentList, pageNum, pageSize)
+        pageHelper(stageParticipants[stage - 1], pageNum, pageSize)
       );
     }
   )
