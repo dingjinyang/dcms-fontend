@@ -43,7 +43,7 @@
           <template #container>
             <v-img
               v-if="item.credential"
-              lazy-src="../../../../public/credential.jpg"
+              src="../../../../public/credential.jpg"
             />
             <v-file-input
               v-else
