@@ -48,7 +48,7 @@ export default [
           )
       },
       {
-        path: "management",
+        path: "management/:id",
         name: "ProcessManagement",
         hideInMenu: true,
         meta: {
