@@ -54,7 +54,7 @@ export default [
           college: "软件学院"
         },
         {
-          sno: "201619150119",
+          sno: "201619150120",
           name: Mock.mock("@cname"),
           class: "RB软工卓越161",
           grade: "2016",
@@ -81,14 +81,14 @@ export default [
           college: "软件学院"
         },
         {
-          sno: "201619150119",
+          sno: "201619150120",
           name: Mock.mock("@cname"),
           class: "RB软工卓越161",
           grade: "2016",
           college: "软件学院"
         },
         {
-          sno: "201619150119",
+          sno: "201619150121",
           name: Mock.mock("@cname"),
           class: "RB软工卓越161",
           grade: "2016",
@@ -163,7 +163,7 @@ export default [
           college: "软件学院"
         },
         {
-          sno: "201619150119",
+          sno: "201619150120",
           name: Mock.mock("@cname"),
           class: "RB软工卓越161",
           grade: "2016",
@@ -190,14 +190,14 @@ export default [
           college: "软件学院"
         },
         {
-          sno: "201619150119",
+          sno: "201619150120",
           name: Mock.mock("@cname"),
           class: "RB软工卓越161",
           grade: "2016",
           college: "软件学院"
         },
         {
-          sno: "201619150119",
+          sno: "201619150121",
           name: Mock.mock("@cname"),
           class: "RB软工卓越161",
           grade: "2016",
@@ -272,7 +272,7 @@ export default [
           college: "软件学院"
         },
         {
-          sno: "201619150119",
+          sno: "201619150120",
           name: Mock.mock("@cname"),
           class: "RB软工卓越161",
           grade: "2016",

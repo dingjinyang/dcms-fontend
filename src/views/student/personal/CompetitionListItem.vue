@@ -22,7 +22,10 @@
               }}</v-list-item-title
             >
             <v-list-item-title
-              >获奖情况：{{ item.awards || "无" }}</v-list-item-title
+              >比赛状态：{{ item.awards || "无" }}</v-list-item-title
+            >
+            <v-list-item-title
+              >参赛及获奖情况：{{ item.awards || "无" }}</v-list-item-title
             >
           </v-list-item-content>
         </v-list-item>

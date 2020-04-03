@@ -7,6 +7,7 @@ export default {
   state: {
     token: getToken(),
     info: {
+      id: "",
       username: "",
       avatar: "",
       roles: [],

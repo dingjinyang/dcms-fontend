@@ -16,7 +16,13 @@
         v-on="on"
       ></v-text-field>
     </template>
-    <v-date-picker v-model="dates" :readonly="readonly" range scrollable>
+    <v-date-picker
+      v-model="dates"
+      :readonly="readonly"
+      range
+      scrollable
+      locale="zh-cn"
+    >
       <v-spacer></v-spacer>
       <v-btn text color="error" @click="menu = false">取消</v-btn>
       <v-btn text color="primary" @click="save">确认</v-btn>

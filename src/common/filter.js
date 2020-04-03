@@ -12,9 +12,10 @@ Vue.filter("dateRangeTextFilter", value => {
 });
 Vue.filter("competitionStageFilter", value => {
   const cur = new Date().toISOString().substr(0, 10);
-  return value.filter(e => {
+  const arr = value.filter(e => {
     return e.startTime < cur && e.endTime > cur;
-  })[0].name;
+  });
+  return arr && arr[0] && arr[0].name;
 });
 /**
  * 竞赛团队成员

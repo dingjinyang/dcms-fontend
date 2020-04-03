@@ -5,6 +5,21 @@
       :current-stage="competition.currentStage"
       @change="getData"
     />
+    <confirm-dialog
+      v-if="competition.currentStage <= competition.stages.length"
+      :title="stageBtnText"
+      btn-class="mt-3"
+      :btn-color="stageBtnColor"
+      max-width="450px"
+      @confirm="nextStage"
+    >
+      {{ stageBtnText }}
+      <template #container>
+        <v-alert dense text type="warning">
+          进入下一段将不能返回，确认进入下一阶段？
+        </v-alert>
+      </template>
+    </confirm-dialog>
     <v-data-table
       :headers="headers"
       :items="desserts"
@@ -14,6 +29,8 @@
       show-expand
       disable-sort
       disable-filtering
+      show-select
+      v-model="selected"
     >
       <template #item.teamMembers="{ item }">{{
         item.teamMembers | teamMemberTextFilter
@@ -71,10 +88,23 @@ export default {
       page: 1,
       itemsPerPage: 5
     },
-    total: 0
+    total: 0,
+    selected: []
   }),
   created() {
     this.getData();
+  },
+  computed: {
+    stageBtnText() {
+      return this.competition.currentStage < this.competition.stages.length
+        ? "进入下一阶段"
+        : "结束";
+    },
+    stageBtnColor() {
+      return this.competition.currentStage < this.competition.stages.length
+        ? "primary"
+        : "warning";
+    }
   },
   methods: {
     deleteItem(item) {
@@ -94,6 +124,9 @@ export default {
         this.total = data.total;
         this.desserts = data.list;
       });
+    },
+    nextStage() {
+      this.competition.currentStage++;
     }
   }
 };

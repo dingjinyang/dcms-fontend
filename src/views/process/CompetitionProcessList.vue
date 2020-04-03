@@ -20,7 +20,7 @@
     <template #item.time="{ item }">
       {{ `${item.startTime} - ${item.endTime}` }}
     </template>
-    <template #item.stage="{ item }">
+    <template #item.stages="{ item }">
       {{ item.stages | competitionStageFilter }}
     </template>
     <template #item.action="{ item }">
@@ -29,15 +29,9 @@
         color="primary"
         text
         :to="itemTo('ConfirmParticipantList', item.id)"
-        >参赛名单
-      </v-btn>
-      <v-btn
-        small
-        color="warning"
-        text
-        :to="itemTo('ProcessManagement', item.id)"
         >过程管理
       </v-btn>
+      <v-btn small color="success" text>奖项录入 </v-btn>
     </template>
   </v-data-table>
 </template>
@@ -55,7 +49,7 @@ export default {
       { text: "#", value: "id" },
       { text: "名称", value: "name" },
       { text: "时间", value: "time" },
-      { text: "竞赛阶段", value: "stage" },
+      { text: "竞赛阶段", value: "stages" },
       { text: "操作", value: "action" }
     ],
     desserts: [],

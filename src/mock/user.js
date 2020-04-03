@@ -44,6 +44,8 @@ export default {
       code: 200,
       data: {
         roles: [role],
+        id: 5771,
+        department: "软件学院",
         permissions: permissions[role],
         username: Mock.mock("@CNAME"),
         avatar:

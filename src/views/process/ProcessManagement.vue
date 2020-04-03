@@ -5,13 +5,14 @@
       :current-stage="competition.currentStage"
     />
     <confirm-dialog
-      title="进入下一阶段"
+      v-if="competition.currentStage <= competition.stages.length"
+      :title="stageBtnText"
       btn-class="mt-3"
-      btn-color="primary"
+      :btn-color="stageBtnColor"
       max-width="450px"
       @confirm="nextStage"
     >
-      进入下一阶段
+      {{ stageBtnText }}
       <template #container>
         <v-alert dense text type="warning">
           进入下一段将不能返回，确认进入下一阶段？
@@ -40,6 +41,18 @@ export default {
   },
   created() {
     this.getData();
+  },
+  computed: {
+    stageBtnText() {
+      return this.competition.currentStage < this.competition.stages.length
+        ? "进入下一阶段"
+        : "结束";
+    },
+    stageBtnColor() {
+      return this.competition.currentStage < this.competition.stages.length
+        ? "primary"
+        : "warning";
+    }
   },
   methods: {
     async getData() {

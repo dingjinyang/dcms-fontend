@@ -3,37 +3,38 @@
     <v-row>
       <v-col cols="12" sm="6" md="4" lg="4" xl="4">
         <v-text-field
-          v-model="competitionForm.name"
+          v-model.trim="competitionForm.comName"
           label="名称"
+          :rules="[v => !!v || '名称不能为空']"
           :readonly="readonly"
         />
       </v-col>
       <v-col cols="12" sm="6" md="4" lg="4" xl="4">
         <v-select
-          v-model="competitionForm.level"
-          label="最高级别"
+          v-model="competitionForm.comLevel"
+          label="级别"
           :items="competitionLevels"
           :readonly="readonly"
         />
       </v-col>
       <v-col cols="12" sm="6" md="4" lg="4" xl="4">
         <v-text-field
-          v-model="competitionForm.principal"
-          label="负责人"
-          :readonly="readonly"
+          v-model.number="competitionForm.principalId"
+          label="负责人工号"
+          readonly
         />
       </v-col>
       <v-col cols="12" sm="6" md="4" lg="4" xl="4">
         <v-text-field
-          v-model="competitionForm.phone"
+          v-model.lazy.number="competitionForm.principalPhone"
+          :clearable="!readonly"
           label="联系方式"
-          type="phone"
           :readonly="readonly"
         />
       </v-col>
       <v-col cols="12" sm="6" md="4" lg="4" xl="4">
         <v-text-field
-          v-model="competitionForm.teams"
+          v-model.number="competitionForm.teams"
           label="参赛队数"
           type="number"
           :readonly="readonly"
@@ -41,7 +42,7 @@
       </v-col>
       <v-col cols="12" sm="6" md="4" lg="4" xl="4">
         <v-text-field
-          v-model="competitionForm.people"
+          v-model.number="competitionForm.participants"
           label="参赛人数"
           type="number"
           :readonly="readonly"
@@ -50,7 +51,7 @@
       <v-col cols="12">
         <competition-stage
           :readonly="readonly"
-          :stages.sync="competitionForm.stages"
+          :stages.sync="competitionForm.competitionStages"
         />
       </v-col>
       <v-col cols="12" sm="12" md="12" lg="12" xl="12">
@@ -82,17 +83,16 @@
       </v-col>
       <v-col cols="12" sm="12" md="6" lg="6" xl="4">
         <v-text-field
-          :clearable="!readonly"
-          v-model="competitionForm.condition"
+          v-model="competitionForm.comCondition"
           label="竞赛条件"
-          :readonly="readonly"
+          readonly
         />
       </v-col>
       <v-col cols="12" sm="12" md="6" lg="6" xl="4">
         <v-text-field
           :clearable="!readonly"
-          v-model="competitionForm.achievement"
-          label="预期成果"
+          v-model="competitionForm.sponsor"
+          label="主办单位"
           :readonly="readonly"
         />
       </v-col>
@@ -101,10 +101,7 @@
         <v-btn text color="primary">历年参赛情况</v-btn>
       </v-col>
       <v-col cols="12" sm="12" md="6" lg="6" xl="6" v-if="isPracticeApproval">
-        <v-text-field label="批复预算金额" />
-      </v-col>
-      <v-col cols="12" sm="12" md="6" lg="6" xl="6" v-if="isPracticeApproval">
-        <v-checkbox label="纳入评估"></v-checkbox>
+        <v-text-field label="批复预算金额" v-model="competitionForm.budget" />
       </v-col>
       <v-col cols="12">
         <template v-if="isDetail">
@@ -131,7 +128,7 @@
           >
             返回修改
             <template #container>
-              <v-textarea v-model="correctSuggest" required clearable />
+              <v-textarea v-model="collegeModifySuggest" required clearable />
             </template>
           </confirm-dialog>
           <confirm-dialog
@@ -168,16 +165,20 @@
 </template>
 
 <script>
-import store from "../../../store";
-import { colleges, competitionLevels } from "../../../common/constant";
+import store from "@/store";
+import {
+  colleges,
+  competitionLevels,
+  competitionForm
+} from "@/common/constant";
 import CompetitionStage from "./CompetitionStage";
-import SnackBar from "../../../components/SnackBar";
+import SnackBar from "@/components/SnackBar";
 import {
   getCompetitionDetail,
   saveCompetitionApply,
   commitCompetitionApply
-} from "../../../api/competition/competition.js";
-import ConfirmDialog from "../../../components/ConfirmDialog";
+} from "@/api/competition/competition.js";
+import ConfirmDialog from "@/components/ConfirmDialog";
 export default {
   name: "CompetitionApply",
   components: {
@@ -187,55 +188,18 @@ export default {
   },
   data: () => ({
     competitionForm: {
-      name: "",
-      level: 0,
-      phone: "",
-      teams: 1,
-      people: 1,
-      startTime: "",
-      endTime: "",
-      principal: store.getters["user/info"].username,
-      awards: "",
-      achievement: "",
-      flow: "",
-      condition: "",
-      stages: [
-        {
-          name: "",
-          level: "",
-          startTime: "",
-          endTime: "",
-          sponsor: ""
-        }
-      ]
-    },
-    defaultCompetitionForm: {
-      name: "",
-      level: 0,
-      phone: "",
-      teams: 1,
-      people: 1,
-      startTime: "",
-      endTime: "",
-      principal: store.getters["user/info"].username,
-      awards: "",
-      achievement: "",
-      process: "",
-      stages: [
-        {
-          name: "",
-          level: "",
-          startTime: "",
-          endTime: "",
-          sponsor: ""
-        }
-      ]
+      ...competitionForm,
+      principalId: store.getters["user/info"].id,
+      department: store.getters["user/info"].department
     },
     /** 部门选项 */
     colleges,
     competitionLevels,
     snackbarSet: {},
-    correctSuggest: ""
+    collegeModifySuggest: "", //学院修改意见
+    practiceModifySuggest: "",
+    phoneRules: [v => /^1[3456789]\d{9}$/.test(v) || "手机号不合法"],
+    stagesRules: []
   }),
   computed: {
     isApproval() {
@@ -275,13 +239,19 @@ export default {
       });
     },
     reset() {
-      this.competitionForm = this.defaultCompetitionForm;
+      this.$refs.competition_form.resetValidation();
+      this.competitionForm = {
+        ...competitionForm,
+        principalId: store.getters["user/info"].id,
+        department: store.getters["user/info"].department
+      };
     },
     returnForCorrection() {
-      console.log(this.correctSuggest);
+      console.log(this.collegeModifySuggest);
     },
     //TODO 保存数据，可修改
     save() {
+      console.log(JSON.stringify(this.competitionForm));
       saveCompetitionApply(this.competitionForm).then(res => {
         if (res.code === 200)
           this.snackbarSet = {

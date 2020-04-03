@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import { competitionStage } from "@/common/constant";
 import CompetitionStageTabItem from "./CompetitionStageTabItem";
 export default {
   name: "CompetitionStage",
@@ -47,13 +48,7 @@ export default {
       tabsMin: 1,
       tabsMax: 10,
       menu: false,
-      stage: {
-        name: "",
-        level: 0,
-        startTime: "",
-        endTime: "",
-        sponsor: ""
-      },
+      stage: { ...competitionStage },
       stageForms: []
     };
   },
@@ -70,7 +65,10 @@ export default {
     tabsPlus() {
       !this.$attrs.readonly &&
         this.stageForms.length < this.tabsMax &&
-        this.stageForms.push({ ...this.stage });
+        this.stageForms.push({
+          ...this.stage,
+          stage: this.stageForms.length
+        });
     },
     tabsMinus() {
       !this.$attrs.readonly &&
