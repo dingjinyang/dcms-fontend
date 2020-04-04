@@ -3,17 +3,27 @@
  * @type {({color: string, text: string, value: string})[]}
  */
 export const competitionStatus = [
-  { text: "未提交", value: 0, color: "text" },
-  { text: "待审批", value: 1, color: "primary" },
-  { text: "待修改", value: 2, color: "warning" },
-  { text: "被驳回", value: 3, color: "error" },
-  { text: "已通过", value: 4, color: "success" },
-  { text: "进行中", value: 5, color: "light-blue" }
+  { text: "无状态", value: 0, color: "gray" },
+  { text: "未提交", value: 1, color: "text" },
+  { text: "待审批", value: 2, color: "primary" },
+  { text: "待修改", value: 3, color: "warning" },
+  { text: "被驳回", value: 4, color: "error" },
+  { text: "待审批", value: 5, color: "primary" },
+  { text: "待修改", value: 6, color: "success" },
+  { text: "被驳回", value: 7, color: "error" },
+  { text: "已通过", value: 8, color: "success" }
 ];
 
 export const colleges = ["软件学院", "计算机学院", "纺织学院", "马克思学院"];
 
 export const competitionLevels = ["校级", "院级"];
+
+export const competitionSearchForm = {
+  year: new Date().getFullYear(),
+  department: null,
+  comName: null,
+  sponsor: null
+};
 
 export const competitionStage = {
   stage: 1, //阶段级别
@@ -35,12 +45,12 @@ export const competitionForm = {
   flow: "", //赛事流程
   comCondition: "中原工学院全体学生", //参赛条件
   comStatus: 1, //立项申请状态
-  comDate: "", //立项时间
+  comDate: new Date().toISOString().substring(0, 10), //立项时间
   sponsor: "", //主办单位
   budget: 0,
   lastHandler: 1,
   collegeModifySuggest: null,
   practiceModifySuggest: null,
   currentStage: 1,
-  competitionStages: [competitionStage]
+  competitionStages: [{ ...competitionStage }]
 };

@@ -23,7 +23,7 @@
         <v-tab-item v-for="i in tabs" :key="i" :value="`stage-${i}`">
           <competition-stage-tab-item
             v-bind="$attrs"
-            :stage.sync="stageForms[i - 1]"
+            :stage="stageForms[i - 1]"
           />
         </v-tab-item>
       </v-tabs>
@@ -48,7 +48,6 @@ export default {
       tabsMin: 1,
       tabsMax: 10,
       menu: false,
-      stage: { ...competitionStage },
       stageForms: []
     };
   },
@@ -65,10 +64,12 @@ export default {
     tabsPlus() {
       !this.$attrs.readonly &&
         this.stageForms.length < this.tabsMax &&
-        this.stageForms.push({
-          ...this.stage,
-          stage: this.stageForms.length
-        });
+        this.stageForms.push(
+          Object.assign(
+            {},
+            { competitionStage, stage: this.stageForms.length + 1 }
+          )
+        );
     },
     tabsMinus() {
       !this.$attrs.readonly &&
@@ -79,9 +80,6 @@ export default {
   computed: {
     thumbSize() {
       return 15 + this.tabs * 2;
-    },
-    isDetail() {
-      return this.$route.name === "CompetitionDetail";
     }
   }
 };

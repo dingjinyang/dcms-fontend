@@ -12,7 +12,7 @@
       disable-sort
     >
       <template #top>
-        <practice-table-search @search="tableSearch" />
+        <c-table-search @search="searchData" />
         <v-expand-transition>
           <v-toolbar v-show="selectedApproval.length" dense flat>
             <confirm-dialog
@@ -35,16 +35,8 @@
           </v-toolbar>
         </v-expand-transition>
       </template>
-      <template #item.name="{ item }">
-        <router-link
-          :to="{
-            name: 'CompetitionDetail',
-            params: { competitionId: item.id }
-          }"
-          class="competition-name-link"
-        >
-          {{ item.name }}
-        </router-link>
+      <template #item.comName="{ item }">
+        <c-name-link :id="item.id" :name="item.comName" />
       </template>
       <template #item.action="{ item }">
         <v-btn
@@ -69,12 +61,15 @@
 import {
   batchPracticeApproval,
   getPracticeApprovalList
-} from "../../../api/competition/competition";
-import PracticeTableSearch from "./PracticeTableSearch";
-import ConfirmDialog from "../../../components/ConfirmDialog";
+} from "../../api/competition/competition";
+import ConfirmDialog from "../../components/ConfirmDialog";
+import CNameLink from "@/views/components/CNameLink";
+import CTableSearch from "@/views/components/CTableSearch";
+import { competitionSearchForm } from "@/common/constant";
 
 export default {
   name: "PracticeApprovalList",
+  components: { CTableSearch, ConfirmDialog, CNameLink },
   data: () => ({
     loading: false,
     dialog: false,
@@ -107,7 +102,6 @@ export default {
     },
     copyName: ""
   }),
-  components: { PracticeTableSearch, ConfirmDialog },
   computed: {
     selectedApproval() {
       return this.selected.filter(item => {
@@ -115,12 +109,33 @@ export default {
       });
     }
   },
+  watch: {
+    options: {
+      handler() {
+        this.searchData();
+      },
+      deep: true
+    }
+  },
   methods: {
-    // TODO 后端请求 本院系本年度立项申请
-    getDate() {
+    batchApproval() {
+      batchPracticeApproval(this.selectedApproval.map(item => item.id)).then(
+        res => {
+          if (res.code === 200) this.dialog = false;
+        }
+      );
+    },
+    /**
+     * 撤销当前竞赛
+     *  @param id int
+     */
+    deleteItem(id) {
+      console.log(id);
+    },
+    searchData(searchForm = competitionSearchForm) {
       const { page, itemsPerPage } = this.options;
       this.loading = true;
-      getPracticeApprovalList(page, itemsPerPage)
+      getPracticeApprovalList(page, itemsPerPage, searchForm)
         .then(({ code, data: { list, total } }) => {
           if (code !== 200) return;
           this.desserts = list;
@@ -143,55 +158,7 @@ export default {
         name,
         params: { competitionId }
       };
-    },
-    /**
-     * 撤销当前竞赛
-     *  @param id int
-     */
-    deleteItem(id) {
-      console.log(id);
-    },
-    copyItem(item) {
-      prompt("重新命名：", item.name);
-    },
-    /**
-     * 表单检索
-     * @param searchFrom
-     */
-    // eslint-disable-next-line no-unused-vars
-    tableSearch(searchFrom) {
-      // TODO 调用后端接口检索
-      console.log(searchFrom);
-    },
-    batchApproval() {
-      batchPracticeApproval(this.selectedApproval.map(item => item.id)).then(
-        res => {
-          if (res.code === 200) this.dialog = false;
-        }
-      );
     }
-  },
-  watch: {
-    options: {
-      handler() {
-        this.getDate();
-      },
-      deep: true
-    }
-  },
-  activated() {
-    this.getDate();
   }
 };
 </script>
-
-<style scoped>
-.competition-name-link {
-  color: #08c;
-  text-decoration: none;
-}
-.competition-name-link:hover {
-  color: #0408b7;
-  text-decoration: underline;
-}
-</style>

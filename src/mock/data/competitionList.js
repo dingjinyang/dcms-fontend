@@ -1,423 +1,151 @@
-const Mock = require("mockjs");
-
 export default [
   {
     id: 1,
-    year: "2020",
-    status: 0,
-    name: "ACM程序设计大赛",
+    comName: "软件设计大赛",
     department: "软件学院",
-    scope: "软件学院全体学生",
-    time: "01/01 - 06/01",
-    lastHandler: Mock.mock("@cname"),
-    level: "院级",
-    phone: "110",
-    teams: 100,
-    people: 200,
-    startTime: "2020-01-01",
-    endTime: "2020-6-31",
-    principal: Mock.mock("@cname"),
-    awards: "一等奖",
-    description: Mock.mock("@cparagraph"),
-    achievement: "优秀竞赛",
-    flow: Mock.mock("@cparagraph"),
-    condition: "16级全体学生",
-    currentStage: 3,
-    stages: [
+    comLevel: "院级",
+    principalId: 5771,
+    principalPhone: 12345678910,
+    teams: 50,
+    participants: 100,
+    awards: "一等奖一名\n二等奖两名\n三等奖三名",
+    description: "软件改变生活，软件创造价值",
+    flow: "报名-初赛-复赛-决赛",
+    comCondition: "中原工学院全体学生",
+    comStatus: 1,
+    comDate: "2020-04-02",
+    sponsor: "软件学院大学生社团联合会",
+    budget: 0,
+    lastHandler: 1,
+    collegeModifySuggest: null,
+    practiceModifySuggest: null,
+    currentStage: 1,
+    competitionStages: [
       {
-        name: "报名",
-        level: 1,
-        startTime: "2020-03-01",
-        endTime: "2020-04-10",
-        sponsor: "软件学院"
-      },
-      {
-        name: "中期检查",
-        level: 2,
+        stage: 1,
+        stageName: "报名",
         startTime: "2020-04-01",
-        endTime: "2020-05-01",
-        sponsor: "软件学院"
+        endTime: "2020-04-30"
       },
       {
-        name: "初赛",
-        level: 3,
+        stage: 2,
+        stageName: "初赛",
         startTime: "2020-05-01",
-        endTime: "2020-06-01",
-        sponsor: "软件学院"
+        endTime: "2020-05-01"
       },
       {
-        name: "复赛",
-        level: 4,
+        stage: 3,
+        stageName: "复赛",
+        startTime: "2020-05-23",
+        endTime: "2020-05-24"
+      },
+      {
+        stage: 4,
+        stageName: "决赛",
         startTime: "2020-06-01",
-        endTime: "2020-07-01",
-        sponsor: "软件学院"
-      },
-      {
-        name: "决赛",
-        level: 5,
-        startTime: "2020-07-01",
-        endTime: "2020-08-01",
-        sponsor: "软件学院"
+        endTime: "2020-06-01"
       }
     ]
   },
   {
     id: 2,
-    year: "2020",
-    status: 1,
-    name: "软件设计大赛",
+    comName: "ACM程序设计大赛",
     department: "软件学院",
-    scope: "软件学院全体学生",
-    time: "01/01 - 06/01",
-    lastHandler: Mock.mock("@cname"),
-    level: "院级",
-    phone: "110",
+    comLevel: "校级",
+    principalId: 5771,
+    principalPhone: 12345678910,
     teams: 100,
-    people: 200,
-    startTime: "2020-01-01",
-    endTime: "2020-6-31",
-    principal: Mock.mock("@cname"),
-    awards: "一等奖",
-    description: Mock.mock("@cparagraph"),
-    achievement: "优秀竞赛",
-    flow: Mock.mock("@cparagraph"),
-    condition: "16级全体学生",
-    currentStage: 3,
-    stages: [
+    participants: 300,
+    awards: "一等奖一名\n二等奖二名\n三等奖三名\n优秀奖若干",
+    description: "ACM程序设计大赛",
+    flow: "报名-初赛-决赛",
+    comCondition: "中原工学院全体学生",
+    comStatus: 2,
+    comDate: "2020-04-02",
+    sponsor: "中原工学院计算机技术学院",
+    budget: 0,
+    lastHandler: 1,
+    collegeModifySuggest: null,
+    practiceModifySuggest: null,
+    currentStage: 1,
+    competitionStages: [
       {
-        name: "报名",
-        level: 1,
-        startTime: "2020-01-01",
-        endTime: "2020-02-01",
-        sponsor: "软件学院"
+        stage: 1,
+        stageName: "报名",
+        startTime: "2020-04-06",
+        endTime: "2020-04-12"
       },
       {
-        name: "中期检查",
-        level: 2,
-        startTime: "2020-03-01",
-        endTime: "2020-04-01",
-        sponsor: "软件学院"
-      },
-      {
-        name: "初赛",
-        level: 3,
-        startTime: "2020-04-01",
-        endTime: "2020-05-01",
-        sponsor: "软件学院"
-      },
-      {
-        name: "复赛",
-        level: 4,
+        stage: 2,
+        stageName: "初赛",
         startTime: "2020-05-01",
-        endTime: "2020-06-01",
-        sponsor: "软件学院"
+        endTime: "2020-05-01"
       },
       {
-        name: "决赛",
-        level: 5,
-        startTime: "2020-06-01",
-        endTime: "2020-07-01",
-        sponsor: "软件学院"
+        stage: 3,
+        stageName: "决赛",
+        startTime: "2020-05-22",
+        endTime: "2020-05-22"
       }
     ]
   },
   {
     id: 3,
-    year: "2020",
-    status: 2,
-    name: "软件知识大赛",
+    comName: "软件创意大赛",
     department: "软件学院",
-    scope: "软件学院全体学生",
-    time: "01/01 - 06/01",
-    lastHandler: Mock.mock("@cname"),
-    level: "院级",
-    phone: "110",
+    comLevel: "院级",
+    principalId: 5771,
+    principalPhone: 12345678910,
     teams: 100,
-    people: 200,
-    startTime: "2020-01-01",
-    endTime: "2020-6-31",
-    principal: Mock.mock("@cname"),
-    awards: "一等奖",
-    description: Mock.mock("@cparagraph"),
-    achievement: "优秀竞赛",
-    flow: Mock.mock("@cparagraph"),
-    condition: "16级全体学生",
+    participants: 300,
+    awards: "一等奖一名\n二等奖二名\n三等奖三名\n优秀奖若干",
+    description: "软件创意大赛",
+    flow: "决赛",
+    comCondition: "中原工学院全体学生",
+    comStatus: 3,
+    comDate: "2020-04-02",
+    sponsor: "中原工学院计算机技术学院",
+    budget: 0,
+    lastHandler: 1,
+    collegeModifySuggest: null,
+    practiceModifySuggest: null,
     currentStage: 1,
-    stages: [
+    competitionStages: [
       {
-        name: "报名",
-        level: 1,
-        startTime: "2020-01-01",
-        endTime: "2020-02-01",
-        sponsor: "软件学院"
-      },
-      {
-        name: "中期检查",
-        level: 2,
-        startTime: "2020-02-01",
-        endTime: "2020-03-01",
-        sponsor: "软件学院"
-      },
-      {
-        name: "初赛",
-        level: 3,
-        startTime: "2020-03-01",
-        endTime: "2020-04-01",
-        sponsor: "软件学院"
-      },
-      {
-        name: "复赛",
-        level: 4,
-        startTime: "2020-04-01",
-        endTime: "2020-05-01",
-        sponsor: "软件学院"
-      },
-      {
-        name: "决赛",
-        level: 5,
-        startTime: "2020-05-01",
-        endTime: "2020-06-01",
-        sponsor: "软件学院"
+        stage: 1,
+        stageName: "报名",
+        startTime: "2020-04-06",
+        endTime: "2020-04-12"
       }
     ]
   },
   {
     id: 4,
-    year: "2020",
-    status: 3,
-    name: "软件创意大赛",
+    comName: "计算机技能大赛",
     department: "软件学院",
-    scope: "软件学院全体学生",
-    time: "01/01 - 06/01",
-    lastHandler: Mock.mock("@cname"),
-    level: "院级",
-    phone: "110",
+    comLevel: "院级",
+    principalId: 5771,
+    principalPhone: 12345678910,
     teams: 100,
-    people: 200,
-    startTime: "2020-01-01",
-    endTime: "2020-6-31",
-    principal: Mock.mock("@cname"),
-    awards: "一等奖",
-    description: Mock.mock("@cparagraph"),
-    achievement: "优秀竞赛",
-    flow: Mock.mock("@cparagraph"),
-    condition: "16级全体学生",
+    participants: 300,
+    awards: "一等奖一名\n二等奖二名\n三等奖三名\n优秀奖若干",
+    description: "软件创意大赛",
+    flow: "决赛",
+    comCondition: "中原工学院全体学生",
+    comStatus: 4,
+    comDate: "2020-04-02",
+    sponsor: "中原工学院计算机技术学院",
+    budget: 0,
+    lastHandler: 1,
+    collegeModifySuggest: null,
+    practiceModifySuggest: null,
     currentStage: 1,
-    stages: [
+    competitionStages: [
       {
-        name: "报名",
-        level: 1,
-        startTime: "2020-01-01",
-        endTime: "2020-02-01",
-        sponsor: "软件学院"
-      },
-      {
-        name: "中期检查",
-        level: 2,
-        startTime: "2020-02-01",
-        endTime: "2020-03-01",
-        sponsor: "软件学院"
-      },
-      {
-        name: "初赛",
-        level: 3,
-        startTime: "2020-04-01",
-        endTime: "2020-04-01",
-        sponsor: "软件学院"
-      },
-      {
-        name: "复赛",
-        level: 4,
-        startTime: "2020-03-01",
-        endTime: "2020-05-01",
-        sponsor: "软件学院"
-      },
-      {
-        name: "决赛",
-        level: 5,
-        startTime: "2020-05-01",
-        endTime: "2020-06-01",
-        sponsor: "软件学院"
-      }
-    ]
-  },
-  {
-    id: 5,
-    year: "2020",
-    status: 4,
-    name: "计算机技能大赛",
-    department: "软件学院",
-    scope: "软件学院全体学生",
-    time: "01/01 - 06/01",
-    lastHandler: Mock.mock("@cname"),
-    level: "院级",
-    phone: "110",
-    teams: 100,
-    people: 200,
-    startTime: "2020-01-01",
-    endTime: "2020-6-31",
-    principal: Mock.mock("@cname"),
-    awards: "一等奖",
-    description: Mock.mock("@cparagraph"),
-    achievement: "优秀竞赛",
-    flow: Mock.mock("@cparagraph"),
-    condition: "16级全体学生",
-    currentStage: 1,
-    stages: [
-      {
-        name: "报名",
-        level: 1,
-        startTime: "2020-01-01",
-        endTime: "2020-02-01",
-        sponsor: "软件学院"
-      },
-      {
-        name: "中期检查",
-        level: 2,
-        startTime: "2020-02-01",
-        endTime: "2020-03-01",
-        sponsor: "软件学院"
-      },
-      {
-        name: "初赛",
-        level: 3,
-        startTime: "2020-04-01",
-        endTime: "2020-04-01",
-        sponsor: "软件学院"
-      },
-      {
-        name: "复赛",
-        level: 4,
-        startTime: "2020-04-01",
-        endTime: "2020-05-01",
-        sponsor: "软件学院"
-      },
-      {
-        name: "决赛",
-        level: 5,
-        startTime: "2020-03-01",
-        endTime: "2020-06-01",
-        sponsor: "软件学院"
-      }
-    ]
-  },
-  {
-    id: 6,
-    year: "2020",
-    status: 1,
-    name: "服装设计大赛",
-    department: "服装学院",
-    scope: "软件学院全体学生",
-    time: "01/01 - 06/01",
-    lastHandler: Mock.mock("@cname"),
-    level: "院级",
-    phone: "110",
-    teams: 100,
-    people: 200,
-    startTime: "2020-01-01",
-    endTime: "2020-6-31",
-    principal: Mock.mock("@cname"),
-    awards: "一等奖",
-    description: Mock.mock("@cparagraph"),
-    achievement: "优秀竞赛",
-    flow: Mock.mock("@cparagraph"),
-    condition: "16级全体学生",
-    currentStage: 1,
-    stages: [
-      {
-        name: "报名",
-        level: 1,
-        startTime: "2020-01-01",
-        endTime: "2020-02-01",
-        sponsor: "软件学院"
-      },
-      {
-        name: "中期检查",
-        level: 2,
-        startTime: "2020-02-01",
-        endTime: "2020-03-01",
-        sponsor: "软件学院"
-      },
-      {
-        name: "初赛",
-        level: 3,
-        startTime: "2020-03-01",
-        endTime: "2020-04-01",
-        sponsor: "软件学院"
-      },
-      {
-        name: "复赛",
-        level: 4,
-        startTime: "2020-04-01",
-        endTime: "2020-05-01",
-        sponsor: "软件学院"
-      },
-      {
-        name: "决赛",
-        level: 5,
-        startTime: "2020-05-01",
-        endTime: "2020-06-01",
-        sponsor: "软件学院"
-      }
-    ]
-  },
-  {
-    id: 7,
-    year: "2020",
-    status: 1,
-    name: "能源大赛",
-    department: "环境工程学院",
-    scope: "软件学院全体学生",
-    time: "01/01 - 06/01",
-    lastHandler: Mock.mock("@cname"),
-    level: "院级",
-    phone: "110",
-    teams: 100,
-    people: 200,
-    startTime: "2020-01-01",
-    endTime: "2020-6-31",
-    principal: Mock.mock("@cname"),
-    awards: "一等奖",
-    description: Mock.mock("@cparagraph"),
-    achievement: "优秀竞赛",
-    flow: Mock.mock("@cparagraph"),
-    condition: "16级全体学生",
-    currentStage: 1,
-    stages: [
-      {
-        name: "报名",
-        level: 1,
-        startTime: "2020-01-01",
-        endTime: "2020-02-01",
-        sponsor: "软件学院"
-      },
-      {
-        name: "中期检查",
-        level: 2,
-        startTime: "2020-02-01",
-        endTime: "2020-03-01",
-        sponsor: "软件学院"
-      },
-      {
-        name: "初赛",
-        level: 3,
-        startTime: "2020-03-01",
-        endTime: "2020-04-01",
-        sponsor: "软件学院"
-      },
-      {
-        name: "复赛",
-        level: 4,
-        startTime: "2020-04-01",
-        endTime: "2020-05-01",
-        sponsor: "软件学院"
-      },
-      {
-        name: "决赛",
-        level: 5,
-        startTime: "2020-05-01",
-        endTime: "2020-06-01",
-        sponsor: "软件学院"
+        stage: 1,
+        stageName: "报名",
+        startTime: "2020-04-06",
+        endTime: "2020-04-12"
       }
     ]
   }

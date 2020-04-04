@@ -41,9 +41,7 @@ export default {
       const { pageNum, pageSize } = getURLSearchParams(options.url);
       return responseData(
         pageHelper(
-          competitionList.filter(
-            item => item.status === 1 || item.status === 4
-          ),
+          competitionList.filter(item => item.comStatus === 2),
           pageNum,
           pageSize
         )

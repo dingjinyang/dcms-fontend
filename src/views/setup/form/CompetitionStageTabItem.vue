@@ -22,6 +22,7 @@
 import DateRangePicker from "@/components/DateRangePicker";
 export default {
   name: "CompetitionStageTabItem",
+  components: { DateRangePicker },
   props: {
     stage: Object
   },
@@ -37,9 +38,6 @@ export default {
         this.stageItem = val;
       }
     }
-  },
-  components: { DateRangePicker }
+  }
 };
 </script>
-
-<style scoped></style>

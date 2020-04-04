@@ -39,7 +39,7 @@
 <script>
 import { getAllCompetition } from "@/api/competition/competition";
 import ProcessTableSearch from "./ProcessTableSearch";
-import CompetitionNameLink from "@/views/components/CompetitionNameLink";
+import CompetitionNameLink from "@/views/components/CNameLink";
 
 export default {
   name: "CompetitionProcessList",

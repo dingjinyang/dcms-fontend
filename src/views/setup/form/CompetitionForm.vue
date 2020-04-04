@@ -50,6 +50,7 @@
       </v-col>
       <v-col cols="12">
         <competition-stage
+          ref="refCompetitionStage"
           :readonly="readonly"
           :stages.sync="competitionForm.competitionStages"
         />
@@ -104,12 +105,12 @@
         <v-text-field label="批复预算金额" v-model="competitionForm.budget" />
       </v-col>
       <v-col cols="12">
+        <v-btn color="brown" dark class="mr-4" @click="$router.back()"
+          >返回
+        </v-btn>
         <template v-if="isDetail">
           <v-btn color="primary" :to="{ name: 'CompetitionApply' }"
             >再次申请</v-btn
-          >
-          <v-btn color="warning" class="ml-4" @click="$router.back()"
-            >返回</v-btn
           >
         </template>
         <template v-else-if="isApproval">
@@ -227,41 +228,47 @@ export default {
   methods: {
     //TODO 提交，不可再修改,表单验证
     commit() {
-      commitCompetitionApply(this.competitionForm).then(res => {
-        if (res.code === 200)
-          this.snackbarSet = {
-            show: true,
-            text: "提交成功",
-            color: "success",
-            y: "top",
-            timeout: 3000
-          };
-      });
+      commitCompetitionApply({ ...this.competitionForm, comStatus: 2 }).then(
+        res => {
+          if (res.code === 200)
+            this.snackbarSet = {
+              show: true,
+              text: "提交成功",
+              color: "success",
+              y: "top",
+              timeout: 3000
+            };
+        }
+      );
     },
     reset() {
       this.$refs.competition_form.resetValidation();
-      this.competitionForm = {
-        ...competitionForm,
-        principalId: store.getters["user/info"].id,
-        department: store.getters["user/info"].department
-      };
+      this.competitionForm = Object.assign(
+        {},
+        {
+          ...competitionForm,
+          principalId: store.getters["user/info"].id,
+          department: store.getters["user/info"].department
+        }
+      );
     },
     returnForCorrection() {
       console.log(this.collegeModifySuggest);
     },
     //TODO 保存数据，可修改
     save() {
-      console.log(JSON.stringify(this.competitionForm));
-      saveCompetitionApply(this.competitionForm).then(res => {
-        if (res.code === 200)
-          this.snackbarSet = {
-            show: true,
-            text: "保存成功",
-            color: "success",
-            y: "top",
-            timeout: 3000
-          };
-      });
+      saveCompetitionApply({ ...this.competitionForm, comStatus: 1 }).then(
+        res => {
+          if (res.code === 200)
+            this.snackbarSet = {
+              show: true,
+              text: "保存成功",
+              color: "success",
+              y: "top",
+              timeout: 3000
+            };
+        }
+      );
     }
   }
 };

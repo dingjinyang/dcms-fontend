@@ -11,7 +11,7 @@
     <template #top>
       <v-row no-gutters>
         <v-col cols="12" xl="11" lg="10" md="12" sm="12">
-          <apply-table-search @search="tableSearch" />
+          <c-table-search @search="searchData" />
         </v-col>
         <v-col cols="12" xl="1" lg="2" md="12" sm="12">
           <v-toolbar dense flat color="white">
@@ -23,25 +23,15 @@
         </v-col>
       </v-row>
     </template>
-    <template #item.name="{ item }">
-      <router-link
-        :to="{
-          name: 'CompetitionDetail',
-          params: { competitionId: item.id }
-        }"
-        class="competition-name-link"
-      >
-        {{ item.name }}
-      </router-link>
+    <template #item.comName="{ item }">
+      <c-name-link :name="item.comName" :id="item.id" />
     </template>
-    <template #item.status="{ item }">
-      <v-chip :color="item.status | competitionStatusColorFilter" small dark>
-        {{ item.status | competitionStatusTextFilter }}
-      </v-chip>
+    <template #item.comStatus="{ item }">
+      <c-status-chip :status="item.comStatus" />
     </template>
     <template #item.action="{ item }">
       <v-btn
-        v-if="item.status === 0"
+        v-if="item.comStatus === 1"
         small
         color="warning"
         text
@@ -49,7 +39,7 @@
         >编辑
       </v-btn>
       <v-btn
-        v-if="item.status === 2"
+        v-if="item.comStatus === 3"
         small
         color="primary"
         text
@@ -57,58 +47,54 @@
         >修改
       </v-btn>
       <confirm-dialog
-        v-if="item.status === 0"
+        v-if="item.comStatus === 1"
         title="确认撤销"
         btn-small
         btn-text
         btn-color="error"
-        max-width="373px"
+        max-width="273px"
         hide-text
-        @confirm="deleteItem(item.id)"
+        @confirm="deleteItem(item)"
       >
         撤销
-      </confirm-dialog>
-      <confirm-dialog
-        v-if="item.status === 4"
-        title="重新命名"
-        btn-small
-        btn-text
-        btn-color="success"
-        max-width="373px"
-        @confirm="copyItem(item)"
-      >
-        复制
-        <template #container>
-          <v-text-field v-model="copyName" label="竞赛名称" />
-        </template>
       </confirm-dialog>
     </template>
     <template #expanded-item="{ headers, item }">
       <td :colspan="headers.length">
-        参赛对象：{{ item.scope }} <br />竞赛简介：{{ item.description }}
+        参赛对象：{{ item.comCondition }} <br />竞赛简介：{{ item.description }}
+        <br />
+        竞赛流程：{{ item.flow }} <br />
+        主办单位：{{ item.sponsor }}
       </td>
     </template>
   </v-data-table>
 </template>
 
 <script>
-import { getAllCompetition } from "../../../api/competition/competition";
-import ApplyTableSearch from "./ApplyTableSearch";
-import ConfirmDialog from "../../../components/ConfirmDialog";
+import { getAllCompetition } from "@/api/competition/competition";
+import ConfirmDialog from "@/components/ConfirmDialog";
+import CNameLink from "@/views/components/CNameLink";
+import CStatusChip from "@/views/components/CStatusChip";
+import CTableSearch from "@/views/components/CTableSearch";
 
 export default {
   name: "CompetitionApplyList",
+  components: {
+    CTableSearch,
+    ConfirmDialog,
+    CNameLink,
+    CStatusChip
+  },
   data: () => ({
     loading: false,
     dialog: false,
     headers: [
       { text: "#", value: "id" },
-      { text: "名称", value: "name" },
-      { text: "年份", value: "year" },
-      { text: "部门", value: "department" },
-      { text: "时间", value: "time" },
-      { text: "负责人", value: "principal" },
-      { text: "状态", value: "status" },
+      { text: "名称", value: "comName" },
+      { text: "申报部门", value: "department" },
+      { text: "申报日期", value: "comDate" },
+      { text: "负责人", value: "principalId" },
+      { text: "状态", value: "comStatus" },
       { text: "最后处理人", value: "lastHandler" },
       { text: "操作", value: "action" },
       { text: "", value: "data-table-expand" }
@@ -127,16 +113,36 @@ export default {
     defaultItem: {
       name: "",
       department: ""
-    },
-    copyName: ""
+    }
   }),
-  components: { ApplyTableSearch, ConfirmDialog },
+  watch: {
+    options: {
+      deep: true,
+      handler() {
+        this.searchData();
+      }
+    }
+  },
   methods: {
-    // TODO 后端请求 本院系本年度立项申请
-    getDate() {
+    /**
+     * 撤销当前竞赛
+     *  @param item int
+     */
+    deleteItem(item) {
+      const index = this.desserts.indexOf(item);
+      this.desserts.splice(index, 1);
+    },
+    searchData(
+      searchFrom = {
+        year: new Date().getFullYear(),
+        department: null,
+        comName: null,
+        sponsor: null
+      }
+    ) {
       const { page, itemsPerPage } = this.options;
       this.loading = true;
-      getAllCompetition(page, itemsPerPage)
+      getAllCompetition(page, itemsPerPage, searchFrom)
         .then(({ code, data: { list, total } }) => {
           if (code !== 200) return;
           this.desserts = list;
@@ -159,45 +165,7 @@ export default {
         name,
         params: { competitionId }
       };
-    },
-    /**
-     * 撤销当前竞赛
-     *  @param id int
-     */
-    deleteItem(id) {
-      console.log(id);
-    },
-    copyItem(item) {
-      prompt("重新命名：", item.name);
-    },
-    /**
-     * 表单检索
-     * @param searchFrom
-     */
-    // eslint-disable-next-line no-unused-vars
-    tableSearch(searchFrom) {
-      console.log(searchFrom);
-      // TODO 调用后端接口检索
-    }
-  },
-  watch: {
-    options: {
-      deep: true,
-      handler() {
-        this.getDate();
-      }
     }
   }
 };
 </script>
-
-<style scoped>
-.competition-name-link {
-  color: #08c;
-  text-decoration: none;
-}
-.competition-name-link:hover {
-  color: #0408b7;
-  text-decoration: underline;
-}
-</style>
