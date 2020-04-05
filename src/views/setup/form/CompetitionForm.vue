@@ -97,16 +97,16 @@
           :readonly="readonly"
         />
       </v-col>
-      <v-col cols="12" v-if="isApproval">
-        <v-btn text color="primary">历年经费使用情况</v-btn>
-        <v-btn text color="primary">历年参赛情况</v-btn>
-      </v-col>
+      <!--      <v-col cols="12" v-if="isApproval">-->
+      <!--        <v-btn text color="primary">历年经费使用情况</v-btn>-->
+      <!--        <v-btn text color="primary">历年参赛情况</v-btn>-->
+      <!--      </v-col>-->
       <v-col cols="12" sm="12" md="6" lg="6" xl="6" v-if="isPracticeApproval">
         <v-text-field label="批复预算金额" v-model="competitionForm.budget" />
       </v-col>
       <v-col cols="12">
         <v-btn color="brown" dark class="mr-4" @click="$router.back()"
-          >返回
+          >返回上一页
         </v-btn>
         <template v-if="isDetail">
           <v-btn color="primary" :to="{ name: 'CompetitionApply' }"
@@ -117,27 +117,29 @@
           <confirm-dialog
             title="确认通过"
             btn-color="success"
-            max-width="373px"
+            max-width="273px"
             hide-text
+            @confirm="confirmApproval"
             >通过</confirm-dialog
           >
           <confirm-dialog
             title="修改意见"
             btn-class="ml-3"
             max-width="600px"
-            @confirm="returnForCorrection"
+            @confirm="confirmReturn"
           >
             返回修改
             <template #container>
-              <v-textarea v-model="collegeModifySuggest" required clearable />
+              <v-textarea v-model="modifySuggest" required clearable />
             </template>
           </confirm-dialog>
           <confirm-dialog
             title="确认驳回"
             btn-class="ml-3"
             btn-color="error"
-            max-width="373px"
+            max-width="273px"
             hide-text
+            @confirm="reject"
             >驳回</confirm-dialog
           >
         </template>
@@ -161,7 +163,7 @@
         </template>
       </v-col>
     </v-row>
-    <snack-bar :set="snackbarSet" />
+    <c-snackbar ref="snackbar" />
   </v-form>
 </template>
 
@@ -173,18 +175,21 @@ import {
   competitionForm
 } from "@/common/constant";
 import CompetitionStage from "./CompetitionStage";
-import SnackBar from "@/components/SnackBar";
 import {
   getCompetitionDetail,
-  saveCompetitionApply,
-  commitCompetitionApply
+  saveApply,
+  commitApply,
+  approvalApply,
+  returnApply,
+  rejectApply
 } from "@/api/competition/competition.js";
 import ConfirmDialog from "@/components/ConfirmDialog";
+import CSnackbar from "@/views/components/CSnackbar";
 export default {
   name: "CompetitionApply",
   components: {
     CompetitionStage,
-    SnackBar,
+    CSnackbar,
     ConfirmDialog
   },
   data: () => ({
@@ -196,9 +201,7 @@ export default {
     /** 部门选项 */
     colleges,
     competitionLevels,
-    snackbarSet: {},
-    collegeModifySuggest: "", //学院修改意见
-    practiceModifySuggest: "",
+    modifySuggest: "", //修改意见
     phoneRules: [v => /^1[3456789]\d{9}$/.test(v) || "手机号不合法"],
     stagesRules: []
   }),
@@ -226,20 +229,22 @@ export default {
       });
   },
   methods: {
-    //TODO 提交，不可再修改,表单验证
     commit() {
-      commitCompetitionApply({ ...this.competitionForm, comStatus: 2 }).then(
-        res => {
-          if (res.code === 200)
-            this.snackbarSet = {
-              show: true,
-              text: "提交成功",
-              color: "success",
-              y: "top",
-              timeout: 3000
-            };
+      commitApply({ ...this.competitionForm, comStatus: 2 }).then(
+        ({ code }) => {
+          code === 200 && this.$refs.snackbar.success("提交成功！");
         }
       );
+    },
+    confirmApproval() {
+      approvalApply(this.$route.params.competitionId).then(({ code }) => {
+        code === 200 && this.$refs.snackbar.success("审核成功！");
+      });
+    },
+    reject() {
+      rejectApply(this.$route.params.competitionId).then(({ code }) => {
+        code === 200 && this.$refs.snackbar.success();
+      });
     },
     reset() {
       this.$refs.competition_form.resetValidation();
@@ -252,23 +257,20 @@ export default {
         }
       );
     },
-    returnForCorrection() {
-      console.log(this.collegeModifySuggest);
-    },
-    //TODO 保存数据，可修改
-    save() {
-      saveCompetitionApply({ ...this.competitionForm, comStatus: 1 }).then(
-        res => {
-          if (res.code === 200)
-            this.snackbarSet = {
-              show: true,
-              text: "保存成功",
-              color: "success",
-              y: "top",
-              timeout: 3000
-            };
+    confirmReturn() {
+      returnApply(this.$route.params.competitionId, this.modifySuggest).then(
+        ({ code }) => {
+          code === 200 && this.$refs.snackbar.success();
         }
       );
+    },
+    save() {
+      saveApply({ ...this.competitionForm, comStatus: 1 }).then(({ code }) => {
+        code === 200 && this.$refs.snackbar.success("保存成功！");
+        setTimeout(() => {
+          this.$router.back();
+        }, 1000);
+      });
     }
   }
 };

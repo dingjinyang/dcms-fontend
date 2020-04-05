@@ -67,7 +67,7 @@ export default {
         this.stageForms.push(
           Object.assign(
             {},
-            { competitionStage, stage: this.stageForms.length + 1 }
+            { ...competitionStage, stage: this.stageForms.length + 1 }
           )
         );
     },

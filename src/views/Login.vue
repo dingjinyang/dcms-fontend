@@ -56,16 +56,16 @@
         </v-layout>
       </v-container>
     </v-content>
-    <v-snackbar top :color="snackbar.color" v-model="snackbar.show">
-      {{ snackbar.text }}
-      <v-btn text @click="snackbar.show = false">Close</v-btn>
-    </v-snackbar>
+    <c-snackbar ref="snackbar" />
   </v-app>
 </template>
 
 <script>
+import CSnackbar from "@/views/components/CSnackbar";
+
 export default {
   name: "Login",
+  components: { CSnackbar },
   data: () => ({
     passwordDisplay: false,
     loginLoading: false,
@@ -89,11 +89,6 @@ export default {
     ],
     rules: {
       required: value => !!value || "Required."
-    },
-    snackbar: {
-      show: false,
-      text: "",
-      color: "primary"
     }
   }),
   methods: {
@@ -103,18 +98,6 @@ export default {
         password: user
       };
       this.userLogin();
-    },
-    /**
-     * 提示框
-     * @param text 提示内容
-     * @param color 提示框颜色
-     */
-    snackbarShow(text, color) {
-      this.snackbar = {
-        show: true,
-        text,
-        color
-      };
     },
     userLogin() {
       const _this = this;
@@ -130,7 +113,7 @@ export default {
           }
         })
         .catch(({ code, msg }) => {
-          if (code === 400) _this.snackbarShow(msg, "error");
+          if (code === 400) _this.$refs.snackbar.show("error", msg);
         })
         .finally(() => {
           _this.loginLoading = false;

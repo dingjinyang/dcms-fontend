@@ -148,5 +148,43 @@ export default [
         endTime: "2020-04-12"
       }
     ]
+  },
+  {
+    id: 5,
+    comName: "消防知识竞赛",
+    department: "软件学院",
+    comLevel: "院级",
+    principalId: 5771,
+    principalName: "赵冬",
+    principalPhone: 12345678910,
+    teams: 100,
+    participants: 300,
+    awards: "一等奖一名\n二等奖二名\n三等奖三名\n优秀奖若干",
+    description: "消防知识竞赛",
+    flow: "初赛-决赛",
+    comCondition: "中原工学院全体学生",
+    comStatus: 5,
+    comDate: "2020-04-02",
+    sponsor: "软件学院",
+    budget: 1000,
+    lastHandler: 1,
+    lastHandlerName: "赵冬",
+    collegeModifySuggest: null,
+    practiceModifySuggest: null,
+    currentStage: 1,
+    competitionStages: [
+      {
+        stage: 1,
+        stageName: "初赛",
+        startTime: "2020-04-06",
+        endTime: "2020-04-12"
+      },
+      {
+        stage: 2,
+        stageName: "决赛",
+        startTime: "2020-04-20",
+        endTime: "2020-04-20"
+      }
+    ]
   }
 ];

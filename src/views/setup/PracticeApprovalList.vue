@@ -35,12 +35,18 @@
           </v-toolbar>
         </v-expand-transition>
       </template>
+      <template #item.no="{item}">
+        {{ desserts.indexOf(item) + 1 }}
+      </template>
       <template #item.comName="{ item }">
         <c-name-link :id="item.id" :name="item.comName" />
       </template>
+      <template #item.comStatus="{ item }">
+        <c-status-chip :status="item.comStatus" />
+      </template>
       <template #item.action="{ item }">
         <v-btn
-          v-if="item.status === 1"
+          v-if="item.comStatus === 5"
           small
           color="warning"
           text
@@ -50,7 +56,12 @@
       </template>
       <template #expanded-item="{ headers, item }">
         <td :colspan="headers.length">
-          参赛对象：{{ item.scope }} <br />竞赛简介：{{ item.description }}
+          参赛对象：{{ item.comCondition }} <br />竞赛简介：{{
+            item.description
+          }}
+          <br />
+          竞赛流程：{{ item.flow }} <br />
+          主办单位：{{ item.sponsor }}
         </td>
       </template>
     </v-data-table>
@@ -61,26 +72,30 @@
 import {
   batchPracticeApproval,
   getPracticeApprovalList
-} from "../../api/competition/competition";
-import ConfirmDialog from "../../components/ConfirmDialog";
+} from "@/api/competition/competition";
+import ConfirmDialog from "@/components/ConfirmDialog";
 import CNameLink from "@/views/components/CNameLink";
 import CTableSearch from "@/views/components/CTableSearch";
+import CStatusChip from "@/views/components/CStatusChip";
+
 import { competitionSearchForm } from "@/common/constant";
 
 export default {
   name: "PracticeApprovalList",
-  components: { CTableSearch, ConfirmDialog, CNameLink },
+  components: { CTableSearch, ConfirmDialog, CNameLink, CStatusChip },
   data: () => ({
     loading: false,
     dialog: false,
     headers: [
+      { text: "#", value: "no" },
+      { text: "名称", value: "comName" },
       { text: "申报部门", value: "department" },
-      { text: "竞赛名称", value: "name" },
-      { text: "时间", value: "time" },
+      { text: "申报日期", value: "comDate" },
+      { text: "负责人", value: "principalId" },
+      { text: "状态", value: "comStatus" },
+      { text: "最后处理人", value: "lastHandler" },
+      { text: "申报部门", value: "department" },
       { text: "预算金额(元)", value: "budget" },
-      { text: "上年度经费使用", value: "lastYearUseOfFunds" },
-      { text: "上年度获奖", value: "lastYearAwards" },
-      { text: "是否纳入评估", value: "isAssessment" },
       { text: "操作", value: "action" },
       { text: "", value: "data-table-expand" }
     ],
@@ -111,10 +126,10 @@ export default {
   },
   watch: {
     options: {
+      deep: true,
       handler() {
         this.searchData();
-      },
-      deep: true
+      }
     }
   },
   methods: {
@@ -126,11 +141,15 @@ export default {
       );
     },
     /**
-     * 撤销当前竞赛
-     *  @param id int
+     * 表格操作跳转至竞赛详情页 - 编辑/删除
+     * @param name 路由名称
+     * @param competitionId number
      */
-    deleteItem(id) {
-      console.log(id);
+    itemTo(name, competitionId) {
+      return {
+        name,
+        params: { competitionId }
+      };
     },
     searchData(searchForm = competitionSearchForm) {
       const { page, itemsPerPage } = this.options;
@@ -147,17 +166,6 @@ export default {
         .finally(() => {
           this.loading = false;
         });
-    },
-    /**
-     * 表格操作跳转至竞赛详情页 - 编辑/删除
-     * @param name 路由名称
-     * @param competitionId number
-     */
-    itemTo(name, competitionId) {
-      return {
-        name,
-        params: { competitionId }
-      };
     }
   }
 };
