@@ -13,19 +13,21 @@ export default {
       return responseData(pageHelper(competitionList, pageNum, pageSize));
     }
   ),
-  detail: Mock.mock(/^\/selectCompetitionById\?id=[1-9]\d*/, "get", options => {
-    const { id } = getURLSearchParams(options.url);
-    const arr = competitionList.filter(item => item.id === id);
-    return responseData(arr[0]);
-  }),
+  detail: Mock.mock(
+    /^\/selectCompetitionById\?competitionId=[1-9]\d*/,
+    "get",
+    options => {
+      const { competitionId: id } = getURLSearchParams(options.url);
+      const arr = competitionList.filter(item => item.id === id);
+      return responseData(arr[0]);
+    }
+  ),
   save: Mock.mock(/^\/saveCompetition/, "post", responseData(37)),
   commit: Mock.mock(/^\/submitCompetition/, "post", options =>
     responseData(options.body.id || 12)
   ),
   delete: Mock.mock(/^\/teaDeleteCompetition/, "delete", responseData()),
-  approval: Mock.mock(/^\/competition\/approval/, "post", responseData()),
-  return: Mock.mock(/^\/competition\/return/, "post", responseData()),
-  reject: Mock.mock(/^\/competition\/reject/, "post", responseData()),
+
   collegeApproval: Mock.mock(
     /^\/college\/approval\/list\?pageNum=[1-9]\d*&pageSize=[1-9]\d*/,
     "get",
@@ -40,11 +42,12 @@ export default {
       );
     }
   ),
-  collegeApprovalBatch: Mock.mock(
-    "/college/approval/batch",
-    "post",
-    responseData(null)
+  approvalOrReject: Mock.mock(
+    /^\/teaChange\?competitionId=[1-9]\d*&stage=[1-9]\d*/,
+    "get",
+    responseData()
   ),
+  return: Mock.mock(/^\/competition\/return/, "post", responseData()),
   practiceApprovalList: Mock.mock(
     /^\/practice\/list\?pageNum=[1-9]\d*&pageSize=[1-9]\d*/,
     "get",
@@ -58,10 +61,5 @@ export default {
         )
       );
     }
-  ),
-  practiceApprovalBatch: Mock.mock(
-    "/practice/approval/batch",
-    "post",
-    responseData(null)
   )
 };

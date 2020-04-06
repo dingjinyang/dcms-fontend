@@ -1,60 +1,15 @@
 <template>
   <v-card>
     <v-data-table
-      v-model="selected"
       :headers="headers"
       :items="desserts"
       :loading="loading"
       :options.sync="options"
       :server-items-length="total"
-      show-select
       item-key="id"
     >
       <template #top>
         <c-table-search @search="searchData" />
-        <v-toolbar dense flat color="white">
-          <v-row>
-            <v-slide-x-transition>
-              <v-col
-                cols="6"
-                xl="1"
-                lg="2"
-                md="2"
-                sm="3"
-                v-show="selectedApproval.length"
-              >
-                <confirm-dialog
-                  btn-color="success"
-                  title="确认批量审批"
-                  max-width="373px"
-                  @confirm="batchApproval"
-                >
-                  批量审批
-                  <template #container>
-                    <v-list disabled dense>
-                      <v-list-item
-                        v-for="item in selectedApproval"
-                        :key="item.id"
-                      >
-                        <v-list-item-content>
-                          <v-list-item-title
-                            >{{ item.comName }}
-                          </v-list-item-title>
-                        </v-list-item-content>
-                      </v-list-item>
-                    </v-list>
-                  </template>
-                </confirm-dialog>
-              </v-col>
-            </v-slide-x-transition>
-            <!-- TODO 生成汇总表-->
-            <!--            <v-col translate cols="6" xl="1" lg="2" md="2" sm="3">-->
-            <!--              <v-btn color="primary" dark>-->
-            <!--                生成汇总表-->
-            <!--              </v-btn>-->
-            <!--            </v-col>-->
-          </v-row>
-        </v-toolbar>
       </template>
       <template #item.no="{ item }">
         {{ desserts.indexOf(item) + 1 }}
@@ -80,11 +35,7 @@
 </template>
 
 <script>
-import {
-  getCollegeApprovalList,
-  batchCollegeApproval
-} from "@/api/competition/competition";
-import ConfirmDialog from "../../components/ConfirmDialog";
+import { getCollegeApprovalList } from "@/api/competition/competition";
 import CNameLink from "@/views/components/CNameLink";
 import CStatusChip from "@/views/components/CStatusChip";
 import CTableSearch from "@/views/components/CTableSearch";
@@ -92,11 +43,10 @@ import { competitionSearchForm } from "@/common/constant";
 
 export default {
   name: "CollegeApprovalList",
-  components: { ConfirmDialog, CNameLink, CStatusChip, CTableSearch },
+  components: { CNameLink, CStatusChip, CTableSearch },
   data: () => ({
     loading: false,
     dialog: false,
-    selected: [],
     headers: [
       { text: "#", value: "no" },
       { text: "名称", value: "comName" },
@@ -116,13 +66,6 @@ export default {
     },
     total: 0
   }),
-  computed: {
-    selectedApproval() {
-      return this.selected.filter(item => {
-        return item.comStatus === 2;
-      });
-    }
-  },
   watch: {
     options: {
       deep: true,
@@ -132,13 +75,6 @@ export default {
     }
   },
   methods: {
-    batchApproval() {
-      batchCollegeApproval(this.selectedApproval.map(item => item.id)).then(
-        res => {
-          if (res.code === 200) this.dialog = false;
-        }
-      );
-    },
     // TODO 后端请求 本院系本年度立项申请
     searchData(searchForm = competitionSearchForm) {
       const { page, itemsPerPage } = this.options;

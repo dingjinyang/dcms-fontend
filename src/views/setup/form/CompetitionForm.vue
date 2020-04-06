@@ -119,14 +119,14 @@
             btn-color="success"
             max-width="273px"
             hide-text
-            @confirm="confirmApproval"
+            @confirm="approval"
             >通过</confirm-dialog
           >
           <confirm-dialog
             title="修改意见"
             btn-class="ml-3"
             max-width="600px"
-            @confirm="confirmReturn"
+            @confirm="back"
           >
             返回修改
             <template #container>
@@ -246,13 +246,31 @@ export default {
       return this.isDetail || this.isCollegeApproval || this.isPracticeApproval;
     }
   },
-  created() {
+  mounted() {
     this.$route.name !== "CompetitionApply" &&
       getCompetitionDetail(this.$route.params.competitionId).then(res => {
         if (res.code === 200) this.competitionForm = res.data;
       });
   },
   methods: {
+    /**
+     * 审核通过
+     */
+    approval() {
+      approvalApply(this.$route.params.competitionId).then(({ code }) => {
+        code === 200 && this.$refs.snackbar.success("审核成功！");
+      });
+    },
+    /**
+     * 返回修改
+     */
+    back() {
+      returnApply(this.$route.params.competitionId, this.modifySuggest).then(
+        ({ code }) => {
+          code === 200 && this.$refs.snackbar.success();
+        }
+      );
+    },
     commit() {
       commitApply({ ...this.competitionForm, comStatus: 2 }).then(
         ({ code, msg, data }) => {
@@ -261,11 +279,6 @@ export default {
           if (data !== null) this.competitionForm.id = data;
         }
       );
-    },
-    confirmApproval() {
-      approvalApply(this.$route.params.competitionId).then(({ code }) => {
-        code === 200 && this.$refs.snackbar.success("审核成功！");
-      });
     },
     reject() {
       rejectApply(this.$route.params.competitionId).then(({ code }) => {
@@ -280,13 +293,6 @@ export default {
           ...competitionForm,
           principalId: store.getters["user/info"].id,
           department: store.getters["user/info"].department
-        }
-      );
-    },
-    confirmReturn() {
-      returnApply(this.$route.params.competitionId, this.modifySuggest).then(
-        ({ code }) => {
-          code === 200 && this.$refs.snackbar.success();
         }
       );
     },

@@ -1,39 +1,16 @@
 <template>
   <v-card>
     <v-data-table
-      v-model="selected"
       :headers="headers"
       :items="desserts"
       :loading="loading"
       :options.sync="options"
       :server-items-length="total"
-      show-select
       show-expand
       disable-sort
     >
       <template #top>
         <c-table-search @search="searchData" />
-        <v-expand-transition>
-          <v-toolbar v-show="selectedApproval.length" dense flat>
-            <confirm-dialog
-              btn-color="success"
-              title="确认批量审批"
-              max-width="373px"
-              @confirm="batchApproval"
-            >
-              批量审批
-              <template #container>
-                <v-list disabled>
-                  <v-list-item v-for="item in selectedApproval" :key="item.id">
-                    <v-list-item-content>
-                      <v-list-item-title>{{ item.name }} </v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                </v-list>
-              </template>
-            </confirm-dialog>
-          </v-toolbar>
-        </v-expand-transition>
       </template>
       <template #item.no="{item}">
         {{ desserts.indexOf(item) + 1 }}
@@ -69,11 +46,7 @@
 </template>
 
 <script>
-import {
-  batchPracticeApproval,
-  getPracticeApprovalList
-} from "@/api/competition/competition";
-import ConfirmDialog from "@/components/ConfirmDialog";
+import { getPracticeApprovalList } from "@/api/competition/competition";
 import CNameLink from "@/views/components/CNameLink";
 import CTableSearch from "@/views/components/CTableSearch";
 import CStatusChip from "@/views/components/CStatusChip";
@@ -82,7 +55,7 @@ import { competitionSearchForm } from "@/common/constant";
 
 export default {
   name: "PracticeApprovalList",
-  components: { CTableSearch, ConfirmDialog, CNameLink, CStatusChip },
+  components: { CTableSearch, CNameLink, CStatusChip },
   data: () => ({
     loading: false,
     dialog: false,
@@ -100,30 +73,12 @@ export default {
       { text: "", value: "data-table-expand" }
     ],
     desserts: [],
-    selected: [],
     options: {
       page: 1,
       itemsPerPage: 5
     },
-    total: 0,
-    editedIndex: -1,
-    editedItem: {
-      name: "",
-      department: ""
-    },
-    defaultItem: {
-      name: "",
-      department: ""
-    },
-    copyName: ""
+    total: 0
   }),
-  computed: {
-    selectedApproval() {
-      return this.selected.filter(item => {
-        return item.status === 1;
-      });
-    }
-  },
   watch: {
     options: {
       deep: true,
@@ -133,13 +88,6 @@ export default {
     }
   },
   methods: {
-    batchApproval() {
-      batchPracticeApproval(this.selectedApproval.map(item => item.id)).then(
-        res => {
-          if (res.code === 200) this.dialog = false;
-        }
-      );
-    },
     /**
      * 表格操作跳转至竞赛详情页 - 编辑/删除
      * @param name 路由名称
