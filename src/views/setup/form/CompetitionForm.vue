@@ -194,9 +194,33 @@ export default {
   },
   data: () => ({
     competitionForm: {
-      ...competitionForm,
-      principalId: store.getters["user/info"].id,
-      department: store.getters["user/info"].department
+      comName: "", //竞赛名称
+      department: store.getters["user/info"].department, //申报部门
+      comLevel: "院级", //比赛等级
+      principalId: store.getters["user/info"].id, //负责人工号
+      principalPhone: null, //负责人联写方式
+      teams: 1, //参赛队伍数量
+      participants: 1, //参赛人数
+      awards: "", //拟设奖项及数目
+      description: "", //竞赛描述
+      flow: "", //赛事流程
+      comCondition: "中原工学院全体学生", //参赛条件
+      comStatus: 1, //立项申请状态
+      comDate: new Date().toISOString().substring(0, 10), //立项时间
+      sponsor: "", //主办单位
+      budget: 0,
+      lastHandler: 1,
+      collegeModifySuggest: null,
+      practiceModifySuggest: null,
+      currentStage: 1,
+      competitionStages: [
+        {
+          stage: 1, //阶段级别
+          stageName: "", //阶段名称
+          startTime: "",
+          endTime: ""
+        }
+      ]
     },
     /** 部门选项 */
     colleges,
@@ -231,8 +255,10 @@ export default {
   methods: {
     commit() {
       commitApply({ ...this.competitionForm, comStatus: 2 }).then(
-        ({ code }) => {
-          code === 200 && this.$refs.snackbar.success("提交成功！");
+        ({ code, msg, data }) => {
+          if (code !== 200) return;
+          this.$refs.snackbar.success(msg);
+          if (data !== null) this.competitionForm.id = data;
         }
       );
     },
@@ -265,12 +291,13 @@ export default {
       );
     },
     save() {
-      saveApply({ ...this.competitionForm, comStatus: 1 }).then(({ code }) => {
-        code === 200 && this.$refs.snackbar.success("保存成功！");
-        setTimeout(() => {
-          this.$router.back();
-        }, 1000);
-      });
+      saveApply({ ...this.competitionForm, comStatus: 1 }).then(
+        ({ code, msg, data }) => {
+          if (code !== 200) return;
+          this.$refs.snackbar.success(msg);
+          if (data !== null) this.competitionForm.id = data;
+        }
+      );
     }
   }
 };

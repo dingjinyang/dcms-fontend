@@ -4,22 +4,22 @@ import "../../plugins/axios";
 const _axios = axios;
 
 export async function getAllCompetition(pageNum = 1, pageSize = 10, search) {
-  return await _axios.get(`/competitionList`, {
+  return await _axios.get(`/selectCompetition`, {
     params: { pageNum, pageSize, ...search }
   });
 }
 export function getCompetitionDetail(id) {
-  return _axios.get(`/competition/detail`, { params: { id } });
+  return _axios.get(`/selectCompetitionById`, { params: { id } });
 }
 export function saveApply(data) {
   return _axios.post(`/saveCompetition`, data);
 }
 export function commitApply(data) {
-  return _axios.post(`/competition/commit`, data);
+  return _axios.post(`/submitCompetition`, data);
 }
-export function deleteApply(id) {
-  return _axios.delete(`/competition/delete`, {
-    params: { id }
+export function deleteApply(competitionId) {
+  return _axios.delete(`/teaDeleteCompetition`, {
+    params: { competitionId }
   });
 }
 export const approvalApply = id => {

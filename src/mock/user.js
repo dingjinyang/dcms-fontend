@@ -1,4 +1,4 @@
-const Mock = require("mockjs");
+import { Mock } from "@/mock/mock";
 import { getToken } from "../util/cookie";
 const permissions = {
   root: [
@@ -29,7 +29,7 @@ const permissions = {
 
 export default {
   /** 用户登陆 */
-  login: Mock.mock(`${process.env.VUE_APP_API_URL}/user/login`, options => {
+  login: Mock.mock(/\/user\/login/, options => {
     return {
       code: 200,
       data: {
@@ -38,7 +38,7 @@ export default {
     };
   }),
   /** 获取用户信息 */
-  getUserInfo: Mock.mock(`${process.env.VUE_APP_API_URL}/user/info`, () => {
+  getUserInfo: Mock.mock(/\/user\/info/, () => {
     const role = getToken();
     return {
       code: 200,
@@ -55,7 +55,7 @@ export default {
     };
   }),
   /** 用户登出 */
-  logout: Mock.mock(`${process.env.VUE_APP_API_URL}/logout`, {
+  logout: Mock.mock(/\/logout/, {
     code: 200,
     meg: "logout success"
   }),

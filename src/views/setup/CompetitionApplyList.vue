@@ -24,6 +24,9 @@
           </v-col>
         </v-row>
       </template>
+      <template #item.no="{ item }">
+        {{ desserts.indexOf(item) + 1 }}
+      </template>
       <template #item.comName="{ item }">
         <c-name-link :name="item.comName" :id="item.id" />
       </template>
@@ -76,10 +79,7 @@
 </template>
 
 <script>
-import {
-  getAllCompetition,
-  deleteCompetitionApply
-} from "@/api/competition/competition";
+import { getAllCompetition, deleteApply } from "@/api/competition/competition";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import CNameLink from "@/views/components/CNameLink";
 import CStatusChip from "@/views/components/CStatusChip";
@@ -99,7 +99,7 @@ export default {
     loading: false,
     dialog: false,
     headers: [
-      { text: "#", value: "id" },
+      { text: "#", value: "no" },
       { text: "名称", value: "comName" },
       { text: "申报部门", value: "department" },
       { text: "申报日期", value: "comDate" },
@@ -139,13 +139,24 @@ export default {
      *  @param item int
      */
     deleteItem(item) {
-      deleteCompetitionApply(item.id).then(({ code }) => {
+      deleteApply(item.id).then(({ code, msg }) => {
         if (code === 200) {
           const index = this.desserts.indexOf(item);
           this.desserts.splice(index, 1);
-          this.$refs.snackbar.show("success", "删除成功！");
+          this.$refs.snackbar.success(msg);
         }
       });
+    },
+    /**
+     * 表格操作跳转至竞赛详情页 - 编辑/删除
+     * @param name 路由名称
+     * @param competitionId number
+     */
+    itemTo(name, competitionId) {
+      return {
+        name,
+        params: { competitionId }
+      };
     },
     searchData(
       searchFrom = {
@@ -169,17 +180,6 @@ export default {
         .finally(() => {
           this.loading = false;
         });
-    },
-    /**
-     * 表格操作跳转至竞赛详情页 - 编辑/删除
-     * @param name 路由名称
-     * @param competitionId number
-     */
-    itemTo(name, competitionId) {
-      return {
-        name,
-        params: { competitionId }
-      };
     }
   }
 };
