@@ -7,7 +7,8 @@
       :options.sync="options"
       :server-items-length="total"
       show-expand
-      disable-pagination
+      disable-sort
+      no-data-text="无数据"
     >
       <template #top>
         <v-row no-gutters>
@@ -43,7 +44,7 @@
           >编辑
         </v-btn>
         <v-btn
-          v-if="item.comStatus === 3"
+          v-if="item.comStatus === 3 || item.comStatus === 6"
           small
           color="primary"
           text
@@ -79,7 +80,10 @@
 </template>
 
 <script>
-import { getAllCompetition, deleteApply } from "@/api/competition/competition";
+import {
+  selectCompetitionList,
+  deleteApply
+} from "@/api/competition/competition";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import CNameLink from "@/views/components/CNameLink";
 import CStatusChip from "@/views/components/CStatusChip";
@@ -168,7 +172,7 @@ export default {
     ) {
       const { page, itemsPerPage } = this.options;
       this.loading = true;
-      getAllCompetition(page, itemsPerPage, searchFrom)
+      selectCompetitionList(page, itemsPerPage, searchFrom)
         .then(({ code, data: { list, total } }) => {
           if (code !== 200) return;
           this.desserts = list;

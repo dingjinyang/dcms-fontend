@@ -1,8 +1,8 @@
 <template>
   <v-snackbar v-model="snackbar" :color="color" :timeout="3000" top>
     {{ text }}
-    <v-btn dark text @click="snackbar = false">
-      关闭
+    <v-btn dark text fab x-small @click="snackbar = false">
+      <v-icon>mdi-close</v-icon>
     </v-btn>
   </v-snackbar>
 </template>

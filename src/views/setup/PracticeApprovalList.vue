@@ -1,52 +1,49 @@
 <template>
-  <v-card>
-    <v-data-table
-      :headers="headers"
-      :items="desserts"
-      :loading="loading"
-      :options.sync="options"
-      :server-items-length="total"
-      show-expand
-      disable-sort
-    >
-      <template #top>
-        <c-table-search @search="searchData" />
-      </template>
-      <template #item.no="{item}">
-        {{ desserts.indexOf(item) + 1 }}
-      </template>
-      <template #item.comName="{ item }">
-        <c-name-link :id="item.id" :name="item.comName" />
-      </template>
-      <template #item.comStatus="{ item }">
-        <c-status-chip :status="item.comStatus" />
-      </template>
-      <template #item.action="{ item }">
-        <v-btn
-          v-if="item.comStatus === 5"
-          small
-          color="warning"
-          text
-          :to="itemTo(`PracticeApproval`, item.id)"
-          >审批
-        </v-btn>
-      </template>
-      <template #expanded-item="{ headers, item }">
-        <td :colspan="headers.length">
-          参赛对象：{{ item.comCondition }} <br />竞赛简介：{{
-            item.description
-          }}
-          <br />
-          竞赛流程：{{ item.flow }} <br />
-          主办单位：{{ item.sponsor }}
-        </td>
-      </template>
-    </v-data-table>
-  </v-card>
+  <v-data-table
+    :headers="headers"
+    :items="desserts"
+    :loading="loading"
+    :options.sync="options"
+    :server-items-length="total"
+    show-expand
+    disable-sort
+    no-data-text="无数据"
+  >
+    <template #top>
+      <c-table-search @search="searchData" />
+    </template>
+    <template #item.no="{item}">
+      {{ desserts.indexOf(item) + 1 }}
+    </template>
+    <template #item.comName="{ item }">
+      <c-name-link :id="item.id" :name="item.comName" />
+    </template>
+    <template #item.comStatus="{ item }">
+      <c-status-chip :status="item.comStatus" />
+    </template>
+    <template #item.action="{ item }">
+      <v-btn
+        v-if="item.comStatus === 5"
+        small
+        color="warning"
+        text
+        :to="itemTo(`PracticeApproval`, item.id)"
+        >审批
+      </v-btn>
+    </template>
+    <template #expanded-item="{ headers, item }">
+      <td :colspan="headers.length">
+        参赛对象：{{ item.comCondition }} <br />竞赛简介：{{ item.description }}
+        <br />
+        竞赛流程：{{ item.flow }} <br />
+        主办单位：{{ item.sponsor }}
+      </td>
+    </template>
+  </v-data-table>
 </template>
 
 <script>
-import { getPracticeApprovalList } from "@/api/competition/competition";
+import { selectPracticeApprovalList } from "@/api/competition/competition";
 import CNameLink from "@/views/components/CNameLink";
 import CTableSearch from "@/views/components/CTableSearch";
 import CStatusChip from "@/views/components/CStatusChip";
@@ -64,9 +61,9 @@ export default {
       { text: "名称", value: "comName" },
       { text: "申报部门", value: "department" },
       { text: "申报日期", value: "comDate" },
-      { text: "负责人", value: "principalId" },
+      { text: "负责人", value: "principalName" },
       { text: "状态", value: "comStatus" },
-      { text: "最后处理人", value: "lastHandler" },
+      { text: "最后处理人", value: "lastHandlerName" },
       { text: "申报部门", value: "department" },
       { text: "预算金额(元)", value: "budget" },
       { text: "操作", value: "action" },
@@ -102,7 +99,7 @@ export default {
     searchData(searchForm = competitionSearchForm) {
       const { page, itemsPerPage } = this.options;
       this.loading = true;
-      getPracticeApprovalList(page, itemsPerPage, searchForm)
+      selectPracticeApprovalList(page, itemsPerPage, searchForm)
         .then(({ code, data: { list, total } }) => {
           if (code !== 200) return;
           this.desserts = list;

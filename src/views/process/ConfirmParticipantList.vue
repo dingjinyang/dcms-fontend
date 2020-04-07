@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { getCompetitionDetail } from "@/api/competition/competition";
+import { selectCompetition } from "@/api/competition/competition";
 import { getStageParticipants } from "@/api/competition/process";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import CompetitionStageStepper from "@/views/components/CompetitionStageStepper";
@@ -113,7 +113,7 @@ export default {
     },
     async getData(stage) {
       const id = this.$route.params.id;
-      await getCompetitionDetail(id).then(({ code, data }) => {
+      await selectCompetition(id).then(({ code, data }) => {
         if (code === 200) this.competition = data;
       });
       await getStageParticipants(

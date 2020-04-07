@@ -78,7 +78,7 @@ export default [
         path: "college-approval/list",
         name: "CollegeApprovalList",
         meta: {
-          title: "学院审批",
+          title: "学院审批列表",
           icon: "file-star"
         },
         component: () =>
@@ -89,6 +89,7 @@ export default [
       {
         path: "college-approval/:competitionId",
         name: "CollegeApproval",
+        meta: { title: "学院审批" },
         hideInMenu: true,
         component: () =>
           import(
@@ -99,7 +100,7 @@ export default [
         path: "practice-approval/list",
         name: "PracticeApprovalList",
         meta: {
-          title: "部门汇总",
+          title: "管理科审批列表",
           icon: "table"
         },
         component: () =>
@@ -111,10 +112,7 @@ export default [
         path: "practice-approval/:competitionId",
         name: "PracticeApproval",
         hideInMenu: true,
-        meta: {
-          title: "实践管理科审批",
-          icon: "id-card"
-        },
+        meta: { title: "实践管理科审批" },
         component: () =>
           import(
             /* webpackChunkName: "CompetitionForm" */ "@/views/setup/form/CompetitionForm"

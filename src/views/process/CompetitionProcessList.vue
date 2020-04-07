@@ -6,22 +6,22 @@
     :options.sync="options"
     :server-items-length="total"
     disable-sort
+    no-data-text="无数据"
   >
     <template #top>
-      <v-row no-gutters>
-        <v-col cols="12">
-          <process-table-search @search="tableSearch" />
-        </v-col>
-      </v-row>
+      <c-table-search />
     </template>
-    <template #item.name="{ item }">
-      <competition-name-link :id="item.id" :name="item.name" />
+    <template #item.no="{ item }">
+      {{ desserts.indexOf(item) + 1 }}
+    </template>
+    <template #item.comName="{ item }">
+      <competition-name-link :id="item.id" :name="item.comName" />
     </template>
     <template #item.time="{ item }">
       {{ `${item.startTime} - ${item.endTime}` }}
     </template>
     <template #item.stages="{ item }">
-      {{ item.stages | competitionStageFilter }}
+      {{ item.competitionStages | competitionStageFilter }}
     </template>
     <template #item.action="{ item }">
       <v-btn
@@ -37,16 +37,17 @@
 </template>
 
 <script>
-import { getAllCompetition } from "@/api/competition/competition";
-import ProcessTableSearch from "./ProcessTableSearch";
+import { selectCompetitionList } from "@/api/competition/competition";
+import CTableSearch from "@/views/components/CTableSearch";
 import CompetitionNameLink from "@/views/components/CNameLink";
 
 export default {
   name: "CompetitionProcessList",
+  components: { CTableSearch, CompetitionNameLink },
   data: () => ({
     loading: false,
     headers: [
-      { text: "#", value: "id" },
+      { text: "#", value: "no" },
       { text: "名称", value: "name" },
       { text: "时间", value: "time" },
       { text: "竞赛阶段", value: "stages" },
@@ -59,13 +60,26 @@ export default {
     },
     total: 0
   }),
-  components: { ProcessTableSearch, CompetitionNameLink },
+  watch: {
+    options: {
+      handler() {
+        this.searchData();
+      },
+      deep: true
+    }
+  },
   methods: {
-    // TODO 后端请求 本院系本年度立项申请
-    getDate() {
+    searchData(
+      searchFrom = {
+        year: new Date().getFullYear(),
+        department: null,
+        comName: null,
+        sponsor: null
+      }
+    ) {
       const { page, itemsPerPage } = this.options;
       this.loading = true;
-      getAllCompetition(page, itemsPerPage)
+      selectCompetitionList(page, itemsPerPage, searchFrom)
         .then(({ code, data: { list, total } }) => {
           if (code !== 200) return;
           this.desserts = list;
@@ -97,14 +111,6 @@ export default {
     tableSearch(searchFrom) {
       console.log(searchFrom);
       // TODO 调用后端接口检索
-    }
-  },
-  watch: {
-    options: {
-      handler() {
-        this.getDate();
-      },
-      deep: true
     }
   }
 };

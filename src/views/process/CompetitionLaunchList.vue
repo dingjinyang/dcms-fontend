@@ -1,54 +1,61 @@
 <template>
-  <v-card>
+  <div>
     <v-data-table
       :headers="headers"
       :items="desserts"
       :loading="loading"
       :options.sync="options"
       :server-items-length="total"
-      item-key="id"
+      disable-sort
+      no-data-text="无数据"
     >
-      <template #item.name="{ item }">
-        <competition-name-link :id="item.id" :name="item.name" />
+      <template #item.no="{ item }">
+        {{ desserts.indexOf(item) + 1 }}
       </template>
-      <template #item.status="{ item }">
-        <v-chip :color="item.status | competitionStatusColorFilter" small dark>
-          {{ item.status | competitionStatusTextFilter }}
-        </v-chip>
+      <template #item.comName="{ item }">
+        <competition-name-link :id="item.id" :name="item.comName" />
       </template>
-      <template #item.action>
+      <template #item.comStatus="{ item }">
+        <c-status-chip :status="item.comStatus" />
+      </template>
+      <template #item.action="{ item }">
         <confirm-dialog
           title="竞赛发起"
           btn-color="success"
           btn-text
           btn-small
-          max-width="300px"
+          max-width="273px"
           hide-text
+          @confirm="launch(item)"
         >
           发起
         </confirm-dialog>
       </template>
     </v-data-table>
-  </v-card>
+    <c-snackbar ref="snackbar" />
+  </div>
 </template>
 
 <script>
-import CompetitionNameLink from "../components/CNameLink";
-import { getLaunchList } from "../../api/competition/process";
-import ConfirmDialog from "../../components/ConfirmDialog";
+import CompetitionNameLink from "@/views/components/CNameLink";
+import CStatusChip from "@/views/components/CStatusChip";
+import ConfirmDialog from "@/components/ConfirmDialog";
+import CSnackbar from "@/views/components/CSnackbar";
+import { selectLaunchList, launchCompetition } from "@/api/competition/process";
 
 export default {
   name: "CompetitionLaunch",
+  components: { CStatusChip, CompetitionNameLink, ConfirmDialog, CSnackbar },
   data: () => ({
     loading: false,
     dialog: false,
     headers: [
-      { text: "#", value: "id" },
-      { text: "名称", value: "name", sortable: false },
-      { text: "级别", value: "level", sortable: false },
-      { text: "主办单位", value: "department", sortable: false },
-      { text: "状态", value: "status", sortable: false },
-      { text: "操作", value: "action", sortable: false }
+      { text: "#", value: "no" },
+      { text: "名称", value: "comName" },
+      { text: "级别", value: "comLevel" },
+      { text: "主办单位", value: "sponsor" },
+      { text: "状态", value: "comStatus" },
+      { text: "操作", value: "action" }
     ],
     desserts: [],
     options: {
@@ -57,13 +64,19 @@ export default {
     },
     total: 0
   }),
-  components: { CompetitionNameLink, ConfirmDialog },
+  watch: {
+    options: {
+      deep: true,
+      handler() {
+        this.searchData();
+      }
+    }
+  },
   methods: {
-    // TODO 后端请求 本院系本年度立项申请
-    getDate() {
+    searchData() {
       const { page, itemsPerPage } = this.options;
       this.loading = true;
-      getLaunchList(page, itemsPerPage)
+      selectLaunchList(page, itemsPerPage)
         .then(({ code, data: { list, total } }) => {
           if (code !== 200) return;
           this.desserts = list;
@@ -76,20 +89,14 @@ export default {
           this.loading = false;
         });
     },
-    itemTo(name, competitionId) {
-      return {
-        name,
-        params: { competitionId }
-      };
-    }
-  },
-  watch: {
-    options: {
-      deep: true,
-      immediate: true,
-      handler() {
-        this.getDate();
-      }
+    /**
+     * 发起比赛
+     * @param item
+     */
+    launch(item) {
+      launchCompetition(item.id).then(({ code, msg }) => {
+        code === 200 && this.$refs.snackbar.success(msg) && this.searchData();
+      });
     }
   }
 };

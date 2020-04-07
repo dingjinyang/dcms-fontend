@@ -15,8 +15,8 @@ const permissionList = [
   { id: 12, name: "删除权限", perCode: "permission:delete" }
 ];
 
-import { pageHelper } from "../util/pageHelper";
-import { getURLSearchParams } from "../util/url";
+import { pageHelper } from "../../util/pageHelper";
+import { getURLSearchParams } from "../../util/url";
 
 export default {
   /** 权限列表 */

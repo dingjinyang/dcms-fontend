@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { getCompetitionDetail } from "../../../api/competition/competition";
+import { selectCompetition } from "../../../api/competition/competition";
 import EnrollFormAddItem from "./EnrollFormAddItem";
 import ConfirmDialog from "../../../components/ConfirmDialog";
 
@@ -104,7 +104,7 @@ export default {
     }
   },
   activated() {
-    getCompetitionDetail(this.$route.params.id).then(({ code, data }) => {
+    selectCompetition(this.$route.params.id).then(({ code, data }) => {
       if (code !== 200) return;
       this.name = data.name;
     });

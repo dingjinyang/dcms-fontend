@@ -2,19 +2,19 @@ import { getURLSearchParams } from "../util/url";
 import competitionList from "./data/competitionList";
 import stageParticipants from "@/mock/data/stageParticipants";
 import { pageHelper } from "@/util/pageHelper";
-
-const Mock = require("mockjs");
-const responseData = (data = null) => ({
-  code: 200,
-  msg: "success",
-  data
-});
+import { Mock, responseData } from "@/mock/mock";
 
 export default {
+  launchList: Mock.mock(
+    /\/beginList?sno=[1-9]\d*&pageSize=[1-9]\d*/,
+    "get",
+    responseData(competitionList.filter(item => item.comStatus === 8))
+  ),
+  launch: Mock.mock(/\/beginCom?competitionId=[1-9]\d*/, "get", responseData()),
   getStudentCompetitionList: Mock.mock(
     /\/student\/competition\/all?sno=[1-9]\d*&pageSize=[1-9]\d*/,
     "get",
-    responseData(competitionList.filter(item => item.status === 4))
+    responseData(competitionList.filter(item => item.comStatus === 4))
   ),
   getStudentInfoById: Mock.mock(
     /\/student\/info\?sno=[1-9]\d*/,

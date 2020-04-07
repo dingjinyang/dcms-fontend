@@ -1,44 +1,102 @@
-import "../../plugins/axios";
+import "@/plugins/axios";
 
 // eslint-disable-next-line no-unused-vars,no-undef
 const _axios = axios;
 
-export async function getAllCompetition(pageNum = 1, pageSize = 10, search) {
-  return await _axios.get(`/selectCompetition`, {
+export const selectCompetitionList = (pageNum = 1, pageSize = 5, search) => {
+  return _axios.get(`/selectCompetition`, {
     params: { pageNum, pageSize, ...search }
   });
-}
-export function getCompetitionDetail(competitionId) {
+};
+/**
+ * 根据 Id 查询竞赛
+ * @param competitionId
+ * @returns {*}
+ */
+export const selectCompetition = competitionId => {
   return _axios.get(`/selectCompetitionById`, { params: { competitionId } });
-}
-export function saveApply(data) {
+};
+/**
+ * 保存申請
+ * @param data
+ * @returns {*}
+ */
+export const saveApply = data => {
   return _axios.post(`/saveCompetition`, data);
-}
-export function commitApply(data) {
+};
+/**
+ * 提交申請
+ * @param data
+ * @returns {*}
+ */
+export const commitApply = data => {
   return _axios.post(`/submitCompetition`, data);
-}
-export function deleteApply(competitionId) {
+};
+/**
+ * 撤消申請
+ * @param competitionId
+ * @returns {*}
+ */
+export const deleteApply = competitionId => {
   return _axios.delete(`/teaDeleteCompetition`, {
     params: { competitionId }
   });
-}
-export const approvalApply = (competitionId, stage = 5) => {
-  return _axios.get(`/teaChange`, { params: { competitionId, stage } });
-};
-export const returnApply = (id, suggest) => {
-  return _axios.post(`/competition/return`, { id, suggest });
-};
-export const rejectApply = (competitionId, stage = 4) => {
-  return _axios.get(`/teaChange`, { params: { competitionId, stage } });
 };
 
-export function getCollegeApprovalList(pageNum = 1, pageSize = 10, search) {
-  return _axios.get(`/college/approval/list`, {
+/**
+ * 通过审核
+ * @param data
+ * @returns {*}
+ */
+export const approvalApply = data => {
+  return _axios.post(`/past`, data);
+};
+/**
+ * 返回修改
+ * @param data
+ * @returns {*}
+ */
+export const returnApply = data => {
+  return _axios.post(`/comAlter`, data);
+};
+/**
+ * 驳回
+ * @param data
+ * @returns {*}
+ */
+export const rejectApply = data => {
+  return _axios.post(`/comBack`, data);
+};
+
+/**
+ * 学院审批列表
+ * @param pageNum
+ * @param pageSize
+ * @param search
+ * @returns {*}
+ */
+export const selectCollegeApprovalList = (
+  pageNum = 1,
+  pageSize = 5,
+  search
+) => {
+  return _axios.get(`/teacherList`, {
     params: { pageNum, pageSize, ...search }
   });
-}
-export const getPracticeApprovalList = (pageNum = 1, pageSize = 10, search) => {
-  return _axios.get(`/practice/list`, {
+};
+/**
+ * 实践管理科审批列表
+ * @param pageNum
+ * @param pageSize
+ * @param search
+ * @returns {*}
+ */
+export const selectPracticeApprovalList = (
+  pageNum = 1,
+  pageSize = 5,
+  search
+) => {
+  return _axios.get(`/glkList`, {
     params: { pageNum, pageSize, ...search }
   });
 };

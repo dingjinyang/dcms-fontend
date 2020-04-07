@@ -5,7 +5,7 @@ import { Mock, responseData } from "@/mock/mock";
 
 export default {
   /** 权限列表 */
-  all: Mock.mock(
+  list: Mock.mock(
     /^\/selectCompetition\?pageNum=[1-9]\d*&pageSize=[1-9]\d*/,
     "get",
     options => {
@@ -13,7 +13,7 @@ export default {
       return responseData(pageHelper(competitionList, pageNum, pageSize));
     }
   ),
-  detail: Mock.mock(
+  one: Mock.mock(
     /^\/selectCompetitionById\?competitionId=[1-9]\d*/,
     "get",
     options => {
@@ -22,14 +22,18 @@ export default {
       return responseData(arr[0]);
     }
   ),
-  save: Mock.mock(/^\/saveCompetition/, "post", responseData(37)),
+  save: Mock.mock(/^\/saveCompetition/, "post", options =>
+    responseData(options.body.id || 37)
+  ),
   commit: Mock.mock(/^\/submitCompetition/, "post", options =>
-    responseData(options.body.id || 12)
+    responseData(options.body.id || 37)
   ),
   delete: Mock.mock(/^\/teaDeleteCompetition/, "delete", responseData()),
-
-  collegeApproval: Mock.mock(
-    /^\/college\/approval\/list\?pageNum=[1-9]\d*&pageSize=[1-9]\d*/,
+  approval: Mock.mock(/^\/past/, "post", responseData()),
+  reject: Mock.mock(/^\/comBack/, "post", responseData()),
+  return: Mock.mock(/^\/comAlter/, "post", responseData()),
+  collegeList: Mock.mock(
+    /^\/teacherList\?pageNum=[1-9]\d*&pageSize=[1-9]\d*/,
     "get",
     options => {
       const { pageNum, pageSize } = getURLSearchParams(options.url);
@@ -42,14 +46,8 @@ export default {
       );
     }
   ),
-  approvalOrReject: Mock.mock(
-    /^\/teaChange\?competitionId=[1-9]\d*&stage=[1-9]\d*/,
-    "get",
-    responseData()
-  ),
-  return: Mock.mock(/^\/competition\/return/, "post", responseData()),
-  practiceApprovalList: Mock.mock(
-    /^\/practice\/list\?pageNum=[1-9]\d*&pageSize=[1-9]\d*/,
+  practiceList: Mock.mock(
+    /^\/glkList\?pageNum=[1-9]\d*&pageSize=[1-9]\d*/,
     "get",
     options => {
       const { pageNum, pageSize } = getURLSearchParams(options.url);

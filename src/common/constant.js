@@ -1,6 +1,6 @@
 /**
  * 竞赛立项状态
- * @type {({color: string, text: string, value: string})[]}
+ * @type {({color: string, text: string, value: number})[]}
  */
 export const competitionStatus = [
   { text: "无状态", value: 0, color: "gray" },

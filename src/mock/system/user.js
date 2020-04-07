@@ -1,5 +1,5 @@
 import { Mock } from "@/mock/mock";
-import { getToken } from "../util/cookie";
+import { getToken } from "../../util/cookie";
 const permissions = {
   root: [
     "role:insert",

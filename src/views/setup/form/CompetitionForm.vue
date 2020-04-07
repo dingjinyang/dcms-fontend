@@ -104,6 +104,28 @@
       <v-col cols="12" sm="12" md="6" lg="6" xl="6" v-if="isPracticeApproval">
         <v-text-field label="批复预算金额" v-model="competitionForm.budget" />
       </v-col>
+      <v-col cols="12" v-if="isRevise">
+        <v-textarea
+          v-if="competitionForm.comStatus === 3"
+          label="学院修改意见"
+          readonly
+          auto-grow
+          outlined
+          color="red"
+          background-color="orange lighten-4"
+          :value="competitionForm.collegeModifySuggest"
+        />
+        <v-textarea
+          v-if="competitionForm.comStatus === 6"
+          label="实践管理科修改意见"
+          readonly
+          auto-grow
+          outlined
+          color="red"
+          background-color="orange lighten-4"
+          :value="competitionForm.practiceModifySuggest"
+        />
+      </v-col>
       <v-col cols="12">
         <v-btn color="brown" dark class="mr-4" @click="$router.back()"
           >返回上一页
@@ -176,7 +198,7 @@ import {
 } from "@/common/constant";
 import CompetitionStage from "./CompetitionStage";
 import {
-  getCompetitionDetail,
+  selectCompetition,
   saveApply,
   commitApply,
   approvalApply,
@@ -230,47 +252,57 @@ export default {
     stagesRules: []
   }),
   computed: {
-    isApproval() {
-      return this.isCollegeApproval || this.isPracticeApproval;
+    isDetail() {
+      return this.$route.name === "CompetitionDetail";
     },
     isCollegeApproval() {
       return this.$route.name === "CollegeApproval";
     },
-    isDetail() {
-      return this.$route.name === "CompetitionDetail";
-    },
     isPracticeApproval() {
       return this.$route.name === "PracticeApproval";
     },
+    isApproval() {
+      return this.isCollegeApproval || this.isPracticeApproval;
+    },
     readonly() {
       return this.isDetail || this.isCollegeApproval || this.isPracticeApproval;
+    },
+    // 返回修改
+    isRevise() {
+      return this.$route.name === "CompetitionRevise";
     }
   },
   mounted() {
     this.$route.name !== "CompetitionApply" &&
-      getCompetitionDetail(this.$route.params.competitionId).then(res => {
-        if (res.code === 200) this.competitionForm = res.data;
-      });
+      selectCompetition(this.$route.params.competitionId).then(
+        ({ code, data }) => {
+          if (code === 200) this.competitionForm = data;
+        }
+      );
   },
   methods: {
     /**
-     * 审核通过
+     * 通过
      */
     approval() {
-      approvalApply(this.$route.params.competitionId).then(({ code }) => {
-        code === 200 && this.$refs.snackbar.success("审核成功！");
+      approvalApply(this.competitionForm).then(({ code, msg }) => {
+        code === 200 && this.$refs.snackbar.success(msg);
       });
     },
     /**
      * 返回修改
      */
     back() {
-      returnApply(this.$route.params.competitionId, this.modifySuggest).then(
-        ({ code }) => {
-          code === 200 && this.$refs.snackbar.success();
-        }
-      );
+      const data = { ...this.competitionForm };
+      if (data.comStatus === 2) data.collegeModifySuggest = this.modifySuggest;
+      if (data.comStatus === 5) data.practiceModifySuggest = this.modifySuggest;
+      returnApply(data).then(({ code, msg }) => {
+        code === 200 && this.$refs.snackbar.success(msg);
+      });
     },
+    /**
+     * 提交
+     */
     commit() {
       commitApply({ ...this.competitionForm, comStatus: 2 }).then(
         ({ code, msg, data }) => {
@@ -280,9 +312,12 @@ export default {
         }
       );
     },
+    /**
+     * 驳回
+     */
     reject() {
-      rejectApply(this.$route.params.competitionId).then(({ code }) => {
-        code === 200 && this.$refs.snackbar.success();
+      rejectApply(this.competitionForm).then(({ code, msg }) => {
+        code === 200 && this.$refs.snackbar.success(msg);
       });
     },
     reset() {
@@ -296,6 +331,9 @@ export default {
         }
       );
     },
+    /**
+     * 保存
+     */
     save() {
       saveApply({ ...this.competitionForm, comStatus: 1 }).then(
         ({ code, msg, data }) => {

@@ -30,7 +30,7 @@
 <script>
 import EnrollListTableSearch from "./EnrollListTableSearch";
 import EnrollListItem from "./EnrollListItem";
-import { getAllCompetition } from "../../../api/competition/competition";
+import { selectCompetitionList } from "../../../api/competition/competition";
 export default {
   name: "EnrollList",
   components: { EnrollListTableSearch, EnrollListItem },
@@ -52,7 +52,7 @@ export default {
   methods: {
     getData() {
       this.loading = true;
-      getAllCompetition()
+      selectCompetitionList()
         .then(({ code, data: { list } }) => {
           if (code === 200) {
             this.competitionList = list;
