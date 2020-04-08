@@ -1,12 +1,12 @@
 export default [
   {
-    path: "/enroll/list",
-    name: "Student",
+    path: "/competition/enroll",
+    name: "StudentEnrollList",
     component: () =>
       import(/* webpackChunkName: "Layout" */ "@/components/layout/Layout"),
     children: [
       {
-        path: "",
+        path: "list",
         name: "EnrollList",
         meta: {
           title: "竞赛列表",
@@ -14,20 +14,20 @@ export default [
         },
         component: () =>
           import(
-            /* webpackChunkName: "EnrollList" */ "../../views/student/enrollList/EnrollList"
+            /* webpackChunkName: "EnrollList" */ "@/views/student/enrollList/EnrollList"
           )
       }
     ]
   },
   {
-    path: "/enroll/form",
-    name: "Student",
+    path: "/competition/enroll",
+    name: "StudentEnrollForm",
     hideInMenu: true,
     component: () =>
       import(/* webpackChunkName: "Layout" */ "@/components/layout/Layout"),
     children: [
       {
-        path: ":id",
+        path: "form/:competitionId",
         name: "EnrollForm",
         meta: {
           title: "竞赛报名",
@@ -35,7 +35,7 @@ export default [
         },
         component: () =>
           import(
-            /* webpackChunkName: "EnrollForm" */ "../../views/student/enrollForm/EnrollForm"
+            /* webpackChunkName: "EnrollForm" */ "@/views/student/enrollForm/EnrollForm"
           )
       }
     ]
@@ -55,7 +55,7 @@ export default [
         },
         component: () =>
           import(
-            /* webpackChunkName: "PersonalCompetition" */ "../../views/student/personal/CompetitionList"
+            /* webpackChunkName: "CompetitionList" */ "@/views/student/personal/CompetitionList"
           )
       }
     ]

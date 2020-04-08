@@ -1,5 +1,5 @@
 module.exports = {
-  publicPath: process.env.NODE_ENV === "production" ? "/dcms-fontend/" : "/",
+  publicPath: process.env.NODE_ENV === "production" ? "/dcms-font/" : "/",
   transpileDependencies: ["vuetify"],
   chainWebpack: config => {
     config.plugins.delete("prefetch");

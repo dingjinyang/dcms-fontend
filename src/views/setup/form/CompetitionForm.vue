@@ -167,7 +167,9 @@
         </template>
         <template v-else>
           <v-btn color="warning" @click="reset">重置</v-btn>
-          <v-btn color="success" class="ml-4" @click="save">保存</v-btn>
+          <v-btn v-if="!isRevise" color="success" class="ml-4" @click="save"
+            >保存</v-btn
+          >
           <confirm-dialog
             title="确认提交"
             btn-class="ml-3"
@@ -304,13 +306,11 @@ export default {
      * 提交
      */
     commit() {
-      commitApply({ ...this.competitionForm, comStatus: 2 }).then(
-        ({ code, msg, data }) => {
-          if (code !== 200) return;
-          this.$refs.snackbar.success(msg);
-          if (data !== null) this.competitionForm.id = data;
-        }
-      );
+      commitApply({ ...this.competitionForm }).then(({ code, msg, data }) => {
+        if (code !== 200) return;
+        this.$refs.snackbar.success(msg);
+        if (data !== null) this.competitionForm.id = data;
+      });
     },
     /**
      * 驳回
@@ -335,13 +335,11 @@ export default {
      * 保存
      */
     save() {
-      saveApply({ ...this.competitionForm, comStatus: 1 }).then(
-        ({ code, msg, data }) => {
-          if (code !== 200) return;
-          this.$refs.snackbar.success(msg);
-          if (data !== null) this.competitionForm.id = data;
-        }
-      );
+      saveApply({ ...this.competitionForm }).then(({ code, msg, data }) => {
+        if (code !== 200) return;
+        this.$refs.snackbar.success(msg);
+        if (data !== null) this.competitionForm.id = data;
+      });
     }
   }
 };

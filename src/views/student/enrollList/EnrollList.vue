@@ -1,13 +1,13 @@
 <template>
   <v-data-iterator
     :items="competitionList"
-    :items-per-page.sync="itemsPerPage"
-    :page="page"
     :loading="loading"
+    :options.sync="options"
+    :server-items-length="total"
     loading-text="数据加载中"
   >
     <template v-slot:header class="mb-3">
-      <enroll-list-table-search @search="tableSearch" />
+      <c-table-search @search="selectData" />
       <v-progress-linear
         v-if="loading"
         color="primary"
@@ -28,56 +28,45 @@
 </template>
 
 <script>
-import EnrollListTableSearch from "./EnrollListTableSearch";
+import CTableSearch from "@/views/components/CTableSearch";
 import EnrollListItem from "./EnrollListItem";
-import { selectCompetitionList } from "../../../api/competition/competition";
+import { signUpCompetitionList } from "@/api/student";
+import { competitionSearchForm } from "@/common/constant";
 export default {
   name: "EnrollList",
-  components: { EnrollListTableSearch, EnrollListItem },
+  components: { CTableSearch, EnrollListItem },
   data: () => ({
-    itemsPerPageArray: [4, 8, 12],
+    itemsPerPageArray: [5, 10, 15],
     searchForm: {
       department: null,
       name: null,
       sponsor: null
     },
-    panel: [],
-    filter: {},
-    sortDesc: false,
-    page: 1,
-    itemsPerPage: 4,
+    options: {
+      page: 1,
+      itemsPerPage: 5
+    },
+    total: null,
     competitionList: [],
     loading: false
   }),
+  created() {
+    this.selectData();
+  },
   methods: {
-    getData() {
+    selectData(searchForm = competitionSearchForm) {
+      const { page, itemsPerPage } = this.options;
       this.loading = true;
-      selectCompetitionList()
-        .then(({ code, data: { list } }) => {
-          if (code === 200) {
-            this.competitionList = list;
-          }
+      signUpCompetitionList(page, itemsPerPage, searchForm)
+        .then(({ code, data: { list, total } }) => {
+          if (code !== 200) return;
+          this.competitionList = list;
+          this.total = total;
         })
         .finally(() => {
           this.loading = false;
         });
-    },
-    search() {
-      this.panel = [];
-    },
-    tableSearch(form) {
-      console.log(form);
     }
-  },
-  computed: {
-    textMarginTop() {
-      return {
-        "margin-top": this.$vuetify.breakpoint.mdAndDown ? "5px" : ""
-      };
-    }
-  },
-  created() {
-    this.getData();
   }
 };
 </script>

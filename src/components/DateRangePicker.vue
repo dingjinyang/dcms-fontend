@@ -10,7 +10,7 @@
   >
     <template v-slot:activator="{ on }">
       <v-text-field
-        :value="`${start} ~ ${end || ''}`"
+        :value="`${start || ''} ~ ${end || ''}`"
         label="时间段"
         readonly
         v-on="on"

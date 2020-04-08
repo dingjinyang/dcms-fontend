@@ -1,4 +1,4 @@
-import "../plugins/axios";
+import "@/plugins/axios";
 
 // eslint-disable-next-line no-unused-vars,no-undef
 const _axios = axios;

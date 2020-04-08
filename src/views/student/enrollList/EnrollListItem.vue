@@ -2,9 +2,9 @@
   <v-expand-transition>
     <v-card class="mt-3" v-show="item">
       <v-card-title>
-        <span class="font-weight-light">{{ item.name }}</span>
+        <span class="font-weight-light">{{ item.comName }}</span>
         <v-spacer />
-        <span class="font-weight-light">{{ item.department }}</span>
+        <span class="font-weight-light">{{ item.sponsor }}</span>
       </v-card-title>
 
       <v-card-subtitle class="font-weight-bold">
@@ -13,18 +13,14 @@
 
       <v-card-actions>
         <span class="v-card__subtitle" style="padding:0 0 0 8px"
-          >比赛时间：{{ item.startTime }} — {{ item.endTime }}</span
-        >
+          >比赛时间：{{ competitionTimeRange }}
+        </span>
         <v-spacer />
         <v-btn text color="primary" @click="show = !show">
           查看详情
         </v-btn>
 
-        <v-btn
-          text
-          color="success"
-          :to="{ name: 'EnrollForm', params: { id: item.id } }"
-        >
+        <v-btn text color="success" :to="itemTo('EnrollForm', item.id)">
           报名
         </v-btn>
       </v-card-actions>
@@ -33,15 +29,19 @@
           <v-divider></v-divider>
           <v-list-item>
             <v-list-item-content>
-              <v-list-item-title>比赛等级：{{ item.level }}</v-list-item-title>
-              <v-list-item-title>参赛范围：{{ item.scope }}</v-list-item-title>
+              <v-list-item-title
+                >比赛等级：{{ item.comLevel }}</v-list-item-title
+              >
+              <v-list-item-title
+                >参赛范围：{{ item.comCondition }}</v-list-item-title
+              >
               <v-list-item-title
                 >比赛阶段：
                 <ul>
-                  <li v-for="s in item.stages" :key="s.name">
+                  <li v-for="s in item.competitionStages" :key="s.stageName">
                     <span>
-                      {{ s.name }} : {{ s.startTime }} - {{ s.endTime }}</span
-                    >
+                      {{ s.stageName }} : {{ s.startTime }} - {{ s.endTime }}
+                    </span>
                   </li>
                 </ul>
               </v-list-item-title>
@@ -54,6 +54,7 @@
 </template>
 
 <script>
+import { itemTo } from "@/util";
 export default {
   name: "EnrollListItem",
   props: {
@@ -61,7 +62,19 @@ export default {
   },
   data: () => ({
     show: false
-  })
+  }),
+  computed: {
+    competitionTimeRange() {
+      const start = this.item.competitionStages[0].startTime || "";
+      const end =
+        this.item.competitionStages[this.item.competitionStages.length - 1]
+          .endTime || "";
+      return `${start} - ${end}`;
+    }
+  },
+  methods: {
+    itemTo
+  }
 };
 </script>
 

@@ -10,8 +10,8 @@
     </v-col>
     <v-col cols="12" sm="12" md="6" lg="6" xl="3">
       <date-range-picker
-        :start.sync="stageItem.startTime || ''"
-        :end.sync="stageItem.endTime || ''"
+        :start.sync="stageItem.startTime"
+        :end.sync="stageItem.endTime"
         :readonly="$attrs.readonly"
       />
     </v-col>
@@ -28,14 +28,17 @@ export default {
   },
   data() {
     return {
-      stageItem: null
+      stageItem: {
+        startTime: "",
+        endTime: ""
+      }
     };
   },
   watch: {
     stage: {
       immediate: true,
       handler(val) {
-        this.stageItem = val;
+        this.stageItem = { ...val };
       }
     }
   }

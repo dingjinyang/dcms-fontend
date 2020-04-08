@@ -5,14 +5,13 @@ import { pageHelper } from "@/util/pageHelper";
 import { Mock, responseData } from "@/mock/mock";
 
 export default {
-  launchList: Mock.mock(
-    /\/beginList?sno=[1-9]\d*&pageSize=[1-9]\d*/,
+  launch: Mock.mock(
+    /^\/beginCom?competitionId=[1-9]\d*/,
     "get",
-    responseData(competitionList.filter(item => item.comStatus === 8))
+    responseData()
   ),
-  launch: Mock.mock(/\/beginCom?competitionId=[1-9]\d*/, "get", responseData()),
   getStudentCompetitionList: Mock.mock(
-    /\/student\/competition\/all?sno=[1-9]\d*&pageSize=[1-9]\d*/,
+    /\/student\/competition\/all\?sno=[1-9]\d*&pageSize=[1-9]\d*/,
     "get",
     responseData(competitionList.filter(item => item.comStatus === 4))
   ),

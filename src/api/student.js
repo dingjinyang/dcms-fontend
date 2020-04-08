@@ -3,9 +3,15 @@ import "../plugins/axios";
 // eslint-disable-next-line no-unused-vars,no-undef
 const _axios = axios;
 
+export const signUpCompetitionList = (pageNum = 1, pageSize = 5, search) => {
+  return _axios.get(`/startedCom`, {
+    params: { pageNum, pageSize, ...search }
+  });
+};
+
 //TODO 注意学生接口限制，避免查询不必要信息
-export const getStudentInfoBySno = async sno => {
-  return await _axios.get(`/student/info`, {
+export const getStudentInfoBySno = sno => {
+  return _axios.get(`/student/info`, {
     params: { sno }
   });
 };
