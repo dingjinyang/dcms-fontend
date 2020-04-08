@@ -9,6 +9,7 @@ module.exports = {
     sourceMap: false
   },
   devServer: {
+    disableHostCheck: true,
     proxy: {
       "/api": {
         target: "http://p4518kg9wq.52http.com",

@@ -27,18 +27,32 @@
 </template>
 
 <script>
-import { getStudentCompetitionList } from "../../../api/student";
+import { getPersonalCompetitionList } from "@/api/student";
 import CompetitionListItem from "./CompetitionListItem";
+import { competitionSearchForm } from "@/common/constant";
+
 export default {
   name: "CompetitionList",
-  data: () => ({ competitionList: [], loading: false }),
+  data: () => ({
+    competitionList: [],
+    loading: false,
+    options: {
+      page: 1,
+      itemsPerPage: 5
+    },
+    total: null
+  }),
   components: { CompetitionListItem },
   methods: {
-    getData() {
+    searchData(searchForm = competitionSearchForm) {
+      const { page, itemsPerPage } = this.options;
       this.loading = true;
-      getStudentCompetitionList("2016")
-        .then(({ code, data }) => {
-          if (code === 200) this.competitionList = data;
+      getPersonalCompetitionList(page, itemsPerPage, searchForm)
+        .then(({ code, data: { total, list } }) => {
+          if (code === 200) {
+            this.competitionList = list;
+            this.total = total;
+          }
         })
         .finally(() => {
           this.loading = false;
@@ -46,7 +60,7 @@ export default {
     }
   },
   created() {
-    this.getData();
+    this.searchData();
   }
 };
 </script>

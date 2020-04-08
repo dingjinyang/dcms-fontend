@@ -40,11 +40,12 @@ export default {
   /** 获取用户信息 */
   getUserInfo: Mock.mock(/\/user\/info/, () => {
     const role = getToken();
+    console.log(role);
     return {
       code: 200,
       data: {
         roles: [role],
-        id: 5771,
+        id: role === "student" ? "201619150118" : 5771,
         department: "软件学院",
         permissions: permissions[role],
         username: Mock.mock("@CNAME"),

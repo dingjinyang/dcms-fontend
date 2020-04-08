@@ -9,14 +9,23 @@ export const signUpCompetitionList = (pageNum = 1, pageSize = 5, search) => {
   });
 };
 
-//TODO 注意学生接口限制，避免查询不必要信息
-export const getStudentInfoBySno = sno => {
-  return _axios.get(`/student/info`, {
-    params: { sno }
+export const getStudentInfoBySno = studentId => {
+  return _axios.get(`/findStudentById`, {
+    params: { studentId }
   });
 };
-export const getStudentCompetitionList = sno => {
-  return _axios.get(`/student/competition/all`, {
-    params: { sno }
+
+export const signUpCompetition = data => {
+  return _axios.post(`/submitTeam`, data);
+};
+
+export const getPersonalCompetitionList = (
+  pageNum = 1,
+  pageSize = 5,
+  id,
+  search
+) => {
+  return _axios.get(`/personCom`, {
+    params: { pageNum, pageSize, id, ...search }
   });
 };

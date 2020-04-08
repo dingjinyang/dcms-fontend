@@ -3,10 +3,10 @@
     <span class="title">{{ name }}</span>
     <v-row>
       <v-col cols="12" sm="6" md="6" lg="6" xl="6">
-        <v-text-field v-model="enrollForm.entry" label="参赛作品名称" />
+        <v-text-field v-model="enrollForm.opusName" label="参赛作品名称" />
       </v-col>
       <v-col cols="12" sm="6" md="6" lg="6" xl="6">
-        <v-text-field v-model="enrollForm.adviser" label="指导老师" />
+        <v-text-field v-model="enrollForm.adviserName" label="指导老师" />
       </v-col>
       <v-col cols="12">
         <v-data-table
@@ -30,9 +30,18 @@
             <span>{{ desserts.indexOf(item) + 1 }}</span>
           </template>
           <template v-slot:item.actions="{ item }">
-            <v-icon small @click="deleteItem(item)">
-              mdi-delete
-            </v-icon>
+            <confirm-dialog
+              v-if="item.id !== $store.getters['user/info'].id"
+              title="确认删除"
+              hide-text
+              max-width="273px"
+              btn-text
+              btn-small
+              btn-color="error"
+              @confirm="deleteItem(item)"
+            >
+              删除
+            </confirm-dialog>
           </template>
         </v-data-table>
       </v-col>
@@ -40,74 +49,91 @@
         <confirm-dialog
           btn-color="success"
           hide-text
-          max-width="373px"
+          max-width="273px"
           title="确认提交"
-          @confirm="save"
+          :loading="submitLoading"
+          @confirm="submit"
           >提交
         </confirm-dialog>
       </v-col>
     </v-row>
+    <c-snackbar ref="snackbar" />
   </v-form>
 </template>
 
 <script>
-import { selectCompetition } from "../../../api/competition/competition";
+import { selectCompetition } from "@/api/competition/competition";
+import { signUpCompetition } from "@/api/student";
 import EnrollFormAddItem from "./EnrollFormAddItem";
-import ConfirmDialog from "../../../components/ConfirmDialog";
+import ConfirmDialog from "@/components/ConfirmDialog";
+import CSnackbar from "@/views/components/CSnackbar";
 
 export default {
   name: "EnrollForm",
-  data: () => ({
-    name: "",
-    enrollForm: {
-      entry: "",
-      adviser: ""
-    },
-    headers: [
-      {
-        text: "#",
-        align: "start",
-        value: "order"
+  components: { EnrollFormAddItem, ConfirmDialog, CSnackbar },
+  data() {
+    return {
+      name: "",
+      competition: null,
+      submitLoading: false,
+      enrollForm: {
+        competitionId: parseInt(this.$route.params.competitionId),
+        opusName: "",
+        adviserName: ""
       },
-      { text: "学号", value: "sno" },
-      { text: "姓名", value: "name" },
-      { text: "班级", value: "class" },
-      { text: "年级", value: "grade" },
-      { text: "院系", value: "college" },
-      { text: "操作", value: "actions" }
-    ],
-    desserts: [
-      {
-        sno: "201619150118",
-        name: "张三",
-        class: "RB软工卓越161",
-        grade: "2016",
-        college: "软件学院"
+      headers: [
+        {
+          text: "#",
+          align: "start",
+          value: "order"
+        },
+        { text: "学号", value: "id" },
+        { text: "姓名", value: "stuName" },
+        { text: "班级", value: "stuClass" },
+        { text: "年级", value: "grade" },
+        { text: "院系", value: "department" },
+        { text: "操作", value: "actions" }
+      ],
+      desserts: [
+        {
+          id: "201619150118",
+          stuName: "张三",
+          stuClass: "RB软工卓越161",
+          grade: "2016",
+          department: "软件学院"
+        }
+      ]
+    };
+  },
+  mounted() {
+    selectCompetition(this.$route.params.competitionId).then(
+      ({ code, data }) => {
+        if (code === 200) this.competition = data;
       }
-    ]
-  }),
-  components: { EnrollFormAddItem, ConfirmDialog },
+    );
+  },
   methods: {
+    addItem(item) {
+      !this.desserts.find(e => item.id === e.id) && this.desserts.push(item);
+    },
     deleteItem(item) {
       const index = this.desserts.indexOf(item);
       confirm("Are you sure you want to delete this item?") &&
         this.desserts.splice(index, 1);
     },
-    addItem(item) {
-      !this.desserts.find(e => item.sno === e.sno) && this.desserts.push(item);
-    },
-    save() {
-      console.log({
+    submit() {
+      this.submitLoading = true;
+      signUpCompetition({
         ...this.enrollForm,
-        teamMembers: this.desserts
-      });
+        students: this.desserts
+      })
+        .then(({ code, msg }) => {
+          code === 200 && this.$refs.snackbar.success(msg);
+        })
+        .finally(() => {
+          this.submitLoading = false;
+        });
     }
-  },
-  activated() {
-    selectCompetition(this.$route.params.id).then(({ code, data }) => {
-      if (code !== 200) return;
-      this.name = data.name;
-    });
   }
 };
 </script>

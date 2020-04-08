@@ -6,12 +6,15 @@
   >
     <template v-slot:activator="{ on }">
       <v-btn
+        :loading="loading"
         :color="btnColor"
         :class="$attrs['btn-class']"
         :text="$attrs['btn-text']"
         :small="$attrs['btn-small']"
+        :x-small="$attrs['btn-x-small']"
         v-on="on"
-        ><slot />
+      >
+        <slot />
       </v-btn>
     </template>
     <v-card>
@@ -34,6 +37,10 @@
 export default {
   name: "ConfirmDialog",
   props: {
+    loading: {
+      type: Boolean,
+      default: false
+    },
     btnColor: {
       type: String,
       default: "warning"

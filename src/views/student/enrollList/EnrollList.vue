@@ -36,12 +36,6 @@ export default {
   name: "EnrollList",
   components: { CTableSearch, EnrollListItem },
   data: () => ({
-    itemsPerPageArray: [5, 10, 15],
-    searchForm: {
-      department: null,
-      name: null,
-      sponsor: null
-    },
     options: {
       page: 1,
       itemsPerPage: 5

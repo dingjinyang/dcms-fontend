@@ -13,6 +13,8 @@
           v-model="model"
           :loading="isLoading"
           :search-input.sync="search"
+          :error="error"
+          :error-messages="errorMessage"
           hide-no-data
           item-text="Description"
           item-value="API"
@@ -28,19 +30,19 @@
         <v-list v-if="model">
           <v-list-item>
             <v-list-item-content>
-              <v-list-item-title v-text="model['sno']" />
+              <v-list-item-title v-text="model['id']" />
               <v-list-item-subtitle>学号</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
           <v-list-item>
             <v-list-item-content>
-              <v-list-item-title v-text="model['name']" />
+              <v-list-item-title v-text="model['stuName']" />
               <v-list-item-subtitle>姓名</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
           <v-list-item>
             <v-list-item-content>
-              <v-list-item-title v-text="model['class']" />
+              <v-list-item-title v-text="model['stuClass']" />
               <v-list-item-subtitle>班级</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
@@ -52,7 +54,7 @@
           </v-list-item>
           <v-list-item>
             <v-list-item-content>
-              <v-list-item-title v-text="model['college']" />
+              <v-list-item-title v-text="model['department']" />
               <v-list-item-subtitle>学院</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
@@ -79,35 +81,45 @@ export default {
     dialog: false,
     isLoading: false,
     model: null,
-    search: null
+    search: null,
+    error: false,
+    errorMessage: ""
   }),
+  watch: {
+    dialog(val) {
+      val || this.close();
+    }
+  },
   methods: {
-    async snoSearch() {
-      this.isLoading = true;
-
-      await getStudentInfoBySno(this.search)
-        .then(({ code, data }) => {
-          if (code === 200) this.model = data;
-        })
-        .catch(err => {
-          console.log(err);
-        })
-        .finally(() => (this.isLoading = false));
+    close() {
+      this.search = null;
+      this.model = null;
+      this.dialog = false;
     },
     save() {
       if (!this.model) return;
       this.dialog = false;
       this.$emit("add", this.model);
     },
-    close() {
-      this.search = null;
-      this.model = null;
-      this.dialog = false;
-    }
-  },
-  watch: {
-    dialog(val) {
-      val || this.close();
+    async snoSearch() {
+      this.isLoading = true;
+
+      await getStudentInfoBySno(this.search)
+        .then(({ code, msg, data }) => {
+          if (code === 200) {
+            this.error = false;
+            this.errorMessage = "";
+            this.model = data;
+          }
+          if (code === 400) {
+            this.error = true;
+            this.errorMessage = msg;
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        })
+        .finally(() => (this.isLoading = false));
     }
   }
 };
