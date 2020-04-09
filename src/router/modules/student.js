@@ -27,7 +27,7 @@ export default [
       import(/* webpackChunkName: "Layout" */ "@/components/layout/Layout"),
     children: [
       {
-        path: "form/:competitionId",
+        path: "form",
         name: "EnrollForm",
         meta: {
           title: "竞赛报名",

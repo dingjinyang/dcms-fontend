@@ -43,6 +43,28 @@
                     >{{ item.username }}
                   </v-btn>
                 </div>
+                <v-menu offset-x right>
+                  <template v-slot:activator="{ on }">
+                    <v-btn
+                      v-on="on"
+                      :loading="loginLoading"
+                      text
+                      color="success"
+                      >学生
+                    </v-btn>
+                  </template>
+                  <v-list>
+                    <v-list-item
+                      v-for="(item, index) in students"
+                      :key="index"
+                      @click="studentLogin(item.id)"
+                    >
+                      <v-list-item-title>{{
+                        ` ${item.id} - ${item.stuName}`
+                      }}</v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
 
                 <!--                <v-btn-->
                 <!--                  :loading="loginLoading"-->
@@ -60,6 +82,8 @@
 </template>
 
 <script>
+import { getAllStudents } from "@/api/student";
+
 export default {
   name: "Login",
   data: () => ({
@@ -80,13 +104,18 @@ export default {
         color: "success",
         username: "实践管理科",
         account: "practiceManagementDivision"
-      },
-      { color: "primary", username: "学生", account: "student" }
+      }
     ],
     rules: {
       required: value => !!value || "Required."
-    }
+    },
+    students: [{ id: "2018", stuName: "ding" }]
   }),
+  mounted() {
+    getAllStudents().then(({ code, data }) => {
+      if (code === 200) this.students = data;
+    });
+  },
   methods: {
     loginWith(user) {
       this.loginForm = {
@@ -95,9 +124,13 @@ export default {
       };
       this.userLogin();
     },
+    studentLogin(id) {
+      localStorage.setItem("id", id);
+      this.loginWith("student");
+    },
     userLogin() {
       const _this = this;
-      if (!_this.$refs.login_form.validate()) return;
+      // if (!_this.$refs.login_form.validate()) return;
       // 表单验证成功
       _this.loginLoading = true;
       _this.$store

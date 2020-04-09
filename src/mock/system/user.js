@@ -45,7 +45,7 @@ export default {
       code: 200,
       data: {
         roles: [role],
-        id: role === "student" ? "201619150118" : 5771,
+        id: localStorage.getItem("id"),
         department: "软件学院",
         permissions: permissions[role],
         username: Mock.mock("@CNAME"),

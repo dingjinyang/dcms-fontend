@@ -7,10 +7,20 @@ export const signUpCompetitionList = (pageNum = 1, pageSize = 5, search) => {
   });
 };
 
+export const searchSignUpInfo = (competitionId, studentId) => {
+  return _axios.get(`/joinCom`, {
+    params: { competitionId, studentId }
+  });
+};
+
 export const getStudentInfoBySno = studentId => {
   return _axios.get(`/findStudentById`, {
     params: { studentId }
   });
+};
+
+export const getAllStudents = () => {
+  return _axios.get(`/allStudent`);
 };
 
 export const signUpCompetition = data => {
@@ -23,7 +33,7 @@ export const getPersonalCompetitionList = (
   id,
   search
 ) => {
-  return _axios.get(`/personCom`, {
+  return _axios.get(`/MyCom`, {
     params: { pageNum, pageSize, id, ...search }
   });
 };

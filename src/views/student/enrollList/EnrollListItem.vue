@@ -20,7 +20,7 @@
           查看详情
         </v-btn>
 
-        <v-btn text color="success" :to="itemTo('EnrollForm', item.id)">
+        <v-btn text color="success" :to="itemTo(item.id, item.comName)">
           报名
         </v-btn>
       </v-card-actions>
@@ -54,7 +54,6 @@
 </template>
 
 <script>
-import { itemTo } from "@/util";
 export default {
   name: "EnrollListItem",
   props: {
@@ -73,7 +72,12 @@ export default {
     }
   },
   methods: {
-    itemTo
+    itemTo(id, name) {
+      return {
+        name: "EnrollForm",
+        query: { id, name: escape(name) }
+      };
+    }
   }
 };
 </script>

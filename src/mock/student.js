@@ -1,6 +1,7 @@
 import { Mock, responseData } from "./mock";
 import competitionList from "./data/competitionList";
 import studentCompetitionList from "@/mock/data/studentCompetitionList";
+import students from "@/mock/data/students";
 import { pageHelper } from "@/util/pageHelper";
 import { getURLSearchParams } from "@/util/url";
 
@@ -9,7 +10,12 @@ export default {
     const { pageNum, pageSize } = getURLSearchParams(options.url);
     return responseData(pageHelper(competitionList, pageNum, pageSize));
   }),
-  personalList: Mock.mock(/^\/personCom/, "get", options => {
+  signUpInfo: Mock.mock(
+    /^\/joinCom/,
+    "get",
+    responseData(pageHelper(competitionList))
+  ),
+  personalList: Mock.mock(/^\/MyCom/, "get", options => {
     const { pageNum, pageSize } = getURLSearchParams(options.url);
     return responseData(pageHelper(studentCompetitionList, pageNum, pageSize));
   }),
@@ -22,5 +28,6 @@ export default {
       grade: "2017",
       college: "软件学院"
     });
-  })
+  }),
+  getAllStudents: Mock.mock(/^\/allStudent/, "get", responseData(students))
 };

@@ -12,7 +12,9 @@ export const selectCompetitionList = (pageNum = 1, pageSize = 5, search) => {
  * @returns {*}
  */
 export const selectCompetition = competitionId => {
-  return _axios.get(`/selectCompetitionById`, { params: { competitionId } });
+  return _axios.get(`/selectCompetitionById`, {
+    params: { competitionId: parseInt(competitionId) }
+  });
 };
 /**
  * 保存申請
@@ -37,7 +39,7 @@ export const commitApply = data => {
  */
 export const deleteApply = competitionId => {
   return _axios.delete(`/teaDeleteCompetition`, {
-    params: { competitionId }
+    params: { competitionId: parseInt(competitionId) }
   });
 };
 
