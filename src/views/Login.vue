@@ -56,16 +56,12 @@
         </v-layout>
       </v-container>
     </v-content>
-    <c-snackbar ref="snackbar" />
   </v-app>
 </template>
 
 <script>
-import CSnackbar from "@/views/components/CSnackbar";
-
 export default {
   name: "Login",
-  components: { CSnackbar },
   data: () => ({
     passwordDisplay: false,
     loginLoading: false,
@@ -110,10 +106,11 @@ export default {
           if (res.code === 200) {
             _this.loginLoading = false;
             _this.$router.replace("/");
+            this.$message.$emit("message", { text: "登陆成功" });
           }
         })
         .catch(({ code, msg }) => {
-          if (code === 400) _this.$refs.snackbar.show("error", msg);
+          code === 400 && this.$message.$emit("message", { text: msg });
         })
         .finally(() => {
           _this.loginLoading = false;

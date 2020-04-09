@@ -1,7 +1,5 @@
-import "@/plugins/axios";
-
-// eslint-disable-next-line no-unused-vars,no-undef
-const _axios = axios;
+import Vue from "vue";
+const _axios = Vue.axios;
 
 /**
  * 可以发起的比赛

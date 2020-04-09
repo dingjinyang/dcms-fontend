@@ -19,13 +19,13 @@
 </template>
 
 <script>
-import NavigationBar from "./navigation/NavigationBar";
 import AppBar from "./app/AppBar";
+import NavigationBar from "./navigation/NavigationBar";
 import Breadcrumbs from "./breadcrumbs/Breadcrumbs";
 
 export default {
   name: "Layout",
-  components: { NavigationBar, AppBar, Breadcrumbs }
+  components: { AppBar, NavigationBar, Breadcrumbs }
 };
 </script>
 

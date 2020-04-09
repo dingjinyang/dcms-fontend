@@ -9,6 +9,7 @@ import api from "./api";
 import perm from "./directives/perm";
 import "./common/filter";
 import "./mock";
+import "@/plugins/message";
 
 Vue.prototype.$api = api;
 Vue.config.productionTip = false;

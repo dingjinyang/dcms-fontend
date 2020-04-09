@@ -1,7 +1,5 @@
-import "@/plugins/axios";
-
-// eslint-disable-next-line no-unused-vars,no-undef
-const _axios = axios;
+import Vue from "vue";
+const _axios = Vue.axios;
 
 export const selectCompetitionList = (pageNum = 1, pageSize = 5, search) => {
   return _axios.get(`/selectCompetition`, {

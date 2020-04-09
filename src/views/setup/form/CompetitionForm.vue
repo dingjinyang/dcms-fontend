@@ -167,7 +167,12 @@
         </template>
         <template v-else>
           <v-btn color="warning" @click="reset">重置</v-btn>
-          <v-btn v-if="!isRevise" color="success" class="ml-4" @click="save"
+          <v-btn
+            v-if="!isRevise"
+            color="success"
+            class="ml-4"
+            :loading="saveLoading"
+            @click="save"
             >保存</v-btn
           >
           <confirm-dialog
@@ -187,7 +192,6 @@
         </template>
       </v-col>
     </v-row>
-    <c-snackbar ref="snackbar" />
   </v-form>
 </template>
 
@@ -208,12 +212,10 @@ import {
   rejectApply
 } from "@/api/competition/competition.js";
 import ConfirmDialog from "@/components/ConfirmDialog";
-import CSnackbar from "@/views/components/CSnackbar";
 export default {
   name: "CompetitionApply",
   components: {
     CompetitionStage,
-    CSnackbar,
     ConfirmDialog
   },
   data: () => ({
@@ -251,27 +253,28 @@ export default {
     competitionLevels,
     modifySuggest: "", //修改意见
     phoneRules: [v => /^1[3456789]\d{9}$/.test(v) || "手机号不合法"],
-    stagesRules: []
+    saveLoading: false,
+    commitLoading: false
   }),
   computed: {
-    isDetail() {
-      return this.$route.name === "CompetitionDetail";
+    isApproval() {
+      return this.isCollegeApproval || this.isPracticeApproval;
     },
     isCollegeApproval() {
       return this.$route.name === "CollegeApproval";
     },
+    isDetail() {
+      return this.$route.name === "CompetitionDetail";
+    },
     isPracticeApproval() {
       return this.$route.name === "PracticeApproval";
-    },
-    isApproval() {
-      return this.isCollegeApproval || this.isPracticeApproval;
-    },
-    readonly() {
-      return this.isDetail || this.isCollegeApproval || this.isPracticeApproval;
     },
     // 返回修改
     isRevise() {
       return this.$route.name === "CompetitionRevise";
+    },
+    readonly() {
+      return this.isDetail || this.isCollegeApproval || this.isPracticeApproval;
     }
   },
   mounted() {
@@ -288,7 +291,7 @@ export default {
      */
     approval() {
       approvalApply(this.competitionForm).then(({ code, msg }) => {
-        code === 200 && this.$refs.snackbar.success(msg);
+        code === 200 && this.$message.$emit("message", { text: msg });
       });
     },
     /**
@@ -299,7 +302,7 @@ export default {
       if (data.comStatus === 2) data.collegeModifySuggest = this.modifySuggest;
       if (data.comStatus === 5) data.practiceModifySuggest = this.modifySuggest;
       returnApply(data).then(({ code, msg }) => {
-        code === 200 && this.$refs.snackbar.success(msg);
+        code === 200 && this.$message.$emit("message", { text: msg });
       });
     },
     /**
@@ -307,8 +310,7 @@ export default {
      */
     commit() {
       commitApply({ ...this.competitionForm }).then(({ code, msg, data }) => {
-        if (code !== 200) return;
-        this.$refs.snackbar.success(msg);
+        code === 200 && this.$message.$emit("message", { text: msg });
         if (data !== null) this.competitionForm.id = data;
       });
     },
@@ -317,7 +319,7 @@ export default {
      */
     reject() {
       rejectApply(this.competitionForm).then(({ code, msg }) => {
-        code === 200 && this.$refs.snackbar.success(msg);
+        code === 200 && this.$message.$emit("message", { text: msg });
       });
     },
     reset() {
@@ -335,11 +337,16 @@ export default {
      * 保存
      */
     save() {
-      saveApply({ ...this.competitionForm }).then(({ code, msg, data }) => {
-        if (code !== 200) return;
-        this.$refs.snackbar.success(msg);
-        if (data !== null) this.competitionForm.id = data;
-      });
+      this.saveLoading = true;
+      saveApply({ ...this.competitionForm })
+        .then(({ code, msg, data }) => {
+          if (code !== 200) return;
+          this.$message.$emit("message", { text: msg });
+          if (data !== null) this.competitionForm.id = data;
+        })
+        .finally(() => {
+          this.saveLoading = false;
+        });
     }
   }
 };

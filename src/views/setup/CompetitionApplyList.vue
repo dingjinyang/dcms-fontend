@@ -75,7 +75,6 @@
         </td>
       </template>
     </v-data-table>
-    <c-snackbar ref="snackbar" />
   </div>
 </template>
 
@@ -88,7 +87,6 @@ import ConfirmDialog from "@/components/ConfirmDialog";
 import CNameLink from "@/views/components/CNameLink";
 import CStatusChip from "@/views/components/CStatusChip";
 import CTableSearch from "@/views/components/CTableSearch";
-import CSnackbar from "@/views/components/CSnackbar";
 
 export default {
   name: "CompetitionApplyList",
@@ -96,8 +94,7 @@ export default {
     CTableSearch,
     ConfirmDialog,
     CNameLink,
-    CStatusChip,
-    CSnackbar
+    CStatusChip
   },
   data: () => ({
     loading: false,
@@ -147,7 +144,7 @@ export default {
         if (code === 200) {
           const index = this.desserts.indexOf(item);
           this.desserts.splice(index, 1);
-          this.$refs.snackbar.success(msg);
+          this.$message.$emit("message", msg);
         }
       });
     },

@@ -57,7 +57,6 @@
         </confirm-dialog>
       </v-col>
     </v-row>
-    <c-snackbar ref="snackbar" />
   </v-form>
 </template>
 
@@ -66,11 +65,10 @@ import { selectCompetition } from "@/api/competition/competition";
 import { signUpCompetition } from "@/api/student";
 import EnrollFormAddItem from "./EnrollFormAddItem";
 import ConfirmDialog from "@/components/ConfirmDialog";
-import CSnackbar from "@/views/components/CSnackbar";
 
 export default {
   name: "EnrollForm",
-  components: { EnrollFormAddItem, ConfirmDialog, CSnackbar },
+  components: { EnrollFormAddItem, ConfirmDialog },
   data() {
     return {
       name: "",
@@ -128,7 +126,7 @@ export default {
         students: this.desserts
       })
         .then(({ code, msg }) => {
-          code === 200 && this.$refs.snackbar.success(msg);
+          code === 200 && this.$message.$emit("message", msg);
         })
         .finally(() => {
           this.submitLoading = false;

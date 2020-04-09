@@ -32,7 +32,6 @@
         </confirm-dialog>
       </template>
     </v-data-table>
-    <c-snackbar ref="snackbar" />
   </div>
 </template>
 
@@ -40,12 +39,11 @@
 import CompetitionNameLink from "@/views/components/CNameLink";
 import CStatusChip from "@/views/components/CStatusChip";
 import ConfirmDialog from "@/components/ConfirmDialog";
-import CSnackbar from "@/views/components/CSnackbar";
 import { selectLaunchList, launchCompetition } from "@/api/competition/process";
 
 export default {
   name: "CompetitionLaunch",
-  components: { CStatusChip, CompetitionNameLink, ConfirmDialog, CSnackbar },
+  components: { CStatusChip, CompetitionNameLink, ConfirmDialog },
   data: () => ({
     loading: false,
     dialog: false,
@@ -95,7 +93,9 @@ export default {
      */
     launch(item) {
       launchCompetition(item.id).then(({ code, msg }) => {
-        code === 200 && this.$refs.snackbar.success(msg) && this.searchData();
+        code === 200 &&
+          this.$message.$emit("message", { text: msg }) &&
+          this.searchData();
       });
     }
   }
