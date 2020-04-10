@@ -9,7 +9,7 @@
     no-data-text="无数据"
   >
     <template #top>
-      <c-table-search />
+      <c-table-search @search="searchData" />
     </template>
     <template #item.no="{ item }">
       {{ desserts.indexOf(item) + 1 }}
@@ -20,8 +20,11 @@
     <template #item.time="{ item }">
       {{ `${item.startTime} - ${item.endTime}` }}
     </template>
-    <template #item.stages="{ item }">
-      {{ item.competitionStages | competitionStageFilter }}
+    <template #item.currentStage="{ item }">
+      {{ item | currentStageFilter }}
+    </template>
+    <template #item.stageTimeRange="{ item }">
+      {{ item | stageTimeRangeFilter }}
     </template>
     <template #item.action="{ item }">
       <v-btn
@@ -37,20 +40,34 @@
 </template>
 
 <script>
-import { selectCompetitionList } from "@/api/competition/competition";
+import { selectProcessList } from "@/api/competition/process";
 import CTableSearch from "@/views/components/CTableSearch";
 import CompetitionNameLink from "@/views/components/CNameLink";
+import { competitionSearchForm } from "@/common/constant";
+import { itemTo } from "@/util";
 
 export default {
   name: "CompetitionProcessList",
   components: { CTableSearch, CompetitionNameLink },
+  filters: {
+    currentStageFilter(competition) {
+      const stage = competition.competitionStages[competition.currentStage - 1];
+      return competition.currentStage > 0 ? stage && stage.stageName : "";
+    },
+    stageTimeRangeFilter(competition) {
+      const stage = competition.competitionStages[competition.currentStage - 1];
+      return competition.currentStage > 0
+        ? stage && `${stage.startTime} - ${stage.endTime}`
+        : "";
+    }
+  },
   data: () => ({
     loading: false,
     headers: [
       { text: "#", value: "no" },
-      { text: "名称", value: "name" },
-      { text: "时间", value: "time" },
-      { text: "竞赛阶段", value: "stages" },
+      { text: "名称", value: "comName" },
+      { text: "当前阶段", value: "currentStage" },
+      { text: "阶段时间", value: "stageTimeRange" },
       { text: "操作", value: "action" }
     ],
     desserts: [],
@@ -62,24 +79,18 @@ export default {
   }),
   watch: {
     options: {
+      deep: true,
       handler() {
         this.searchData();
-      },
-      deep: true
+      }
     }
   },
   methods: {
-    searchData(
-      searchFrom = {
-        year: new Date().getFullYear(),
-        department: null,
-        comName: null,
-        sponsor: null
-      }
-    ) {
+    itemTo,
+    searchData(searchFrom = competitionSearchForm) {
       const { page, itemsPerPage } = this.options;
       this.loading = true;
-      selectCompetitionList(page, itemsPerPage, searchFrom)
+      selectProcessList(page, itemsPerPage, searchFrom)
         .then(({ code, data: { list, total } }) => {
           if (code !== 200) return;
           this.desserts = list;
@@ -91,26 +102,6 @@ export default {
         .finally(() => {
           this.loading = false;
         });
-    },
-    /**
-     * 表格操作跳转至竞赛详情页 - 编辑/删除
-     * @param name 路由名称
-     * @param id number
-     */
-    itemTo(name, id) {
-      return {
-        name,
-        params: { id }
-      };
-    },
-    /**
-     * 表单检索
-     * @param searchFrom
-     */
-    // eslint-disable-next-line no-unused-vars
-    tableSearch(searchFrom) {
-      console.log(searchFrom);
-      // TODO 调用后端接口检索
     }
   }
 };

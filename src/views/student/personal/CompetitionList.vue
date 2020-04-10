@@ -29,29 +29,21 @@
 <script>
 import { getPersonalCompetitionList } from "@/api/student";
 import CompetitionListItem from "./CompetitionListItem";
-import { competitionSearchForm } from "@/common/constant";
 
 export default {
   name: "CompetitionList",
   data: () => ({
     competitionList: [],
-    loading: false,
-    options: {
-      page: 1,
-      itemsPerPage: 5
-    },
-    total: null
+    loading: false
   }),
   components: { CompetitionListItem },
   methods: {
-    searchData(searchForm = competitionSearchForm) {
-      const { page, itemsPerPage } = this.options;
+    searchData() {
       this.loading = true;
-      getPersonalCompetitionList(page, itemsPerPage, searchForm)
-        .then(({ code, data: { total, list } }) => {
+      getPersonalCompetitionList(this.$store.getters["user/info"].id)
+        .then(({ code, data }) => {
           if (code === 200) {
-            this.competitionList = list;
-            this.total = total;
+            this.competitionList = data;
           }
         })
         .finally(() => {

@@ -23,7 +23,7 @@ export default [
           )
       },
       {
-        path: "list",
+        path: "manage/list",
         name: "CompetitionProcessList",
         meta: {
           title: "竞赛列表",
@@ -35,20 +35,20 @@ export default [
           )
       },
       {
-        path: "participant/list/:id",
+        path: "participant/list/:competitionId",
         name: "ConfirmParticipantList",
         hideInMenu: true,
         meta: {
-          title: "参赛名单",
+          title: "竞赛过程及名单",
           icon: "clock-start"
         },
         component: () =>
           import(
-            /* webpackChunkName: "CompetitionProcessList" */ "@/views/process/ConfirmParticipantList"
+            /* webpackChunkName: "ConfirmParticipantList" */ "@/views/process/ConfirmParticipantList"
           )
       },
       {
-        path: "management/:id",
+        path: "manage/:id",
         name: "ProcessManagement",
         hideInMenu: true,
         meta: {

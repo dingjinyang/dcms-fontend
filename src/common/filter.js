@@ -21,5 +21,5 @@ Vue.filter("competitionStageFilter", value => {
  * 竞赛团队成员
  */
 Vue.filter("teamMemberTextFilter", value => {
-  return value.map(e => e.name).join(",");
+  return value.map(e => e.stuName).join(",");
 });

@@ -1,5 +1,5 @@
 export const pageHelper = (data, pageNum, pageSize) => {
-  const total = data.length;
+  const total = (data && data.length) || 0;
   const pages = Math.ceil(total / 5);
   pageNum = parseInt(pageNum);
   pageSize = parseInt(pageSize);

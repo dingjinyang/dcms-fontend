@@ -11,7 +11,7 @@ import { getToken, setToken } from "../util/cookie";
 
 let config = {
   baseURL: process.env.VUE_APP_API_URL,
-  timeout: 60 * 1000, // Timeout
+  timeout: 6 * 1000, // Timeout
   headers: {
     "Content-Type": "application/json",
     Authorization: ""

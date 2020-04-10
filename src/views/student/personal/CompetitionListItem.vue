@@ -18,11 +18,14 @@
             >
             <v-list-item-title
               >参赛成员：{{
-                item.teams | TeamMemberTextFilter
+                item.students | TeamMemberTextFilter
               }}</v-list-item-title
             >
             <v-list-item-title
-              >比赛状态：{{ item.awards || "无" }}</v-list-item-title
+              >比赛状态：{{
+                competition.competitionStages[competition.currentStage - 1]
+                  .stageName
+              }}</v-list-item-title
             >
             <v-list-item-title
               >参赛及获奖情况：{{ item.awards || "无" }}</v-list-item-title
@@ -41,7 +44,7 @@
           btn-color="success"
           max-width="1024px"
           no-persistent
-          :hide-actions="item.credential !== ''"
+          :hide-actions="item.credential && item.credential !== ''"
           >{{ item.credential ? "查看证书" : "上传证书" }}
           <template #container>
             <v-img
@@ -78,7 +81,8 @@
                 <ul>
                   <li v-for="s in competition.competitionStages" :key="s.name">
                     <span>
-                      {{ s.name }} : {{ s.startTime }} - {{ s.endTime }}</span
+                      {{ s.stageName }} : {{ s.startTime }} -
+                      {{ s.endTime }}</span
                     >
                   </li>
                 </ul>

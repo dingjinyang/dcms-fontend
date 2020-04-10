@@ -27,13 +27,8 @@ export const signUpCompetition = data => {
   return _axios.post(`/submitTeam`, data);
 };
 
-export const getPersonalCompetitionList = (
-  pageNum = 1,
-  pageSize = 5,
-  id,
-  search
-) => {
+export const getPersonalCompetitionList = studentId => {
   return _axios.get(`/MyCom`, {
-    params: { pageNum, pageSize, id, ...search }
+    params: { studentId }
   });
 };
