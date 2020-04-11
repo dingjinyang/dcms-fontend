@@ -65,13 +65,6 @@
                     </v-list-item>
                   </v-list>
                 </v-menu>
-
-                <!--                <v-btn-->
-                <!--                  :loading="loginLoading"-->
-                <!--                  color="primary"-->
-                <!--                  @click="userLogin"-->
-                <!--                  >Login-->
-                <!--                </v-btn>-->
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -122,11 +115,16 @@ export default {
         account: user,
         password: user
       };
+      localStorage.setItem("id", "5771");
       this.userLogin();
     },
     studentLogin(id) {
+      this.loginForm = {
+        account: "student",
+        password: "student"
+      };
       localStorage.setItem("id", id);
-      this.loginWith("student");
+      this.userLogin();
     },
     userLogin() {
       const _this = this;

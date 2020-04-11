@@ -13,10 +13,6 @@
               :key="`${item.stage}-step`"
               :complete="currentStage >= item.stage"
               :editable="currentStage >= item.stage"
-              :edit-icon="currentStage === item.stage ? '$complete' : '$edit'"
-              @click="
-                currentStage >= item.stage ? $emit('change', item.stage) : ''
-              "
             >
               {{ item.stageName }}
               <small>

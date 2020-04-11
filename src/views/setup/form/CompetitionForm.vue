@@ -1,5 +1,5 @@
 <template>
-  <v-form ref="competition_form">
+  <v-form ref="refCompetitionForm">
     <v-row>
       <v-col cols="12" sm="6" md="4" lg="4" xl="4">
         <v-text-field
@@ -97,10 +97,6 @@
           :readonly="readonly"
         />
       </v-col>
-      <!--      <v-col cols="12" v-if="isApproval">-->
-      <!--        <v-btn text color="primary">历年经费使用情况</v-btn>-->
-      <!--        <v-btn text color="primary">历年参赛情况</v-btn>-->
-      <!--      </v-col>-->
       <v-col cols="12" sm="12" md="6" lg="6" xl="6" v-if="isPracticeApproval">
         <v-text-field label="批复预算金额" v-model="competitionForm.budget" />
       </v-col>
@@ -184,9 +180,9 @@
           >
             提交
             <template #container>
-              <v-alert dense type="warning" elevation="2"
-                >申请提交后将不能修改，是否确定提交？</v-alert
-              >
+              <v-alert dense text type="warning">
+                申请提交后将不能修改，是否确定提交？
+              </v-alert>
             </template>
           </confirm-dialog>
         </template>
@@ -323,7 +319,7 @@ export default {
       });
     },
     reset() {
-      this.$refs.competition_form.resetValidation();
+      this.$refs.refCompetitionForm.resetValidation();
       this.competitionForm = Object.assign(
         {},
         {

@@ -3,15 +3,15 @@
     <v-col cols="12" sm="12" md="6" lg="6" xl="3">
       <v-text-field
         :rules="[v => !!v || '名称不能为空']"
-        v-model.trim.lazy="stageItem.stageName"
+        v-model.trim.lazy="stageName"
         :readonly="$attrs.readonly"
         label="阶段名称"
       />
     </v-col>
     <v-col cols="12" sm="12" md="6" lg="6" xl="3">
       <date-range-picker
-        :start.sync="stageItem.startTime"
-        :end.sync="stageItem.endTime"
+        :start.sync="startTime"
+        :end.sync="endTime"
         :readonly="$attrs.readonly"
       />
     </v-col>
@@ -24,21 +24,33 @@ export default {
   name: "CompetitionStageTabItem",
   components: { DateRangePicker },
   props: {
-    stage: Object
+    name: String,
+    end: String,
+    start: String
   },
-  data() {
-    return {
-      stageItem: {
-        startTime: "",
-        endTime: ""
+  computed: {
+    stageName: {
+      get() {
+        return this.name;
+      },
+      set(val) {
+        this.$emit("update:name", val);
       }
-    };
-  },
-  watch: {
-    stage: {
-      immediate: true,
-      handler(val) {
-        this.stageItem = { ...val };
+    },
+    startTime: {
+      get() {
+        return this.start;
+      },
+      set(val) {
+        this.$emit("update:start", val);
+      }
+    },
+    endTime: {
+      get() {
+        return this.end;
+      },
+      set(val) {
+        this.$emit("update:end", val);
       }
     }
   }

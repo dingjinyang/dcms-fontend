@@ -3,7 +3,6 @@
     <competition-stage-stepper
       :stages="competition.competitionStages"
       :current-stage="competition.currentStage"
-      @change="searchData"
       @next="next"
     />
     <v-data-table
@@ -27,14 +26,17 @@
           <v-toolbar-items>
             <v-btn-toggle
               v-model="searchStage"
-              tile
-              color="deep-purple accent-3"
-              group
+              dense
+              mandatory
+              rounded
+              color="primary"
+              class="mt-3"
             >
               <v-btn
                 v-for="e in competition.competitionStages"
                 :key="e.stage"
                 :value="e.stage"
+                @click="searchData(e.stage)"
               >
                 {{ e.stageName }}
               </v-btn>
@@ -76,7 +78,6 @@
           btn-color="primary"
           max-width="450px"
         >
-          {{ stageBtnText }}
           <template #container>
             <v-alert dense text type="warning">
               进入下一段将不能返回，确认进入下一阶段？
@@ -118,14 +119,14 @@ export default {
       },
       total: 0,
       selected: [],
-      searchStage: 1
+      searchStage: null
     };
   },
   watch: {
     options: {
       deep: true,
       handler() {
-        this.searchData(this.competition.currentStage);
+        this.searchData();
       }
     }
   },
@@ -143,14 +144,19 @@ export default {
       const index = this.desserts.indexOf(item);
       this.desserts.splice(index, 1);
     },
-    async searchData(stage) {
+    async searchData() {
       this.loading = true;
       const id = this.$route.params.competitionId;
+      /* 获取竞赛信息 */
       await selectCompetition(id).then(({ code, data }) => {
-        if (code === 200) this.competition = data;
+        if (code !== 200) return;
+        this.competition = data;
+        if (this.searchStage === null)
+          this.searchStage = this.competition.currentStage;
       });
       const { page, itemsPerPage } = this.options;
-      await getStageParticipants(id, stage, page, itemsPerPage)
+      /* 根据当前阶段获取 */
+      await getStageParticipants(id, this.searchStage, page, itemsPerPage)
         .then(({ code, data: { total, list } }) => {
           if (code !== 200) return;
           this.total = total;

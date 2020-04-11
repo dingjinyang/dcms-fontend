@@ -23,7 +23,9 @@
         <v-tab-item v-for="i in tabs" :key="i" :value="`stage-${i}`">
           <competition-stage-tab-item
             v-bind="$attrs"
-            :stage="stageForms[i - 1]"
+            :name.sync="stageForms[i - 1].stageName"
+            :start.sync="stageForms[i - 1].startTime"
+            :end.sync="stageForms[i - 1].endTime"
           />
         </v-tab-item>
       </v-tabs>
@@ -51,16 +53,33 @@ export default {
       stageForms: []
     };
   },
+  computed: {
+    thumbSize() {
+      return 15 + this.tabs * 2;
+    }
+  },
   watch: {
     stages: {
+      deep: true,
       immediate: true,
       handler(val) {
         this.stageForms = val;
         this.tabs = val.length;
       }
     }
+    // stageForms: {
+    //   deep: true,
+    //   handler(val) {
+    //     this.$emit("update:stageForms", val);
+    //   }
+    // }
   },
   methods: {
+    tabsMinus() {
+      !this.$attrs.readonly &&
+        this.stageForms.length > this.tabsMin &&
+        this.stageForms.pop();
+    },
     tabsPlus() {
       !this.$attrs.readonly &&
         this.stageForms.length < this.tabsMax &&
@@ -70,19 +89,7 @@ export default {
             { ...competitionStage, stage: this.stageForms.length + 1 }
           )
         );
-    },
-    tabsMinus() {
-      !this.$attrs.readonly &&
-        this.stageForms.length > this.tabsMin &&
-        this.stageForms.pop();
-    }
-  },
-  computed: {
-    thumbSize() {
-      return 15 + this.tabs * 2;
     }
   }
 };
 </script>
-
-<style scoped></style>
