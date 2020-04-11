@@ -49,10 +49,26 @@ export const getStageParticipants = (
   });
 };
 /**
- * 进入下一竞赛阶段
+ * 竞赛进入下一竞赛阶段
  * @param competitionId
  * @returns {*}
  */
-export const intoNextStage = competitionId => {
+export const competitionNextStage = competitionId => {
   return _axios.get(`/teaControlNextStage`, { params: { competitionId } });
+};
+/**
+ * 竞赛团队进入下一个阶段
+ * @param ids
+ * @returns {*}
+ */
+export const teamNextStage = ids => {
+  return _axios.put(`/teaControlTeamNextStage`, ids);
+};
+/**
+ * 取消当前阶段比赛资格
+ * @param id
+ * @returns {*}
+ */
+export const teamBackStage = id => {
+  return _axios.put(`/teaDeleteTeamStage`, id);
 };

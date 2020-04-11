@@ -12,7 +12,8 @@
               :step="item.stage"
               :key="`${item.stage}-step`"
               :complete="currentStage >= item.stage"
-              :editable="currentStage >= item.stage"
+              editable
+              :edit-icon="currentStage === item.stage ? '$edit' : '$complete'"
             >
               {{ item.stageName }}
               <small>
@@ -32,6 +33,7 @@
     <v-card-actions>
       <v-spacer></v-spacer>
       <confirm-dialog
+        v-if="currentStage <= stages.length"
         :title="nextBtnText"
         :btn-color="nextBtnColor"
         max-width="450px"
@@ -54,25 +56,25 @@ export default {
   name: "CompetitionStageStepper",
   components: { ConfirmDialog },
   props: {
+    currentStage: {
+      type: Number
+    },
     stages: {
       type: Array,
       default() {
         return [];
       },
       required: true
-    },
-    currentStage: {
-      type: Number
     }
   },
   computed: {
+    nextBtnColor() {
+      return this.currentStage < this.stages.length ? "primary" : "warning";
+    },
     nextBtnText() {
       return this.currentStage < this.stages.length
         ? "开始下一阶段"
         : "结束竞赛";
-    },
-    nextBtnColor() {
-      return this.currentStage < this.stages.length ? "primary" : "warning";
     }
   },
   methods: {

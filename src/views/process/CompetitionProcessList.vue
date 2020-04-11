@@ -52,7 +52,7 @@ export default {
   filters: {
     currentStageFilter(competition) {
       const stage = competition.competitionStages[competition.currentStage - 1];
-      return competition.currentStage > 0 ? stage && stage.stageName : "";
+      return stage ? stage.stageName : "已结束";
     },
     stageTimeRangeFilter(competition) {
       const stage = competition.competitionStages[competition.currentStage - 1];

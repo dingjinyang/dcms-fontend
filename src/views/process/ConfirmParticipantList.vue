@@ -6,17 +6,19 @@
       @next="next"
     />
     <v-data-table
+      v-model="selected"
       :headers="headers"
       :items="desserts"
       :loading="loading"
       :options.sync="options"
       :server-items-length="total"
       class="elevation-1 mt-5"
+      no-data-text="无数据"
+      loading-text="数据加载中"
       show-expand
       disable-sort
       disable-filtering
-      show-select
-      v-model="selected"
+      :show-select="showSelect"
     >
       <template #top>
         <v-toolbar flat color="white">
@@ -40,24 +42,46 @@
               >
                 {{ e.stageName }}
               </v-btn>
+              <v-btn
+                :value="competition.competitionStages.length + 1"
+                @click="searchAward"
+              >
+                获奖
+              </v-btn>
             </v-btn-toggle>
           </v-toolbar-items>
         </v-toolbar>
+      </template>
+      <template #item.no="{ item }">
+        {{ desserts.indexOf(item) + 1 }}
       </template>
       <template #item.students="{ item }">{{
         item.students | teamMemberTextFilter
       }}</template>
       <template #item.action="{ item }">
         <confirm-dialog
+          v-if="searchAwardList && !competitionOver"
           title="取消资格"
           btn-text
           btn-small
           btn-color="error"
-          max-width="373px"
+          max-width="273px"
           hide-text
           @confirm="deleteItem(item)"
-          >取消资格</confirm-dialog
-        >
+          >取消资格
+        </confirm-dialog>
+        <confirm-dialog
+          v-if="searchAwardList && competitionOver"
+          title="填写获奖信息"
+          btn-text
+          btn-small
+          btn-color="success"
+          max-width="273px"
+          >获奖
+          <template #container>
+            <v-text-field label="奖项" autofocus v-model="awardInfo" />
+          </template>
+        </confirm-dialog>
       </template>
       <template #expanded-item="{ headers, item }">
         <td :colspan="headers.length">
@@ -74,14 +98,21 @@
         <confirm-dialog
           v-if="nextStageBtn"
           title="确认名单"
-          btn-class="ml-3 mb-3"
+          btn-class="ma-1"
           btn-color="primary"
           max-width="450px"
-        >
+          @confirm="teamNext"
+          >进入下一阶段
           <template #container>
-            <v-alert dense text type="warning">
-              进入下一段将不能返回，确认进入下一阶段？
-            </v-alert>
+            <v-chip
+              v-for="e in selected"
+              :key="e.id"
+              class="ma-2"
+              dark
+              color="warning"
+            >
+              {{ e.opusName }}
+            </v-chip>
           </template>
         </confirm-dialog>
       </template>
@@ -91,7 +122,12 @@
 
 <script>
 import { selectCompetition } from "@/api/competition/competition";
-import { getStageParticipants, intoNextStage } from "@/api/competition/process";
+import {
+  getStageParticipants,
+  competitionNextStage,
+  teamNextStage,
+  teamBackStage
+} from "@/api/competition/process";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import CompetitionStageStepper from "@/views/components/CompetitionStageStepper";
 
@@ -101,12 +137,20 @@ export default {
   data() {
     return {
       loading: false,
-      headers: [
-        { text: "#", value: "id" },
+      headers: [],
+      headersNoAward: [
+        { text: "#", value: "no" },
         { text: "参赛作品", value: "opusName" },
         { text: "指导老师", value: "adviserName" },
         { text: "参赛人员", value: "students" },
         { text: "操作", value: "action" }
+      ],
+      headersWithAward: [
+        { text: "#", value: "no" },
+        { text: "参赛作品", value: "opusName" },
+        { text: "指导老师", value: "adviserName" },
+        { text: "参赛人员", value: "students" },
+        { text: "获奖情况", value: "award" }
       ],
       desserts: [],
       competition: {
@@ -119,8 +163,43 @@ export default {
       },
       total: 0,
       selected: [],
-      searchStage: null
+      searchStage: null,
+      awardInfo: ""
     };
+  },
+  computed: {
+    nextStageBtn() {
+      return (
+        this.selected.length > 0 &&
+        this.competition.currentStage <=
+          this.competition.competitionStages.length
+      );
+    },
+    /**
+     * 是否展示表格复选框
+     * 比赛结束后不再展示，表格检索 决赛和获奖 时不再展示
+     * @returns {boolean|boolean}
+     */
+    showSelect() {
+      return (
+        this.competition.currentStage <=
+          this.competition.competitionStages.length &&
+        this.searchStage < this.competition.competitionStages.length
+      );
+    },
+    /**
+     * 竞赛是否结束
+     * @returns {boolean}
+     */
+    competitionOver() {
+      return (
+        this.competition.currentStage ===
+        this.competition.competitionStages.length + 1
+      );
+    },
+    searchAwardList() {
+      return this.searchStage === this.competition.competitionStages.length;
+    }
   },
   watch: {
     options: {
@@ -130,22 +209,29 @@ export default {
       }
     }
   },
-  computed: {
-    nextStageBtn() {
-      return (
-        this.selected.length > 0 &&
-        this.competition.currentStage <=
-          this.competition.competitionStages.length
-      );
-    }
+  created() {
+    this.headers = this.headersNoAward;
   },
   methods: {
     deleteItem(item) {
-      const index = this.desserts.indexOf(item);
-      this.desserts.splice(index, 1);
+      teamBackStage(item.id).then(({ code, msg }) => {
+        if (code !== 200) return;
+        this.desserts.splice(this.desserts.indexOf(item), 1);
+        this.$message.$emit("message", { text: msg });
+      });
+    },
+    next() {
+      competitionNextStage(this.competition.id).then(({ code, msg }) => {
+        code === 200 && this.$message.$emit("message", { text: msg });
+        this.competition.currentStage++;
+      });
+    },
+    searchAward() {
+      this.headers = this.headersWithAward;
     },
     async searchData() {
       this.loading = true;
+      this.headers = this.headersNoAward;
       const id = this.$route.params.competitionId;
       /* 获取竞赛信息 */
       await selectCompetition(id).then(({ code, data }) => {
@@ -166,10 +252,14 @@ export default {
           this.loading = false;
         });
     },
-    next() {
-      intoNextStage(this.competition.id).then(({ code, msg }) => {
+    teamNext() {
+      const ids = this.selected.map(v => v.id);
+      this.selected = [];
+      teamNextStage(ids).then(({ code, msg }) => {
         code === 200 && this.$message.$emit("message", { text: msg });
-        this.competition.currentStage++;
+        code === 400 &&
+          this.$message.$emit("message", { color: "error", text: msg });
+        this.searchData();
       });
     }
   }
