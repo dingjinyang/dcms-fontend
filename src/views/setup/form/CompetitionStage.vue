@@ -67,12 +67,6 @@ export default {
         this.tabs = val.length;
       }
     }
-    // stageForms: {
-    //   deep: true,
-    //   handler(val) {
-    //     this.$emit("update:stageForms", val);
-    //   }
-    // }
   },
   methods: {
     tabsMinus() {
