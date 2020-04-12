@@ -48,5 +48,28 @@ export default [
           )
       }
     ]
+  },
+  {
+    path: "/fund",
+    name: "Fund",
+    meta: {
+      isGroup: false
+    },
+    component: () =>
+      import(/* webpackChunkName: "Layout" */ "@/components/layout/Layout"),
+    children: [
+      {
+        path: "list",
+        name: "FundList",
+        meta: {
+          icon: "cash-usd-outline",
+          title: "经费报销"
+        },
+        component: () =>
+          import(
+            /* webpackChunkName: "FundReimburseList" */ "@/views/process/FundReimburseList"
+          )
+      }
+    ]
   }
 ];
