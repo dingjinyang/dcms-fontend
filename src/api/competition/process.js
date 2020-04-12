@@ -72,3 +72,11 @@ export const teamNextStage = ids => {
 export const teamBackStage = id => {
   return _axios.put(`/teaDeleteTeamStage`, id);
 };
+/**
+ * 竞赛团队获奖
+ * @param data
+ * @returns {*}
+ */
+export const teamWinAward = data => {
+  return _axios.put(`/getSuccess`, data);
+};

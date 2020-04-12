@@ -23,8 +23,7 @@
             >
             <v-list-item-title
               >比赛状态：{{
-                competition.competitionStages[competition.currentStage - 1]
-                  .stageName
+                item.competition.currentStageName || "已结束"
               }}</v-list-item-title
             >
             <v-list-item-title

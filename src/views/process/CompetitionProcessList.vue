@@ -34,7 +34,6 @@
         :to="itemTo('ConfirmParticipantList', item.id)"
         >过程管理
       </v-btn>
-      <v-btn small color="success" text>奖项录入 </v-btn>
     </template>
   </v-data-table>
 </template>

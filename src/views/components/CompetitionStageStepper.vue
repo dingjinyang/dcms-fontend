@@ -12,8 +12,9 @@
               :step="item.stage"
               :key="`${item.stage}-step`"
               :complete="currentStage >= item.stage"
-              editable
-              :edit-icon="currentStage === item.stage ? '$edit' : '$complete'"
+              :complete-icon="
+                currentStage === item.stage ? '$edit' : '$complete'
+              "
             >
               {{ item.stageName }}
               <small>

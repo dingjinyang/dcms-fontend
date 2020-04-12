@@ -44,7 +44,7 @@
               </v-btn>
               <v-btn
                 :value="competition.competitionStages.length + 1"
-                @click="searchAward"
+                @click="searchData(competition.competitionStages.length + 1)"
               >
                 获奖
               </v-btn>
@@ -60,7 +60,7 @@
       }}</template>
       <template #item.action="{ item }">
         <confirm-dialog
-          v-if="searchAwardList && !competitionOver"
+          v-if="!searchAwardList"
           title="取消资格"
           btn-text
           btn-small
@@ -71,12 +71,13 @@
           >取消资格
         </confirm-dialog>
         <confirm-dialog
-          v-if="searchAwardList && competitionOver"
+          v-else
           title="填写获奖信息"
           btn-text
           btn-small
           btn-color="success"
           max-width="273px"
+          @confirm="win(item)"
           >获奖
           <template #container>
             <v-text-field label="奖项" autofocus v-model="awardInfo" />
@@ -126,7 +127,8 @@ import {
   getStageParticipants,
   competitionNextStage,
   teamNextStage,
-  teamBackStage
+  teamBackStage,
+  teamWinAward
 } from "@/api/competition/process";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import CompetitionStageStepper from "@/views/components/CompetitionStageStepper";
@@ -150,7 +152,7 @@ export default {
         { text: "参赛作品", value: "opusName" },
         { text: "指导老师", value: "adviserName" },
         { text: "参赛人员", value: "students" },
-        { text: "获奖情况", value: "award" }
+        { text: "获奖情况", value: "message" }
       ],
       desserts: [],
       competition: {
@@ -168,12 +170,25 @@ export default {
     };
   },
   computed: {
+    /**
+     * 竞赛是否结束
+     * @returns {boolean}
+     */
+    competitionOver() {
+      return (
+        this.competition.currentStage ===
+        this.competition.competitionStages.length + 1
+      );
+    },
     nextStageBtn() {
       return (
         this.selected.length > 0 &&
         this.competition.currentStage <=
           this.competition.competitionStages.length
       );
+    },
+    searchAwardList() {
+      return this.searchStage === this.competition.competitionStages.length;
     },
     /**
      * 是否展示表格复选框
@@ -186,19 +201,6 @@ export default {
           this.competition.competitionStages.length &&
         this.searchStage < this.competition.competitionStages.length
       );
-    },
-    /**
-     * 竞赛是否结束
-     * @returns {boolean}
-     */
-    competitionOver() {
-      return (
-        this.competition.currentStage ===
-        this.competition.competitionStages.length + 1
-      );
-    },
-    searchAwardList() {
-      return this.searchStage === this.competition.competitionStages.length;
     }
   },
   watch: {
@@ -207,6 +209,11 @@ export default {
       handler() {
         this.searchData();
       }
+    },
+    searchStage(val) {
+      if (val === this.competition.competitionStages.length + 1)
+        this.headers = this.headersWithAward;
+      else this.headers = this.headersNoAward;
     }
   },
   created() {
@@ -226,19 +233,14 @@ export default {
         this.competition.currentStage++;
       });
     },
-    searchAward() {
-      this.headers = this.headersWithAward;
-    },
     async searchData() {
       this.loading = true;
       this.headers = this.headersNoAward;
       const id = this.$route.params.competitionId;
       /* 获取竞赛信息 */
       await selectCompetition(id).then(({ code, data }) => {
-        if (code !== 200) return;
-        this.competition = data;
-        if (this.searchStage === null)
-          this.searchStage = this.competition.currentStage;
+        if (code === 200) this.competition = data;
+        if (this.searchStage === null) this.searchStage = data.currentStage;
       });
       const { page, itemsPerPage } = this.options;
       /* 根据当前阶段获取 */
@@ -260,6 +262,17 @@ export default {
         code === 400 &&
           this.$message.$emit("message", { color: "error", text: msg });
         this.searchData();
+      });
+    },
+    win(item) {
+      const data = { teamId: item.id, message: this.awardInfo };
+      teamWinAward(data).then(({ code, msg }) => {
+        if (code === 200) {
+          this.$message.$emit("message", { text: msg });
+          this.searchData();
+        }
+        code === 400 &&
+          this.$message.$emit("message", { color: "error", text: msg });
       });
     }
   }
