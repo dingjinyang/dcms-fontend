@@ -1,38 +1,36 @@
 <template>
-  <div>
-    <v-data-table
-      :headers="headers"
-      :items="desserts"
-      :loading="loading"
-      :options.sync="options"
-      :server-items-length="total"
-      disable-sort
-      no-data-text="无数据"
-    >
-      <template #item.no="{ item }">
-        {{ desserts.indexOf(item) + 1 }}
-      </template>
-      <template #item.comName="{ item }">
-        <competition-name-link :id="item.id" :name="item.comName" />
-      </template>
-      <template #item.comStatus="{ item }">
-        <c-status-chip :status="item.comStatus" />
-      </template>
-      <template #item.action="{ item }">
-        <confirm-dialog
-          title="竞赛发起"
-          btn-color="success"
-          btn-text
-          btn-small
-          max-width="273px"
-          hide-text
-          @confirm="launch(item)"
-        >
-          发起
-        </confirm-dialog>
-      </template>
-    </v-data-table>
-  </div>
+  <v-data-table
+    :headers="headers"
+    :items="desserts"
+    :loading="loading"
+    :options.sync="options"
+    :server-items-length="total"
+    disable-sort
+    no-data-text="无数据"
+  >
+    <template #item.no="{ item }">
+      {{ desserts.indexOf(item) + 1 }}
+    </template>
+    <template #item.comName="{ item }">
+      <competition-name-link :id="item.id" :name="item.comName" />
+    </template>
+    <template #item.comStatus="{ item }">
+      <c-status-chip :status="item.comStatus" />
+    </template>
+    <template #item.action="{ item }">
+      <confirm-dialog
+        title="竞赛发起"
+        btn-color="success"
+        btn-text
+        btn-small
+        max-width="273px"
+        hide-text
+        @confirm="launch(item)"
+      >
+        发起
+      </confirm-dialog>
+    </template>
+  </v-data-table>
 </template>
 
 <script>

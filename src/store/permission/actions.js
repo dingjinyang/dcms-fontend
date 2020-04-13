@@ -19,7 +19,7 @@ const checkChildren = (temp, roles, checkedRoutes) => {
     temp.children = filterRoutes(temp.children, roles);
 
     // 为小组的第一个添加重定向，解决在路由表中添加重定向，而重定向的页面不在角色路由筛选后的路由表中，导致面包屑绑定报错问题
-    temp.redirect = { name: temp.children[0].name };
+    temp.redirect = { name: (temp.children[0] && temp.children[0].name) || "" };
   }
   checkedRoutes.push(temp);
 };

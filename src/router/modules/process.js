@@ -5,7 +5,8 @@ export default [
     meta: {
       title: "过程管理",
       icon: "timeline",
-      isGroup: true // 在根据角色筛选路由时，若原本有两个子路由，筛选后剩余一个，可保证父路由渲染为分组
+      isGroup: true, // 在根据角色筛选路由时，若原本有两个子路由，筛选后剩余一个，可保证父路由渲染为分组
+      roles: ["principle"]
     },
     component: () =>
       import(/* webpackChunkName: "Layout" */ "@/components/layout/Layout"),
@@ -53,7 +54,10 @@ export default [
     path: "/fund",
     name: "Fund",
     meta: {
-      isGroup: false
+      isGroup: false,
+      icon: "cash-usd-outline",
+      title: "经费管理",
+      roles: ["practice"]
     },
     component: () =>
       import(/* webpackChunkName: "Layout" */ "@/components/layout/Layout"),
@@ -68,6 +72,16 @@ export default [
         component: () =>
           import(
             /* webpackChunkName: "FundReimburseList" */ "@/views/process/FundReimburseList"
+          )
+      },
+      {
+        path: "reimburse/approval/:competitionId",
+        name: "FundReimburseApproval",
+        hideInMenu: true,
+        meta: { title: "经费报销" },
+        component: () =>
+          import(
+            /* webpackChunkName: "FundReimburseFrom" */ "@/views/setup/form/FundReimburseFrom"
           )
       }
     ]

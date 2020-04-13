@@ -2,6 +2,7 @@ export default [
   {
     path: "/competition/enroll",
     name: "StudentEnrollList",
+    meta: { roles: ["student"] },
     component: () =>
       import(/* webpackChunkName: "Layout" */ "@/components/layout/Layout"),
     children: [
@@ -22,6 +23,7 @@ export default [
   {
     path: "/competition/enroll",
     name: "StudentEnrollForm",
+    meta: { roles: ["student"] },
     hideInMenu: true,
     component: () =>
       import(/* webpackChunkName: "Layout" */ "@/components/layout/Layout"),
@@ -42,7 +44,8 @@ export default [
   },
   {
     path: "/personal",
-    name: "Student",
+    name: "Personal",
+    meta: { roles: ["student"] },
     component: () =>
       import(/* webpackChunkName: "Layout" */ "@/components/layout/Layout"),
     children: [

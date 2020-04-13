@@ -90,13 +90,13 @@ export default {
       {
         color: "error",
         username: "竞赛负责人",
-        account: "competitionPrincipal"
+        account: "principal"
       },
-      { color: "warning", username: "学院领导", account: "collegeLeader" },
+      { color: "warning", username: "学院领导", account: "college" },
       {
         color: "success",
         username: "实践管理科",
-        account: "practiceManagementDivision"
+        account: "practice"
       }
     ],
     rules: {

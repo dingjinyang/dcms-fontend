@@ -51,6 +51,14 @@
           :to="itemTo('CompetitionRevise', item.id)"
           >修改
         </v-btn>
+        <v-btn
+          v-if="item.comStatus === 10"
+          small
+          color="purple"
+          text
+          :to="itemTo('FundReimburseApply', item.id)"
+          >经费报销
+        </v-btn>
         <confirm-dialog
           v-if="item.comStatus === 1"
           title="确认撤销"

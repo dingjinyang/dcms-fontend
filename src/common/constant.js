@@ -13,8 +13,9 @@ export const competitionStatus = [
   { text: "被驳回", value: 7, color: "error" },
   { text: "已通过", value: 8, color: "success" },
   { text: "进行中", value: 9, color: "purple" },
-  { text: "已结束", value: 10, color: "brown" },
-  { text: "已报销", value: 11, color: "blue-grey" }
+  { text: "已结束", value: 10, color: "gray" },
+  { text: "待报销", value: 11, color: "brown" },
+  { text: "已报销", value: 12, color: "blue-grey" }
 ];
 
 export const colleges = ["软件学院", "计算机学院", "纺织学院", "马克思学院"];

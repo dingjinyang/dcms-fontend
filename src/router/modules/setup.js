@@ -5,7 +5,8 @@ export default [
     meta: {
       title: "竞赛立项",
       icon: "card-bulleted-settings",
-      isGroup: true // 在根据角色筛选路由时，若原本有两个子路由，筛选后剩余一个，可保证父路由渲染为分组
+      isGroup: true, // 在根据角色筛选路由时，若原本有两个子路由，筛选后剩余一个，可保证父路由渲染为分组
+      roles: ["principal", "college", "practice"]
     },
     component: () =>
       import(/* webpackChunkName: "Layout" */ "@/components/layout/Layout"),
@@ -15,7 +16,8 @@ export default [
         name: "CompetitionApplyList",
         meta: {
           title: "立项申请",
-          icon: "file-settings"
+          icon: "file-settings",
+          roles: ["principal"]
         },
         component: () =>
           import(
@@ -28,7 +30,8 @@ export default [
         hideInMenu: true,
         meta: {
           title: "新的申请",
-          icon: "id-card"
+          icon: "id-card",
+          roles: ["principal"]
         },
         component: () =>
           import(
@@ -41,7 +44,8 @@ export default [
         hideInMenu: true,
         meta: {
           title: "编辑申请",
-          icon: "id-card"
+          icon: "id-card",
+          roles: ["principal"]
         },
         component: () =>
           import(
@@ -54,7 +58,8 @@ export default [
         hideInMenu: true,
         meta: {
           title: "修改申请",
-          icon: "id-card"
+          icon: "id-card",
+          roles: ["principal"]
         },
         component: () =>
           import(
@@ -67,7 +72,8 @@ export default [
         hideInMenu: true,
         meta: {
           title: "立项详情",
-          icon: "id-card"
+          icon: "id-card",
+          roles: ["principal", "college", "practice"]
         },
         component: () =>
           import(
@@ -78,8 +84,9 @@ export default [
         path: "college-approval/list",
         name: "CollegeApprovalList",
         meta: {
-          title: "学院审批列表",
-          icon: "file-star"
+          title: "审批列表",
+          icon: "file-star",
+          roles: ["college"]
         },
         component: () =>
           import(
@@ -89,7 +96,7 @@ export default [
       {
         path: "college-approval/:competitionId",
         name: "CollegeApproval",
-        meta: { title: "学院审批" },
+        meta: { title: "学院审批", roles: ["college"] },
         hideInMenu: true,
         component: () =>
           import(
@@ -100,8 +107,9 @@ export default [
         path: "practice-approval/list",
         name: "PracticeApprovalList",
         meta: {
-          title: "管理科审批列表",
-          icon: "table"
+          title: "审批列表",
+          icon: "table",
+          roles: ["practice"]
         },
         component: () =>
           import(
@@ -112,10 +120,20 @@ export default [
         path: "practice-approval/:competitionId",
         name: "PracticeApproval",
         hideInMenu: true,
-        meta: { title: "实践管理科审批" },
+        meta: { title: "实践管理科审批", roles: ["practice"] },
         component: () =>
           import(
             /* webpackChunkName: "CompetitionForm" */ "@/views/setup/form/CompetitionForm"
+          )
+      },
+      {
+        path: "reimburse/apply/:competitionId",
+        name: "FundReimburseApply",
+        hideInMenu: true,
+        meta: { title: "申请经费报销", roles: ["principal"] },
+        component: () =>
+          import(
+            /* webpackChunkName: "FundReimburseFrom" */ "@/views/setup/form/FundReimburseFrom"
           )
       }
     ]

@@ -80,3 +80,38 @@ export const teamBackStage = id => {
 export const teamWinAward = data => {
   return _axios.put(`/getSuccess`, data);
 };
+/**
+ * 提交经费报销申请
+ * @param data
+ * @returns {*}
+ */
+export const submitFundReimburse = data => {
+  return _axios.put(`/moneyBack`, data);
+};
+/**
+ * 获取经费申请列表
+ * @param pageNum
+ * @param pageSize
+ * @returns {*}
+ */
+export const fundApplyList = (pageNum, pageSize) => {
+  return _axios.get(`/getEndCom`, {
+    params: { pageNum, pageSize }
+  });
+};
+/**
+ * 获取经费详情
+ * @param competitionId
+ * @returns {*}
+ */
+export const fundInfo = competitionId => {
+  return _axios.get(`/reBack`, { params: { competitionId } });
+};
+/**
+ * 实践管理科审批
+ * @param data
+ * @returns {*}
+ */
+export const approvalFundReimburse = data => {
+  return _axios.put(`/moneyBack`, data);
+};
