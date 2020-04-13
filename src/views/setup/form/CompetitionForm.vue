@@ -97,8 +97,14 @@
           :readonly="readonly"
         />
       </v-col>
-      <v-col cols="12" sm="12" md="6" lg="6" xl="6" v-if="isPracticeApproval">
-        <v-text-field label="批复预算金额" v-model="competitionForm.budget" />
+      <v-col cols="12">
+        <v-textarea
+          auto-grow
+          label="经费预算详情"
+          v-model="competitionForm.budget"
+          :clearable="!readonly"
+          :readonly="readonly"
+        />
       </v-col>
       <v-col cols="12" v-if="isRevise">
         <v-textarea
@@ -230,7 +236,7 @@ export default {
       comStatus: 1, //立项申请状态
       comDate: new Date().toISOString().substring(0, 10), //立项时间
       sponsor: "", //主办单位
-      budget: 0,
+      budget: "",
       lastHandler: 1,
       collegeModifySuggest: null,
       practiceModifySuggest: null,
