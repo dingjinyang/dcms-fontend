@@ -93,9 +93,13 @@ export default {
         totalMoney: this.money,
         remarks: this.remark
       };
-      approvalFundReimburse(data).then(({ code, msg }) => {
-        code === 200 && this.$message.$emit("message", { text: msg });
-      });
+      approvalFundReimburse(data)
+        .then(({ code, msg }) => {
+          code === 200 && this.$message.$emit("message", { text: msg });
+        })
+        .finally(() => {
+          this.loading = false;
+        });
     }
   }
 };

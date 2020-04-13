@@ -113,5 +113,5 @@ export const fundInfo = competitionId => {
  * @returns {*}
  */
 export const approvalFundReimburse = data => {
-  return _axios.put(`/moneyBack`, data);
+  return _axios.put(`/totalMoney`, data);
 };
