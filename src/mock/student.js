@@ -15,10 +15,11 @@ export default {
     "get",
     responseData(pageHelper(competitionList))
   ),
-  personalList: Mock.mock(/^\/MyCom/, "get", options => {
-    const { pageNum, pageSize } = getURLSearchParams(options.url);
-    return responseData(pageHelper(studentCompetitionList, pageNum, pageSize));
-  }),
+  personalList: Mock.mock(
+    /^\/MyCom/,
+    "get",
+    responseData(studentCompetitionList)
+  ),
   getStudentInfoById: Mock.mock(/^\/findStudentById/, "get", options => {
     const { sno } = getURLSearchParams(options.url);
     return responseData({

@@ -10,7 +10,7 @@ export default [
       comLevel: "院级",
       principalId: 5771,
       principalPhone: 12345678910,
-      teams: 50,
+      students: 50,
       participants: 100,
       awards: "一等奖一名\n二等奖两名\n三等奖三名",
       description: "软件改变生活，软件创造价值",
@@ -51,7 +51,7 @@ export default [
         }
       ]
     },
-    teams: [
+    students: [
       {
         id: "201619150118",
         stuName: "张三",
@@ -63,6 +63,7 @@ export default [
     opusName: "学科竞赛管理系统",
     adviserName: Mock.mock("@cname"),
     awards: null,
+    currentStageName: "初赛",
     credential: "https://cdn.vuetifyjs.com/images/parallax/material.jpg"
   },
   {
@@ -74,7 +75,7 @@ export default [
       comLevel: "校级",
       principalId: 5771,
       principalPhone: 12345678910,
-      teams: 100,
+      students: 100,
       participants: 300,
       awards: "一等奖一名\n二等奖二名\n三等奖三名\n优秀奖若干",
       description: "ACM程序设计大赛",
@@ -110,7 +111,7 @@ export default [
       ]
     },
     name: "学科竞赛管理系统",
-    teams: [
+    students: [
       {
         id: "201619150118",
         stuName: "张三",
@@ -129,6 +130,7 @@ export default [
     opusName: "图书管理系统",
     adviserName: Mock.mock("@cname"),
     awards: "一等奖",
-    credential: ""
+    credential: null,
+    currentStageName: "初赛"
   }
 ];
