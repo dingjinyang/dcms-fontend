@@ -10,10 +10,12 @@ import perm from "./directives/perm";
 import "./common/filter";
 import "./mock";
 import "@/plugins/message";
+import VeHistogram from "v-charts/lib/histogram.common.min";
 
 Vue.prototype.$api = api;
 Vue.config.productionTip = false;
 Vue.use(perm);
+Vue.component(VeHistogram.name, VeHistogram);
 
 new Vue({
   router,

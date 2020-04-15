@@ -9,5 +9,6 @@ import system from "./system";
 import setup from "./setup";
 import process from "./process";
 import student from "./student";
+import data from "./data";
 
-export default [...student, ...setup, ...process, ...system];
+export default [...student, ...setup, ...process, ...data, ...system];
