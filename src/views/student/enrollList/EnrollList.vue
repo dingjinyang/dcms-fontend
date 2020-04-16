@@ -5,6 +5,7 @@
     :options.sync="options"
     :server-items-length="total"
     loading-text="数据加载中"
+    no-data-text="暂无数据"
   >
     <template v-slot:header class="mb-3">
       <c-table-search @search="selectData" />

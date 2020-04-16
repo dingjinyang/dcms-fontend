@@ -1,5 +1,5 @@
 <template>
-  <v-app id="user-profile">
+  <div id="user-profile">
     <h1>个人信息</h1>
     <v-container grid-list-xl>
       <v-layout wrap justify-space-between>
@@ -31,7 +31,7 @@
         </v-row>
       </v-layout>
     </v-container>
-  </v-app>
+  </div>
 </template>
 
 <script>

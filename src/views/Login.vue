@@ -45,11 +45,7 @@
                 </div>
                 <v-menu offset-x right>
                   <template v-slot:activator="{ on }">
-                    <v-btn
-                      v-on="on"
-                      :loading="loginLoading"
-                      text
-                      color="success"
+                    <v-btn v-on="on" :loading="loginLoading" text color="purple"
                       >学生
                     </v-btn>
                   </template>
@@ -87,6 +83,11 @@ export default {
       password: ""
     },
     loginRoles: [
+      {
+        color: "primary",
+        username: "root",
+        account: "root"
+      },
       {
         color: "error",
         username: "竞赛负责人",
