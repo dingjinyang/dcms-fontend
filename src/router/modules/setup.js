@@ -125,16 +125,6 @@ export default [
           import(
             /* webpackChunkName: "CompetitionForm" */ "@/views/setup/form/CompetitionForm"
           )
-      },
-      {
-        path: "reimburse/apply/:competitionId",
-        name: "FundReimburseApply",
-        hideInMenu: true,
-        meta: { title: "申请经费报销", roles: ["principal"] },
-        component: () =>
-          import(
-            /* webpackChunkName: "FundReimburseFrom" */ "@/views/setup/form/FundReimburseFrom"
-          )
       }
     ]
   }

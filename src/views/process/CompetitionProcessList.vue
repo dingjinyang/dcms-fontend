@@ -34,6 +34,14 @@
         :to="itemTo('ConfirmParticipantList', item.id)"
         >过程管理
       </v-btn>
+      <v-btn
+        v-if="item.comStatus >= 10"
+        small
+        color="warning"
+        text
+        :to="itemTo('FundReimburseApply', item.id)"
+        >经费报销
+      </v-btn>
     </template>
   </v-data-table>
 </template>

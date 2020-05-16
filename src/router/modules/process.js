@@ -54,10 +54,10 @@ export default [
     path: "/fund",
     name: "Fund",
     meta: {
-      isGroup: false,
+      isGroup: true,
+      roles: ["practice"],
       icon: "cash-usd-outline",
-      title: "经费管理",
-      roles: ["practice"]
+      title: "经费管理"
     },
     component: () =>
       import(/* webpackChunkName: "Layout" */ "@/components/layout/Layout"),
@@ -66,8 +66,9 @@ export default [
         path: "list",
         name: "FundList",
         meta: {
-          icon: "cash-usd-outline",
-          title: "经费报销"
+          icon: "cash-plus",
+          title: "经费报销",
+          roles: ["practice"]
         },
         component: () =>
           import(
@@ -78,10 +79,39 @@ export default [
         path: "reimburse/approval/:competitionId",
         name: "FundReimburseApproval",
         hideInMenu: true,
-        meta: { title: "经费报销" },
+        meta: { title: "经费报销", roles: ["practice"] },
         component: () =>
           import(
-            /* webpackChunkName: "FundReimburseFrom" */ "@/views/setup/form/FundReimburseFrom"
+            /* webpackChunkName: "FundReimburseFrom" */ "@/views/process/form/FundReimburseForm"
+          )
+      },
+      {
+        path: "history",
+        name: "FundReimburseHistory",
+        meta: { title: "历史数据", icon: "history", roles: ["practice"] },
+        component: () =>
+          import(
+            /* webpackChunkName: "FundReimburseHistoryList" */ "@/views/process/FundReimburseHistoryList"
+          )
+      }
+    ]
+  },
+  {
+    path: "/reimburse",
+    name: "Reimburse",
+    hideInMenu: true,
+    meta: { title: "申请经费报销", roles: ["principal"] },
+    component: () =>
+      import(/* webpackChunkName: "Layout" */ "@/components/layout/Layout"),
+    children: [
+      {
+        path: "apply/:competitionId",
+        name: "FundReimburseApply",
+        hideInMenu: true,
+        meta: { title: "申请经费报销", roles: ["principal"] },
+        component: () =>
+          import(
+            /* webpackChunkName: "FundReimburseFrom" */ "@/views/process/form/FundReimburseForm"
           )
       }
     ]
