@@ -35,7 +35,6 @@
         >过程管理
       </v-btn>
       <v-btn
-        v-if="item.comStatus >= 10"
         small
         color="warning"
         text

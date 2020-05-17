@@ -93,6 +93,16 @@ export default [
           import(
             /* webpackChunkName: "FundReimburseHistoryList" */ "@/views/process/FundReimburseHistoryList"
           )
+      },
+      {
+        path: "detail/:competitionId/:stageId",
+        name: "FundReimburseDetail",
+        hideInMenu: true,
+        meta: { title: "经费详情", roles: ["practice"] },
+        component: () =>
+          import(
+            /* webpackChunkName: "FundReimburseDetail" */ "@/views/process/form/FundReimburseDetail"
+          )
       }
     ]
   },

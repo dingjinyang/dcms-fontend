@@ -28,13 +28,20 @@
         <v-btn
           v-if="isApproval"
           :loading="loading"
+          :disabled="whether === 1"
           color="success"
           @click="approval"
         >
-          审批
+          {{ whether === 0 ? "审批" : "已审批" }}
         </v-btn>
-        <v-btn v-else :loading="loading" color="success" @click="submit">
-          提交
+        <v-btn
+          v-else
+          :loading="loading"
+          :disabled="whether === 1"
+          color="success"
+          @click="submit"
+        >
+          {{ whether === 0 ? "提交" : "已审批" }}
         </v-btn>
       </v-form>
     </v-card-text>
@@ -42,22 +49,37 @@
 >
 
 <script>
-import { approvalFundReimburse } from "@/api/competition/process";
+import {
+  submitFundReimburse,
+  approvalFundReimburse
+} from "@/api/competition/process";
 
 export default {
   name: "ReimburseStageFormItem",
   props: {
     stage: {
-      type: Number
+      type: Object,
+      default() {
+        return {
+          remarks: "备注",
+          stage: 1,
+          stageBudget: "预算02",
+          stageName: "报名",
+          trueMoney: "ACM程序设计大赛 实际经费",
+          totalMoney: 13232,
+          whether: 0
+        };
+      }
     }
   },
   data() {
     return {
-      budget: null,
-      actualExpenses: null,
-      money: null,
-      loading: false,
-      remark: null
+      budget: this.stage.stageBudget,
+      actualExpenses: this.stage.trueMoney,
+      money: this.stage.totalMoney,
+      remark: this.stage.remarks,
+      whether: this.stage.whether,
+      loading: false
     };
   },
   computed: {
@@ -66,32 +88,38 @@ export default {
     }
   },
   methods: {
+    /**
+     * 提交报销申请
+     */
     submit() {
       this.loading = true;
       const data = {
-        competitionId: this.$route.params.competitionId,
-        stage: this.stage,
+        competitionId: parseInt(this.$route.params.competitionId),
+        stageId: this.stage.id,
         trueMoney: this.actualExpenses
       };
-      console.log(data);
-      // submitFundReimburse(data)
-      //   .then(({ code, msg }) => {
-      //     code === 200 && this.$message.$emit("message", { text: msg });
-      //   })
-      //   .finally(() => {
-      //     this.loading = false;
-      //   });
+      submitFundReimburse(data)
+        .then(({ code, msg }) => {
+          code === 200 && this.$message.$emit("message", { text: msg });
+        })
+        .finally(() => {
+          this.loading = false;
+        });
     },
     approval() {
       this.loading = true;
       const data = {
         competitionId: this.$route.params.competitionId,
+        stageId: this.stage.id,
         totalMoney: this.money,
         remarks: this.remark
       };
       approvalFundReimburse(data)
         .then(({ code, msg }) => {
-          code === 200 && this.$message.$emit("message", { text: msg });
+          if (code === 200) {
+            this.$message.$emit("message", { text: msg });
+            this.whether = 1;
+          }
         })
         .finally(() => {
           this.loading = false;

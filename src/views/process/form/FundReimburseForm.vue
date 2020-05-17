@@ -2,15 +2,15 @@
   <v-card>
     <v-toolbar flat>
       <v-toolbar-title>
-        竞赛阶段经费{{ isApproval ? "审批" : "报销" }}
+        竞赛阶段经费{{ isApproval ? "审批" : "报销" }} : {{ comName }}
       </v-toolbar-title>
     </v-toolbar>
     <v-tabs vertical>
       <v-tab v-for="item in stages" :key="item.stage">{{
         item.stageName
       }}</v-tab>
-      <v-tab-item v-for="item in stages" :key="item.stage">
-        <reimburse-stage-form-item :stage="item.stage" />
+      <v-tab-item v-for="item in stages" :key="item.id">
+        <reimburse-stage-form-item :stage="item" />
       </v-tab-item>
     </v-tabs>
   </v-card>
@@ -18,20 +18,17 @@
 
 <script>
 import { fundInfo } from "@/api/competition/process";
-import { selectCompetition } from "@/api/competition/competition";
 import ReimburseStageFormItem from "@/views/process/form/ReimburseStageFormItem";
+import { selectCompetition } from "@/api/competition/competition";
 
 export default {
   name: "FundReimburseFrom",
   components: { ReimburseStageFormItem },
   data() {
     return {
-      stages: [],
-      budget: null,
-      actualExpenses: null,
-      money: null,
       loading: false,
-      remark: null
+      comName: "",
+      stages: []
     };
   },
   computed: {
@@ -41,15 +38,17 @@ export default {
   },
   mounted() {
     selectCompetition(this.$route.params.competitionId).then(
-      ({ code, data: { budget, competitionStages } }) => {
-        if (code === 200) {
-          this.budget = budget;
-          this.stages = competitionStages;
-        }
+      ({ code, data: { comName } }) => {
+        if (code === 200) this.comName = comName;
       }
     );
     fundInfo(this.$route.params.competitionId).then(({ code, data }) => {
-      if (code === 200) this.actualExpenses = data;
+      if (code !== 200) return;
+      if (this.isApproval)
+        data.forEach(item => {
+          if (item.trueMoney) this.stages.push(item);
+        });
+      else this.stages = data;
     });
   }
 };

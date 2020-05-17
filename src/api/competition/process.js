@@ -81,14 +81,6 @@ export const teamWinAward = data => {
   return _axios.put(`/getSuccess`, data);
 };
 /**
- * 提交经费报销申请
- * @param data
- * @returns {*}
- */
-export const submitFundReimburse = data => {
-  return _axios.put(`/moneyBack`, data);
-};
-/**
  * 获取经费申请列表
  * @param pageNum
  * @param pageSize
@@ -105,7 +97,15 @@ export const fundApplyList = (pageNum, pageSize) => {
  * @returns {*}
  */
 export const fundInfo = competitionId => {
-  return _axios.get(`/reBack`, { params: { competitionId } });
+  return _axios.get(`/clickBack`, { params: { competitionId } });
+};
+/**
+ * 提交经费报销申请
+ * @param data
+ * @returns {*}
+ */
+export const submitFundReimburse = data => {
+  return _axios.put(`/upMoney`, data);
 };
 /**
  * 实践管理科审批
@@ -113,5 +113,22 @@ export const fundInfo = competitionId => {
  * @returns {*}
  */
 export const approvalFundReimburse = data => {
-  return _axios.put(`/totalMoney`, data);
+  return _axios.put(`/passMoney`, data);
+};
+/**
+ * 经费报销历史数据
+ * @returns {*}
+ */
+export const fundReimburseHistory = (pageNum, pageSize) => {
+  return _axios.get(`/history`, {
+    params: { pageNum, pageSize }
+  });
+};
+/**
+ * 根据竞赛阶段 id 获取经费申请详情
+ * @param stageId
+ * @returns {*}
+ */
+export const selectReimburseDetail = stageId => {
+  return _axios.get(`/getMoneyByStageId`, { params: { stageId } });
 };

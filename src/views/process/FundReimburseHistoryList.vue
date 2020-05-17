@@ -12,16 +12,23 @@
       {{ desserts.indexOf(item) + 1 }}
     </template>
     <template #item.comName="{ item }">
-      <competition-name-link :id="item.id" :name="item.comName" />
+      <competition-name-link :id="item.competitionId" :name="item.comName" />
     </template>
-    <template #item.action>
-      <v-btn text small color="primary">查看详情 </v-btn>
+    <template #item.action="{ item }">
+      <v-btn
+        text
+        small
+        color="primary"
+        :to="itemTo('FundReimburseDetail', item.competitionId, item.stageId)"
+        >查看详情
+      </v-btn>
     </template>
   </v-data-table>
 </template>
 
 <script>
 import CompetitionNameLink from "@/views/components/CNameLink";
+import { fundReimburseHistory } from "@/api/competition/process";
 
 export default {
   name: "FundReimburseList",
@@ -32,7 +39,7 @@ export default {
       { text: "#", value: "no" },
       { text: "名称", value: "comName" },
       { text: "阶段", value: "stageName" },
-      { text: "报销金额", value: "money" },
+      { text: "报销金额", value: "totalMoney" },
       { text: "操作", value: "action" }
     ],
     desserts: [],
@@ -51,13 +58,27 @@ export default {
     }
   },
   methods: {
+    itemTo(name, competitionId, stageId) {
+      return {
+        name,
+        params: { competitionId, stageId }
+      };
+    },
     searchData() {
-      this.desserts = [
-        { id: 1, comName: "2019蓝桥杯", stageName: "校赛", money: "1000" },
-        { id: 2, comName: "2019蓝桥杯", stageName: "省赛", money: "2000" },
-        { id: 3, comName: "2019蓝桥杯", stageName: "国赛", money: "3000" }
-      ];
-      this.total = 3;
+      const { page, itemsPerPage } = this.options;
+      this.loading = true;
+      fundReimburseHistory(page, itemsPerPage)
+        .then(({ code, data: { total, list } }) => {
+          if (code !== 200) return;
+          this.total = total;
+          this.desserts = list;
+        })
+        .catch(err => {
+          console.log(err);
+        })
+        .finally(() => {
+          this.loading = false;
+        });
     }
   }
 };
