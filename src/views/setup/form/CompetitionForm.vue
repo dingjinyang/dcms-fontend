@@ -83,10 +83,17 @@
         />
       </v-col>
       <v-col cols="12" sm="12" md="6" lg="6" xl="4">
-        <v-text-field
-          v-model="competitionForm.comCondition"
+        <!--        <v-select-->
+        <!--          multiple-->
+        <!--          v-model="competitionForm.comCondition"-->
+        <!--          :items="colleges"-->
+        <!--          label="竞赛条件"-->
+        <!--        />-->
+        <college-multiple-select
           label="竞赛条件"
-          readonly
+          :items="colleges"
+          :condition.sync="competitionForm.comCondition"
+          :readonly="readonly"
         />
       </v-col>
       <v-col cols="12" sm="12" md="6" lg="6" xl="4">
@@ -214,11 +221,13 @@ import {
   rejectApply
 } from "@/api/competition/competition.js";
 import ConfirmDialog from "@/components/ConfirmDialog";
+import CollegeMultipleSelect from "@/views/setup/form/CollegeMultipleSelect";
 export default {
   name: "CompetitionApply",
   components: {
     CompetitionStage,
-    ConfirmDialog
+    ConfirmDialog,
+    CollegeMultipleSelect
   },
   data: () => ({
     competitionForm: {
@@ -232,7 +241,7 @@ export default {
       awards: "", //拟设奖项及数目
       description: "", //竞赛描述
       flow: "", //赛事流程
-      comCondition: "中原工学院全体学生", //参赛条件
+      comCondition: "", //参赛条件
       comStatus: 1, //立项申请状态
       comDate: new Date().toISOString().substring(0, 10), //立项时间
       sponsor: "", //主办单位
@@ -340,6 +349,7 @@ export default {
      */
     save() {
       this.saveLoading = true;
+      console.log(this.competitionForm);
       saveApply({ ...this.competitionForm })
         .then(({ code, msg, data }) => {
           if (code !== 200) return;

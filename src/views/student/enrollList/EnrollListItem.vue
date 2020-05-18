@@ -20,7 +20,7 @@
           查看详情
         </v-btn>
 
-        <v-btn text color="success" :to="itemTo(item.id, item.comName)">
+        <v-btn text color="success" @click="itemTo(item.id, item.comName)">
           报名
         </v-btn>
       </v-card-actions>
@@ -54,6 +54,7 @@
 </template>
 
 <script>
+import { searchCollegeCondition } from "@/api/student";
 export default {
   name: "EnrollListItem",
   props: {
@@ -72,11 +73,23 @@ export default {
     }
   },
   methods: {
+    // eslint-disable-next-line no-unused-vars
     itemTo(id, name) {
-      return {
-        name: "EnrollForm",
-        query: { id, name: escape(name) }
-      };
+      searchCollegeCondition(id, this.$store.getters["user/info"].id).then(
+        ({ code, msg }) => {
+          code === 400 &&
+            this.$message.$emit("message", { color: "error", text: msg });
+          code === 200 &&
+            this.$router.push({
+              name: "EnrollForm",
+              query: { id, name: escape(name) }
+            });
+        }
+      );
+      // return {
+      //   name: "EnrollForm",
+      //   query: { id, name: escape(name) }
+      // };
     }
   }
 };

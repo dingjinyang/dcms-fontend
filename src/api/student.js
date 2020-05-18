@@ -6,7 +6,23 @@ export const signUpCompetitionList = (pageNum = 1, pageSize = 5, search) => {
     params: { pageNum, pageSize, ...search }
   });
 };
-
+/**
+ * 判断学生报名是否符合条件
+ * @param competitionId
+ * @param studentId
+ * @returns {*}
+ */
+export const searchCollegeCondition = (competitionId, studentId) => {
+  return _axios.get(`/ifJoin`, {
+    params: { competitionId, studentId }
+  });
+};
+/**
+ * 获取学生竞赛报名信息
+ * @param competitionId
+ * @param studentId
+ * @returns {*}
+ */
 export const searchSignUpInfo = (competitionId, studentId) => {
   return _axios.get(`/joinCom`, {
     params: { competitionId, studentId }

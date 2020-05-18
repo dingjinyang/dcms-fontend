@@ -18,7 +18,25 @@ export const competitionStatus = [
   { text: "已报销", value: 12, color: "blue-grey" }
 ];
 
-export const colleges = ["软件学院", "计算机学院", "纺织学院", "马克思学院"];
+export const colleges = [
+  "中原工学院全体学生",
+  "外国语学院",
+  "建筑工程学院",
+  "新闻与传播学院",
+  "服装学院",
+  "机电学院",
+  "材料与化工学院",
+  "法学院",
+  "理学院",
+  "电子信息学院",
+  "纺织学院",
+  "经济管理学院",
+  "能源与环境学院",
+  "艺术设计学院",
+  "计算机学院",
+  "软件学院",
+  "马克思主义学院"
+];
 
 export const competitionLevels = ["校级", "院级"];
 
