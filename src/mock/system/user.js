@@ -1,5 +1,6 @@
 import { Mock } from "@/mock/mock";
-import { getToken } from "../../util/cookie";
+import { getToken } from "@/util/cookie";
+import user from "@/mock/data/user";
 const permissions = {
   root: [
     "role:insert",
@@ -61,21 +62,19 @@ export default {
     meg: "logout success"
   }),
   /** 用户列表 */
-  userAll: Mock.mock(/\/user\/all\?pageNum=[1-9]\d*&pageSize=[1-9]\d*/, "get", {
-    code: 200,
-    meg: "success",
-    data: {
-      "list|1-10": [
-        {
-          account: "@NAME",
-          regTime: "@DATETIME",
-          username: "@CNAME"
-        }
-      ],
-      pageNum: 1,
-      pageSize: 10,
-      total: 5,
-      pages: 1
+  userAll: Mock.mock(
+    /\/api\/user\/all\?pageNum=[1-9]\d*&pageSize=[1-9]\d*/,
+    "get",
+    {
+      code: 200,
+      meg: "success",
+      data: {
+        list: user,
+        pageNum: 1,
+        pageSize: 10,
+        total: 5,
+        pages: 1
+      }
     }
-  })
+  )
 };

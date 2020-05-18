@@ -30,17 +30,17 @@
                   }}</v-list-item-content>
                 </v-list-item>
               </v-list>
-              <v-card-actions>
-                <v-spacer />
-                <div>
-                  <v-btn v-perm="'role:update'" text color="success">
-                    编辑
-                  </v-btn>
-                  <v-btn v-perm="'role:delete'" text color="error">
-                    删除
-                  </v-btn>
-                </div>
-              </v-card-actions>
+              <!--              <v-card-actions>-->
+              <!--                <v-spacer />-->
+              <!--                <div>-->
+              <!--                  <v-btn v-perm="'role:update'" text color="success">-->
+              <!--                    编辑-->
+              <!--                  </v-btn>-->
+              <!--                  <v-btn v-perm="'role:delete'" text color="error">-->
+              <!--                    删除-->
+              <!--                  </v-btn>-->
+              <!--                </div>-->
+              <!--              </v-card-actions>-->
             </v-card>
           </v-col>
         </v-row>
@@ -109,7 +109,7 @@
 </template>
 
 <script>
-import { getAllRole } from "../../api/system";
+import { getAllRole } from "@/api/system";
 
 export default {
   name: "RoleManagement",
@@ -161,7 +161,7 @@ export default {
         .finally(() => {});
     }
   },
-  activated() {
+  mounted() {
     this.getDate();
   }
 };

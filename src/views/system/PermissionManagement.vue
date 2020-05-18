@@ -67,26 +67,26 @@
         </v-toolbar>
       </template>
 
-      <template #item.action="{ item }">
-        <v-btn
-          small
-          color="success"
-          text
-          @click="editItem(item)"
-          v-perm="`permission:update`"
-        >
-          编辑
-        </v-btn>
-        <v-btn
-          small
-          color="error"
-          text
-          @click="deleteItem(item)"
-          v-perm="`permission:delete`"
-        >
-          删除
-        </v-btn>
-      </template>
+      <!--      <template #item.action="{ item }">-->
+      <!--        <v-btn-->
+      <!--          small-->
+      <!--          color="success"-->
+      <!--          text-->
+      <!--          @click="editItem(item)"-->
+      <!--          v-perm="`permission:update`"-->
+      <!--        >-->
+      <!--          编辑-->
+      <!--        </v-btn>-->
+      <!--        <v-btn-->
+      <!--          small-->
+      <!--          color="error"-->
+      <!--          text-->
+      <!--          @click="deleteItem(item)"-->
+      <!--          v-perm="`permission:delete`"-->
+      <!--        >-->
+      <!--          删除-->
+      <!--        </v-btn>-->
+      <!--      </template>-->
     </v-data-table>
   </v-card>
 </template>
@@ -97,7 +97,7 @@ import {
   insertPermission,
   updatePermission,
   getPermissionByName
-} from "../../api/system";
+} from "@/api/system";
 
 export default {
   name: "PermissionManagement",

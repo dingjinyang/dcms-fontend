@@ -30,17 +30,17 @@
                   }}</v-list-item-content>
                 </v-list-item>
               </v-list>
-              <v-card-actions>
-                <v-spacer />
-                <div>
-                  <v-btn v-perm="'user:update'" text color="success">
-                    编辑
-                  </v-btn>
-                  <v-btn v-perm="'user:delete'" text color="error">
-                    删除
-                  </v-btn>
-                </div>
-              </v-card-actions>
+              <!--              <v-card-actions>-->
+              <!--                <v-spacer />-->
+              <!--                <div>-->
+              <!--                  <v-btn v-perm="'user:update'" text color="success">-->
+              <!--                    编辑-->
+              <!--                  </v-btn>-->
+              <!--                  <v-btn v-perm="'user:delete'" text color="error">-->
+              <!--                    删除-->
+              <!--                  </v-btn>-->
+              <!--                </div>-->
+              <!--              </v-card-actions>-->
             </v-card>
           </v-col>
         </v-row>
@@ -128,8 +128,8 @@ export default {
       pages: 1,
       itemsPerPage: 3,
       keys: [
-        { text: "Account", value: "account" },
-        { text: "Registe Time", value: "regTime" }
+        { text: "工号", value: "account" },
+        { text: "角色", value: "role" }
       ],
       items: [],
       total: 0
@@ -168,7 +168,7 @@ export default {
         .finally(() => {});
     }
   },
-  activated() {
+  mounted() {
     this.getDate();
   }
 };
