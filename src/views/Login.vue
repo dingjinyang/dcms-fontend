@@ -53,7 +53,7 @@
                     <v-list-item
                       v-for="(item, index) in students"
                       :key="index"
-                      @click="studentLogin(item.id)"
+                      @click="studentLogin(item.id, item.stuName)"
                     >
                       <v-list-item-title>{{
                         ` ${item.id} - ${item.stuName}`
@@ -119,12 +119,13 @@ export default {
       localStorage.setItem("id", "5771");
       this.userLogin();
     },
-    studentLogin(id) {
+    studentLogin(id, name) {
       this.loginForm = {
         account: "student",
         password: "student"
       };
       localStorage.setItem("id", id);
+      localStorage.setItem("name", name);
       this.userLogin();
     },
     userLogin() {

@@ -43,7 +43,6 @@
           btn-color="success"
           max-width="600px"
           no-persistent
-          hide-actions
           >{{ imageUrl ? "查看证书" : "上传证书" }}
           <template #container>
             <v-img

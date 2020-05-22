@@ -105,7 +105,7 @@ export default {
       desserts: [
         {
           id: this.$store.getters["user/info"].id,
-          stuName: "张三",
+          stuName: localStorage.getItem("name"),
           stuClass: "RB软工卓越161",
           grade: "2016",
           department: "软件学院"
