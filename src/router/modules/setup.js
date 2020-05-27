@@ -125,6 +125,19 @@ export default [
           import(
             /* webpackChunkName: "CompetitionForm" */ "@/views/setup/form/CompetitionForm"
           )
+      },
+      {
+        path: "history",
+        name: "CompetitionHistory",
+        meta: {
+          title: "历史立项",
+          icon: "history",
+          roles: ["college", "practice"]
+        },
+        component: () =>
+          import(
+            /* webpackChunkName: "CompetitionHistoryList" */ "@/views/setup/CompetitionHistoryList"
+          )
       }
     ]
   }

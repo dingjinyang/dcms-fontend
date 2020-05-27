@@ -44,7 +44,8 @@
             v-model="searchForm.department"
             label="申报部门"
             prepend-icon="mdi-event"
-            clearable
+            :clearable="!isCollege"
+            :readonly="isCollege"
         /></v-col>
         <v-col cols="12" lg="3" md="3" sm="6">
           <v-text-field
@@ -74,7 +75,10 @@ export default {
       menu: false,
       searchForm: {
         year: new Date().getFullYear(),
-        department: null,
+        department:
+          this.$store.getters["user/info"].roles[0] === "college"
+            ? this.$store.getters["user/info"].department
+            : null,
         comName: null,
         sponsor: null
       },
@@ -89,6 +93,12 @@ export default {
       return {
         "margin-top": this.$vuetify.breakpoint.smAndDown ? "5px" : ""
       };
+    },
+    isCollege() {
+      return (
+        this.$store.getters["user/info"].roles.length > 0 &&
+        this.$store.getters["user/info"].roles[0] === "college"
+      );
     }
   },
   methods: {

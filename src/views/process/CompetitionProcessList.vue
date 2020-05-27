@@ -41,20 +41,35 @@
         :to="itemTo('FundReimburseApply', item.id)"
         >经费报销
       </v-btn>
+      <confirm-dialog
+        v-if="!item.currentStageName"
+        title="竞赛总结"
+        max-width="600px"
+        btn-color="error"
+        btn-text
+        btn-small
+        @confirm="submit(item.id)"
+      >
+        竞赛总结
+        <template #container>
+          <v-textarea v-model="summary" required clearable />
+        </template>
+      </confirm-dialog>
     </template>
   </v-data-table>
 </template>
 
 <script>
-import { selectProcessList } from "@/api/competition/process";
+import { selectProcessList, submitSummary } from "@/api/competition/process";
 import CTableSearch from "@/views/components/CTableSearch";
 import CompetitionNameLink from "@/views/components/CNameLink";
+import ConfirmDialog from "@/components/ConfirmDialog";
 import { competitionSearchForm } from "@/common/constant";
 import { itemTo } from "@/util";
 
 export default {
   name: "CompetitionProcessList",
-  components: { CTableSearch, CompetitionNameLink },
+  components: { CTableSearch, CompetitionNameLink, ConfirmDialog },
   filters: {
     currentStageFilter(competition) {
       const stage = competition.competitionStages[competition.currentStage - 1];
@@ -76,6 +91,7 @@ export default {
       { text: "阶段时间", value: "stageTimeRange" },
       { text: "操作", value: "action" }
     ],
+    summary: "",
     desserts: [],
     options: {
       page: 1,
@@ -107,6 +123,15 @@ export default {
         })
         .finally(() => {
           this.loading = false;
+        });
+    },
+    submit(id) {
+      submitSummary(id, this.summary)
+        .then(({ code, msg }) => {
+          code === 200 && this.$message.$emit("message", { text: msg });
+        })
+        .catch(err => {
+          console.log(err);
         });
     }
   }

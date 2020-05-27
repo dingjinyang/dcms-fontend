@@ -132,3 +132,14 @@ export const fundReimburseHistory = (pageNum, pageSize) => {
 export const selectReimburseDetail = stageId => {
   return _axios.get(`/getMoneyByStageId`, { params: { stageId } });
 };
+/**
+ * 提交竞赛总结
+ * @param competitionId
+ * @param Summarize
+ * @returns {*}
+ */
+export const submitSummary = (competitionId, Summarize) => {
+  return _axios.put(
+    `/upSummarize?competitionId=${competitionId}&Summarize=${Summarize}`
+  );
+};

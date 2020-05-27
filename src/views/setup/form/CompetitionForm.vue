@@ -83,12 +83,6 @@
         />
       </v-col>
       <v-col cols="12" sm="12" md="6" lg="6" xl="4">
-        <!--        <v-select-->
-        <!--          multiple-->
-        <!--          v-model="competitionForm.comCondition"-->
-        <!--          :items="colleges"-->
-        <!--          label="竞赛条件"-->
-        <!--        />-->
         <college-multiple-select
           label="竞赛条件"
           :items="colleges"
@@ -133,6 +127,13 @@
           color="red"
           background-color="orange lighten-4"
           :value="competitionForm.practiceModifySuggest"
+        />
+      </v-col>
+      <v-col cols="12" v-if="competitionForm.summarize">
+        <v-textarea
+          label="竞赛总结"
+          :value="competitionForm.summarize"
+          readonly
         />
       </v-col>
       <v-col cols="12">
@@ -250,6 +251,7 @@ export default {
       collegeModifySuggest: null,
       practiceModifySuggest: null,
       currentStage: 1,
+      summarize: null,
       competitionStages: [
         {
           stage: 1, //阶段级别

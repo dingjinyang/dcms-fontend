@@ -115,16 +115,7 @@ export default {
       page: 1,
       itemsPerPage: 5
     },
-    total: 0,
-    editedIndex: -1,
-    editedItem: {
-      name: "",
-      department: ""
-    },
-    defaultItem: {
-      name: "",
-      department: ""
-    }
+    total: 0
   }),
   watch: {
     options: {

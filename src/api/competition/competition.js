@@ -1,8 +1,31 @@
 import Vue from "vue";
 const _axios = Vue.axios;
 
+/**
+ * 查询竞赛列表
+ * @param pageNum
+ * @param pageSize
+ * @param search
+ * @returns {*}
+ */
 export const selectCompetitionList = (pageNum = 1, pageSize = 5, search) => {
   return _axios.get(`/selectCompetition`, {
+    params: { pageNum, pageSize, ...search }
+  });
+};
+/**
+ * 查询历史立项
+ * @param pageNum
+ * @param pageSize
+ * @param search
+ * @returns {*}
+ */
+export const selectCompetitionHistoryList = (
+  pageNum = 1,
+  pageSize = 5,
+  search
+) => {
+  return _axios.get(`/History`, {
     params: { pageNum, pageSize, ...search }
   });
 };

@@ -24,8 +24,8 @@
                 label="部门"
                 readonly
               ></v-select>
-              <v-btn class="my-2" color="warning">修改</v-btn>
-              <v-btn class="my-2 mx-2" color="success">保存</v-btn>
+              <!--              <v-btn class="my-2" color="warning">修改</v-btn>-->
+              <!--              <v-btn class="my-2 mx-2" color="success">保存</v-btn>-->
             </v-form>
           </v-col>
         </v-row>
@@ -35,6 +35,8 @@
 </template>
 
 <script>
+import { colleges } from "@/common/constant";
+
 export default {
   name: "UserProfile",
   data() {
@@ -43,28 +45,30 @@ export default {
       userForm: {
         userRole: "",
         department: "软件学院",
-        jobNumber: "123456"
+        jobNumber: ""
       },
       loginRoles: [
         {
           color: "error",
           username: "竞赛负责人",
-          account: "competitionPrincipal"
+          account: "principal"
         },
-        { color: "warning", username: "学院领导", account: "collegeLeader" },
+        { color: "warning", username: "学院领导", account: "college" },
         {
           color: "success",
           username: "实践管理科",
-          account: "practiceManagementDivision"
+          account: "practice"
         },
         { color: "primary", username: "学生", account: "student" }
       ],
       /** 部门选项 */
-      departmentItems: ["软件学院", "计算机学院"]
+      departmentItems: colleges
     };
   },
-  activated() {
+  mounted() {
     const role = this.$store.getters["user/info"].roles[0];
+    this.userForm.jobNumber = this.$store.getters["user/info"].id;
+    this.userForm.department = this.$store.getters["user/info"].department;
     this.loginRoles.forEach(item => {
       if (item.account === role) this.userForm.userRole = item.username;
     });
